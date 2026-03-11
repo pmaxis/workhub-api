@@ -28,8 +28,8 @@ export * from './enums.js';
  * const prisma = new PrismaClient({
  *   adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL })
  * })
- * // Fetch zero or more Sessions
- * const sessions = await prisma.session.findMany()
+ * // Fetch zero or more Permissions
+ * const permissions = await prisma.permission.findMany()
  * ```
  *
  * Read more in our [docs](https://pris.ly/d/client).
@@ -43,6 +43,21 @@ export type PrismaClient<
 export { Prisma };
 
 /**
+ * Model Permission
+ *
+ */
+export type Permission = Prisma.PermissionModel;
+/**
+ * Model Role
+ *
+ */
+export type Role = Prisma.RoleModel;
+/**
+ * Model RolePermission
+ *
+ */
+export type RolePermission = Prisma.RolePermissionModel;
+/**
  * Model Session
  *
  */
@@ -52,3 +67,8 @@ export type Session = Prisma.SessionModel;
  *
  */
 export type User = Prisma.UserModel;
+/**
+ * Model UserRole
+ *
+ */
+export type UserRole = Prisma.UserRoleModel;

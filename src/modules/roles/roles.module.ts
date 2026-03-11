@@ -1,0 +1,16 @@
+import { Module } from '@nestjs/common';
+import { DatabaseModule } from '@/infrastructure/database/database.module';
+import { RolesService } from '@/modules/roles/service/roles.service';
+import { RolePermissionsService } from '@/modules/roles/service/role-permissions.service';
+import { RolesController } from '@/modules/roles/controller/roles.controller';
+import { RolePermissionsController } from '@/modules/roles/controller/role-permissions.controller';
+import { RolesRepository } from '@/modules/roles/repository/roles.repository';
+import { RolePermissionsRepository } from '@/modules/roles/repository/role-permissions.repository';
+
+@Module({
+  imports: [DatabaseModule],
+  controllers: [RolesController, RolePermissionsController],
+  providers: [RolesService, RolePermissionsService, RolesRepository, RolePermissionsRepository],
+  exports: [RolesService, RolePermissionsService],
+})
+export class RolesModule {}

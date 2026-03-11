@@ -8,10 +8,22 @@ model User {
   firstName String   @map("first_name")
   thirdName String?  @map("third_name")
 
-  sessions Session[]
+  sessions  Session[]
+  roles     UserRole[]
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("users")
+}
+
+model UserRole {
+  userId String @map("user_id")
+  roleId String @map("role_id")
+
+  user   User @relation(fields: [userId], references: [id])
+  role   Role @relation(fields: [roleId], references: [id])
+
+  @@id([userId, roleId])
+  @@map("user_roles")
 }

@@ -17,6 +17,21 @@ export { Prisma };
 export * as $Enums from './enums.js';
 export * from './enums.js';
 /**
+ * Model Permission
+ *
+ */
+export type Permission = Prisma.PermissionModel;
+/**
+ * Model Role
+ *
+ */
+export type Role = Prisma.RoleModel;
+/**
+ * Model RolePermission
+ *
+ */
+export type RolePermission = Prisma.RolePermissionModel;
+/**
  * Model Session
  *
  */
@@ -26,3 +41,8 @@ export type Session = Prisma.SessionModel;
  *
  */
 export type User = Prisma.UserModel;
+/**
+ * Model UserRole
+ *
+ */
+export type UserRole = Prisma.UserRoleModel;

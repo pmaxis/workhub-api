@@ -9,6 +9,8 @@ import { DatabaseModule } from '@/infrastructure/database/database.module';
 import { UsersModule } from '@/modules/users/users.module';
 import { AuthModule } from '@/modules/auth/auth.module';
 import { SessionsModule } from '@/modules/sessions/sessions.module';
+import { RolesModule } from './modules/roles/roles.module';
+import { PermissionsModule } from './modules/permissions/permissions.module';
 
 @Module({
   imports: [
@@ -22,6 +24,8 @@ import { SessionsModule } from '@/modules/sessions/sessions.module';
     UsersModule,
     AuthModule,
     SessionsModule,
+    RolesModule,
+    PermissionsModule,
   ],
   controllers: [],
   providers: [
