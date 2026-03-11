@@ -3,6 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { SessionsService } from '@/modules/sessions/service/sessions.service';
+import { UserPermissionsRepository } from '@/modules/users/repository/user-permissions.repository';
 
 type JwtPayload = { userId: string; sessionId: string };
 
@@ -11,6 +12,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   constructor(
     config: ConfigService,
     private readonly sessionsService: SessionsService,
+    private readonly userPermissionsRepository: UserPermissionsRepository,
   ) {
     const secret = config.getOrThrow<string>('tokens.accessToken.secret');
     super({
@@ -27,9 +29,14 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
       return null;
     }
 
+    const permissions = await this.userPermissionsRepository.getPermissionKeysByUserId(
+      payload.userId,
+    );
+
     return {
       userId: payload.userId,
       sessionId: payload.sessionId,
+      permissions,
     };
   }
 }
