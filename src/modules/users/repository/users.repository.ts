@@ -16,11 +16,28 @@ export class UsersRepository {
   }
 
   async findAll() {
-    return this.database.user.findMany();
+    return this.database.user.findMany({
+      include: {
+        roles: {
+          include: {
+            role: true,
+          },
+        },
+      },
+    });
   }
 
   async findOne(id: string) {
-    return this.database.user.findUnique({ where: { id } });
+    return this.database.user.findUnique({
+      where: { id },
+      include: {
+        roles: {
+          include: {
+            role: true,
+          },
+        },
+      },
+    });
   }
 
   async findOneByEmail(email: string) {
