@@ -5,6 +5,9 @@ import { ValidationPipe } from '@nestjs/common';
 import { AppModule } from '@/app.module';
 import cookieParser from 'cookie-parser';
 import helmet from 'helmet';
+import { AllExceptionsFilter } from '@/common/filters/all-exceptions.filter';
+import { HttpExceptionFilter } from '@/common/filters/http-exception.filter';
+import { PrismaExceptionFilter } from '@/common/filters/prisma-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -32,6 +35,12 @@ async function bootstrap() {
   });
 
   app.use(helmet());
+
+  app.useGlobalFilters(
+    new AllExceptionsFilter(),
+    new HttpExceptionFilter(),
+    new PrismaExceptionFilter(),
+  );
 
   await app.listen(port);
 }

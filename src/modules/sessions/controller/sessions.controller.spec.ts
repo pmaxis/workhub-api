@@ -3,9 +3,7 @@ import { SessionsController } from '@/modules/sessions/controller/sessions.contr
 import { SessionsService } from '@/modules/sessions/service/sessions.service';
 
 const mockSessionsService = {
-  create: jest.fn(),
   findAll: jest.fn(),
-  findOne: jest.fn(),
   delete: jest.fn(),
 };
 

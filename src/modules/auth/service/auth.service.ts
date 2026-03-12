@@ -4,6 +4,7 @@ import { ConfigService } from '@nestjs/config';
 import { comparePassword } from '@/common/utils/hash.util';
 import { TokensService } from '@/infrastructure/tokens/tokens.service';
 import { UsersService } from '@/modules/users/service/users.service';
+import { UserPermissionsRepository } from '@/modules/users/repository/user-permissions.repository';
 import { SessionsService } from '@/modules/sessions/service/sessions.service';
 import { LoginDto } from '@/modules/auth/dto/login.dto';
 import { RegisterDto } from '@/modules/auth/dto/register.dto';
@@ -14,6 +15,7 @@ export class AuthService {
   constructor(
     private readonly configService: ConfigService,
     private readonly usersService: UsersService,
+    private readonly userPermissionsRepository: UserPermissionsRepository,
     private readonly sessionsService: SessionsService,
     private readonly tokensService: TokensService,
   ) {
@@ -63,7 +65,14 @@ export class AuthService {
       throw new UnauthorizedException('Invalid session');
     }
 
-    const accessToken = this.tokensService.generateAccessToken(session.userId, session.id);
+    const permissions = await this.userPermissionsRepository.getPermissionKeysByUserId(
+      session.userId,
+    );
+    const accessToken = this.tokensService.generateAccessToken(
+      session.userId,
+      session.id,
+      permissions,
+    );
     const refreshToken = this.tokensService.generateRefreshToken(session.userId);
     const refreshTokenHash = this.tokensService.hashToken(refreshToken);
 
@@ -92,7 +101,8 @@ export class AuthService {
       userAgent,
     });
 
-    const accessToken = this.tokensService.generateAccessToken(userId, session.id);
+    const permissions = await this.userPermissionsRepository.getPermissionKeysByUserId(userId);
+    const accessToken = this.tokensService.generateAccessToken(userId, session.id, permissions);
 
     return { accessToken, refreshToken };
   }
