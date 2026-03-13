@@ -93,7 +93,7 @@ describe('UsersService', () => {
   describe('update', () => {
     it('should update user without password', async () => {
       const dto: UpdateUserDto = { firstName: 'Jane' };
-      const updated = { id: '1', firstName: 'Jane' };
+      const updated = { id: '1', firstName: 'Jane', roles: [] };
       mockUsersRepository.update.mockResolvedValue(updated);
 
       const result = await service.update('1', dto);
@@ -107,7 +107,7 @@ describe('UsersService', () => {
 
     it('should hash and update when password provided', async () => {
       const dto: UpdateUserDto = { password: 'newpass' };
-      mockUsersRepository.update.mockResolvedValue({ id: '1' });
+      mockUsersRepository.update.mockResolvedValue({ id: '1', roles: [] });
 
       await service.update('1', dto);
 

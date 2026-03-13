@@ -54,7 +54,17 @@ export class UsersRepository {
       thirdName?: string;
     },
   ) {
-    return this.database.user.update({ where: { id }, data });
+    return this.database.user.update({
+      where: { id },
+      data,
+      include: {
+        roles: {
+          include: {
+            role: true,
+          },
+        },
+      },
+    });
   }
 
   async delete(id: string) {

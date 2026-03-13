@@ -8,6 +8,7 @@ const mockRole = {
   id: 'role-id',
   slug: 'admin',
   name: 'Administrator',
+  permissions: [],
   createdAt: new Date(),
   updatedAt: new Date(),
 };

@@ -10,15 +10,36 @@ export class RolesRepository {
   }
 
   async findAll() {
-    return this.database.role.findMany();
+    return this.database.role.findMany({
+      include: {
+        permissions: {
+          include: { permission: true },
+        },
+      },
+    });
   }
 
   async findById(id: string) {
-    return this.database.role.findUnique({ where: { id } });
+    return this.database.role.findUnique({
+      where: { id },
+      include: {
+        permissions: {
+          include: { permission: true },
+        },
+      },
+    });
   }
 
   async update(id: string, data: { slug: string; name: string }) {
-    return this.database.role.update({ where: { id }, data });
+    return this.database.role.update({
+      where: { id },
+      data,
+      include: {
+        permissions: {
+          include: { permission: true },
+        },
+      },
+    });
   }
 
   async delete(id: string) {

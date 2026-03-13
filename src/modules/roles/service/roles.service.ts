@@ -3,6 +3,7 @@ import { RolesRepository } from '@/modules/roles/repository/roles.repository';
 import { CreateRoleDto } from '@/modules/roles/dto/create-role.dto';
 import { UpdateRoleDto } from '@/modules/roles/dto/update-role.dto';
 import { RoleResponseDto } from '@/modules/roles/dto/role-response.dto';
+import { PermissionResponseDto } from '@/modules/permissions/dto/permission-response.dto';
 
 @Injectable()
 export class RolesService {
@@ -15,17 +16,31 @@ export class RolesService {
 
   async findAll(): Promise<RoleResponseDto[]> {
     const roles = await this.rolesRepository.findAll();
-    return roles.map((role) => new RoleResponseDto(role));
+    return roles.map(
+      (role) =>
+        new RoleResponseDto({
+          ...role,
+          permissions: role.permissions.map((rp) => new PermissionResponseDto(rp.permission)),
+        }),
+    );
   }
 
   async findOne(id: string): Promise<RoleResponseDto | null> {
     const role = await this.rolesRepository.findById(id);
-    return role ? new RoleResponseDto(role) : null;
+    if (!role) return null;
+    return new RoleResponseDto({
+      ...role,
+      permissions: role.permissions.map((rp) => new PermissionResponseDto(rp.permission)),
+    });
   }
 
   async update(id: string, updateRoleDto: UpdateRoleDto): Promise<RoleResponseDto | null> {
     const role = await this.rolesRepository.update(id, updateRoleDto);
-    return role ? new RoleResponseDto(role) : null;
+    if (!role) return null;
+    return new RoleResponseDto({
+      ...role,
+      permissions: role.permissions.map((rp) => new PermissionResponseDto(rp.permission)),
+    });
   }
 
   async delete(id: string): Promise<void> {

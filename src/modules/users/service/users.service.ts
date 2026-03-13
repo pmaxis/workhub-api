@@ -47,7 +47,10 @@ export class UsersService {
     const { password, ...rest } = updateUserDto;
     const hashedPassword = password ? await hashPassword(password) : undefined;
     const user = await this.usersRepository.update(id, { ...rest, password: hashedPassword });
-    return new UserResponseDto(user);
+    return new UserResponseDto({
+      ...user,
+      roles: user.roles.map((ur) => new RoleResponseDto(ur.role)),
+    });
   }
 
   async delete(id: string): Promise<void> {
