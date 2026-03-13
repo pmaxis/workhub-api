@@ -1,7 +1,7 @@
-import { Module } from '@nestjs/common';
+import { ClassSerializerInterceptor, Module } from '@nestjs/common';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { ConfigModule } from '@nestjs/config';
-import { APP_GUARD } from '@nestjs/core';
+import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { DatabaseModule } from '@/infrastructure/database/database.module';
 import config from '@/common/config/config';
 import { JwtAuthGuard } from '@/common/guards/jwt-auth.guard';
@@ -43,6 +43,10 @@ import { PermissionsModule } from '@/modules/permissions/permissions.module';
     {
       provide: APP_GUARD,
       useClass: PoliciesGuard,
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: ClassSerializerInterceptor,
     },
   ],
 })
