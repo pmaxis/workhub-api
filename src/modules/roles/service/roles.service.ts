@@ -2,28 +2,33 @@ import { Injectable } from '@nestjs/common';
 import { RolesRepository } from '@/modules/roles/repository/roles.repository';
 import { CreateRoleDto } from '@/modules/roles/dto/create-role.dto';
 import { UpdateRoleDto } from '@/modules/roles/dto/update-role.dto';
+import { RoleResponseDto } from '@/modules/roles/dto/role-response.dto';
 
 @Injectable()
 export class RolesService {
   constructor(private readonly rolesRepository: RolesRepository) {}
 
-  create(createRoleDto: CreateRoleDto) {
-    return this.rolesRepository.create(createRoleDto);
+  async create(createRoleDto: CreateRoleDto): Promise<RoleResponseDto> {
+    const role = await this.rolesRepository.create(createRoleDto);
+    return new RoleResponseDto(role);
   }
 
-  findAll() {
-    return this.rolesRepository.findAll();
+  async findAll(): Promise<RoleResponseDto[]> {
+    const roles = await this.rolesRepository.findAll();
+    return roles.map((role) => new RoleResponseDto(role));
   }
 
-  findOne(id: string) {
-    return this.rolesRepository.findById(id);
+  async findOne(id: string): Promise<RoleResponseDto | null> {
+    const role = await this.rolesRepository.findById(id);
+    return role ? new RoleResponseDto(role) : null;
   }
 
-  update(id: string, updateRoleDto: UpdateRoleDto) {
-    return this.rolesRepository.update(id, updateRoleDto);
+  async update(id: string, updateRoleDto: UpdateRoleDto): Promise<RoleResponseDto | null> {
+    const role = await this.rolesRepository.update(id, updateRoleDto);
+    return role ? new RoleResponseDto(role) : null;
   }
 
-  delete(id: string) {
-    return this.rolesRepository.delete(id);
+  async delete(id: string): Promise<void> {
+    await this.rolesRepository.delete(id);
   }
 }

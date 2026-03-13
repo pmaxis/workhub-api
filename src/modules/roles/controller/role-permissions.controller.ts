@@ -9,13 +9,19 @@ export class RolePermissionsController {
 
   @Post()
   @CheckPolicies((ability) => ability.can(Action.Manage, 'RolePermission'))
-  addPermission(@Param('roleId') roleId: string, @Body() body: { permissionId: string }) {
-    return this.rolePermissionsService.addPermission(roleId, body.permissionId);
+  async addPermission(
+    @Param('roleId') roleId: string,
+    @Body() body: { permissionId: string },
+  ): Promise<void> {
+    await this.rolePermissionsService.addPermission(roleId, body.permissionId);
   }
 
   @Delete(':permissionId')
   @CheckPolicies((ability) => ability.can(Action.Manage, 'RolePermission'))
-  deletePermission(@Param('roleId') roleId: string, @Param('permissionId') permissionId: string) {
-    return this.rolePermissionsService.deletePermission(roleId, permissionId);
+  async deletePermission(
+    @Param('roleId') roleId: string,
+    @Param('permissionId') permissionId: string,
+  ): Promise<void> {
+    await this.rolePermissionsService.deletePermission(roleId, permissionId);
   }
 }

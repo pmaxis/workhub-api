@@ -9,13 +9,16 @@ export class UserRolesController {
 
   @Post()
   @CheckPolicies((ability) => ability.can(Action.Manage, 'UserRole'))
-  addRole(@Param('userId') userId: string, @Body() body: { roleId: string }) {
-    return this.userRolesService.addRole(userId, body.roleId);
+  async addRole(@Param('userId') userId: string, @Body() body: { roleId: string }): Promise<void> {
+    await this.userRolesService.addRole(userId, body.roleId);
   }
 
   @Delete(':roleId')
   @CheckPolicies((ability) => ability.can(Action.Manage, 'UserRole'))
-  deleteRole(@Param('userId') userId: string, @Param('roleId') roleId: string) {
-    return this.userRolesService.deleteRole(userId, roleId);
+  async deleteRole(
+    @Param('userId') userId: string,
+    @Param('roleId') roleId: string,
+  ): Promise<void> {
+    await this.userRolesService.deleteRole(userId, roleId);
   }
 }

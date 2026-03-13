@@ -2,11 +2,6 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { RolePermissionsController } from '@/modules/roles/controller/role-permissions.controller';
 import { RolePermissionsService } from '@/modules/roles/service/role-permissions.service';
 
-const mockRolePermission = {
-  roleId: 'role-id',
-  permissionId: 'permission-id',
-};
-
 describe('RolePermissionsController', () => {
   let controller: RolePermissionsController;
 
@@ -37,31 +32,27 @@ describe('RolePermissionsController', () => {
 
   describe('addPermission', () => {
     it('should add permission to role', async () => {
-      mockRolePermissionsService.addPermission.mockResolvedValue(mockRolePermission);
+      mockRolePermissionsService.addPermission.mockResolvedValue(undefined);
 
-      const result = await controller.addPermission('role-id', {
-        permissionId: 'permission-id',
-      });
+      await controller.addPermission('role-id', { permissionId: 'permission-id' });
 
       expect(mockRolePermissionsService.addPermission).toHaveBeenCalledWith(
         'role-id',
         'permission-id',
       );
-      expect(result).toEqual(mockRolePermission);
     });
   });
 
   describe('deletePermission', () => {
     it('should delete permission from role', async () => {
-      mockRolePermissionsService.deletePermission.mockResolvedValue(mockRolePermission);
+      mockRolePermissionsService.deletePermission.mockResolvedValue(undefined);
 
-      const result = await controller.deletePermission('role-id', 'permission-id');
+      await controller.deletePermission('role-id', 'permission-id');
 
       expect(mockRolePermissionsService.deletePermission).toHaveBeenCalledWith(
         'role-id',
         'permission-id',
       );
-      expect(result).toEqual(mockRolePermission);
     });
   });
 });

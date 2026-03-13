@@ -93,12 +93,11 @@ describe('RolesService', () => {
 
   describe('delete', () => {
     it('should delete a role', async () => {
-      mockRolesRepository.delete.mockResolvedValue(mockRole);
+      mockRolesRepository.delete.mockResolvedValue(undefined);
 
-      const result = await service.delete('role-id');
+      await service.delete('role-id');
 
       expect(mockRolesRepository.delete).toHaveBeenCalledWith('role-id');
-      expect(result).toEqual(mockRole);
     });
   });
 });

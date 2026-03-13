@@ -93,12 +93,11 @@ describe('PermissionsService', () => {
 
   describe('delete', () => {
     it('should delete a permission', async () => {
-      mockPermissionsRepository.delete.mockResolvedValue(mockPermission);
+      mockPermissionsRepository.delete.mockResolvedValue(undefined);
 
-      const result = await service.delete('permission-id');
+      await service.delete('permission-id');
 
       expect(mockPermissionsRepository.delete).toHaveBeenCalledWith('permission-id');
-      expect(result).toEqual(mockPermission);
     });
   });
 });

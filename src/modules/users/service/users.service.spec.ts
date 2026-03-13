@@ -56,7 +56,7 @@ describe('UsersService', () => {
 
   describe('findAll', () => {
     it('should return all users', async () => {
-      const users = [{ id: '1', email: 'a@b.com' }];
+      const users = [{ id: '1', email: 'a@b.com', roles: [] }];
       mockUsersRepository.findAll.mockResolvedValue(users);
 
       const result = await service.findAll();
@@ -68,7 +68,7 @@ describe('UsersService', () => {
 
   describe('findOne', () => {
     it('should return user by id', async () => {
-      const user = { id: '1', email: 'a@b.com' };
+      const user = { id: '1', email: 'a@b.com', roles: [] };
       mockUsersRepository.findOne.mockResolvedValue(user);
 
       const result = await service.findOne('1');
