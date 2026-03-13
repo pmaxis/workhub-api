@@ -12,25 +12,25 @@ export class RolesController {
 
   @Post()
   @CheckPolicies((ability) => ability.can(Action.Create, 'Role'))
-  create(@Body() createRoleDto: CreateRoleDto): Promise<RoleResponseDto> {
+  async create(@Body() createRoleDto: CreateRoleDto): Promise<RoleResponseDto> {
     return this.rolesService.create(createRoleDto);
   }
 
   @Get()
   @CheckPolicies((ability) => ability.can(Action.Read, 'Role'))
-  findAll(): Promise<RoleResponseDto[]> {
+  async findAll(): Promise<RoleResponseDto[]> {
     return this.rolesService.findAll();
   }
 
   @Get(':id')
   @CheckPolicies((ability) => ability.can(Action.Read, 'Role'))
-  findOne(@Param('id') id: string): Promise<RoleResponseDto | null> {
+  async findOne(@Param('id') id: string): Promise<RoleResponseDto | null> {
     return this.rolesService.findOne(id);
   }
 
   @Patch(':id')
   @CheckPolicies((ability) => ability.can(Action.Update, 'Role'))
-  update(
+  async update(
     @Param('id') id: string,
     @Body() updateRoleDto: UpdateRoleDto,
   ): Promise<RoleResponseDto | null> {
@@ -39,7 +39,7 @@ export class RolesController {
 
   @Delete(':id')
   @CheckPolicies((ability) => ability.can(Action.Delete, 'Role'))
-  delete(@Param('id') id: string): Promise<void> {
-    return this.rolesService.delete(id);
+  async delete(@Param('id') id: string): Promise<void> {
+    await this.rolesService.delete(id);
   }
 }

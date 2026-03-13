@@ -19,7 +19,7 @@ const mockConfigService = {
 };
 
 const mockUsersService = {
-  findOneByEmail: jest.fn(),
+  findForAuth: jest.fn(),
   create: jest.fn(),
 };
 
@@ -75,25 +75,25 @@ describe('AuthService', () => {
     const user = { id: 'user-1', email: loginDto.email, password: 'hash' };
 
     it('should return access and refresh tokens on valid credentials', async () => {
-      mockUsersService.findOneByEmail.mockResolvedValue(user);
+      mockUsersService.findForAuth.mockResolvedValue(user);
       mockSessionsService.create.mockResolvedValue({ id: 'session-1', userId: user.id });
 
       const result = await service.login(loginDto, ip, userAgent);
 
       expect(result).toEqual({ accessToken: 'access-token', refreshToken: 'refresh-token' });
-      expect(mockUsersService.findOneByEmail).toHaveBeenCalledWith(loginDto.email);
+      expect(mockUsersService.findForAuth).toHaveBeenCalledWith(loginDto.email);
       expect(mockSessionsService.create).toHaveBeenCalled();
     });
 
     it('should throw UnauthorizedException when user not found', async () => {
-      mockUsersService.findOneByEmail.mockResolvedValue(null);
+      mockUsersService.findForAuth.mockResolvedValue(null);
 
       await expect(service.login(loginDto, ip, userAgent)).rejects.toThrow(UnauthorizedException);
       await expect(service.login(loginDto, ip, userAgent)).rejects.toThrow('Invalid credentials');
     });
 
     it('should throw UnauthorizedException when password is invalid', async () => {
-      mockUsersService.findOneByEmail.mockResolvedValue(user);
+      mockUsersService.findForAuth.mockResolvedValue(user);
       jest.mocked(comparePassword).mockResolvedValueOnce(false);
 
       await expect(service.login(loginDto, ip, userAgent)).rejects.toThrow(
@@ -114,19 +114,19 @@ describe('AuthService', () => {
     const createdUser = { id: 'user-1', ...registerDto };
 
     it('should create user and return tokens', async () => {
-      mockUsersService.findOneByEmail.mockResolvedValue(null);
+      mockUsersService.findForAuth.mockResolvedValue(null);
       mockUsersService.create.mockResolvedValue(createdUser);
       mockSessionsService.create.mockResolvedValue({ id: 'session-1', userId: createdUser.id });
 
       const result = await service.register(registerDto, ip, userAgent);
 
       expect(result).toEqual({ accessToken: 'access-token', refreshToken: 'refresh-token' });
-      expect(mockUsersService.findOneByEmail).toHaveBeenCalledWith(registerDto.email);
+      expect(mockUsersService.findForAuth).toHaveBeenCalledWith(registerDto.email);
       expect(mockUsersService.create).toHaveBeenCalledWith(registerDto);
     });
 
     it('should throw BadRequestException when email already exists', async () => {
-      mockUsersService.findOneByEmail.mockResolvedValue({ id: 'existing' });
+      mockUsersService.findForAuth.mockResolvedValue({ id: 'existing' });
 
       await expect(service.register(registerDto, ip, userAgent)).rejects.toThrow(
         BadRequestException,

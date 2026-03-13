@@ -25,7 +25,7 @@ export class AuthService {
   }
 
   async login(loginDto: LoginDto, ipAddress: string, userAgent: string) {
-    const user = await this.usersService.findOneByEmail(loginDto.email);
+    const user = await this.usersService.findForAuth(loginDto.email);
     if (!user) {
       throw new UnauthorizedException('Invalid credentials');
     }
@@ -40,7 +40,7 @@ export class AuthService {
   }
 
   async register(registerDto: RegisterDto, ipAddress: string, userAgent: string) {
-    const existingUser = await this.usersService.findOneByEmail(registerDto.email);
+    const existingUser = await this.usersService.findForAuth(registerDto.email);
 
     if (existingUser) {
       throw new BadRequestException('Registration failed');
@@ -65,19 +65,18 @@ export class AuthService {
       throw new UnauthorizedException('Invalid session');
     }
 
-    const permissions = await this.userPermissionsRepository.getPermissionKeysByUserId(
-      session.userId,
-    );
-    const accessToken = this.tokensService.generateAccessToken(
-      session.userId,
-      session.id,
-      permissions,
-    );
-    const refreshToken = this.tokensService.generateRefreshToken(session.userId);
+    const userId = String(session.userId);
+    const sessionId = String(session.id);
+
+    const permissions = await this.userPermissionsRepository.getPermissionKeysByUserId(userId);
+
+    const accessToken = this.tokensService.generateAccessToken(userId, sessionId, permissions);
+
+    const refreshToken = this.tokensService.generateRefreshToken(userId);
     const refreshTokenHash = this.tokensService.hashToken(refreshToken);
 
     await this.sessionsService.updateRefreshToken(
-      session.id,
+      sessionId,
       refreshTokenHash,
       new Date(Date.now() + this.refreshTokenMaxAge),
     );
@@ -101,8 +100,10 @@ export class AuthService {
       userAgent,
     });
 
+    const sessionId = String(session.id);
+
     const permissions = await this.userPermissionsRepository.getPermissionKeysByUserId(userId);
-    const accessToken = this.tokensService.generateAccessToken(userId, session.id, permissions);
+    const accessToken = this.tokensService.generateAccessToken(userId, sessionId, permissions);
 
     return { accessToken, refreshToken };
   }

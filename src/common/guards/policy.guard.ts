@@ -6,7 +6,8 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { AbilityFactory, RequestUser } from '@/common/ability/ability.factory';
+import { AbilityFactory } from '@/common/ability/ability.factory';
+import { RequestUser } from '@/common/ability/ability.types';
 import { CHECK_POLICIES_KEY, Policy } from '@/common/decorators/policy.decorator';
 import { IS_PUBLIC_KEY } from '@/common/decorators/public.decorator';
 

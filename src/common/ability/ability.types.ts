@@ -1,5 +1,10 @@
 import { MongoAbility } from '@casl/ability';
-import { RequestUser } from '@/common/ability/ability.factory';
+
+export type RequestUser = {
+  userId: string;
+  sessionId: string;
+  permissions?: string[];
+};
 
 export enum Action {
   Manage = 'manage',

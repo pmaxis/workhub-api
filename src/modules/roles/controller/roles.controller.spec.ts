@@ -93,12 +93,12 @@ describe('RolesController', () => {
 
   describe('delete', () => {
     it('should delete a role', async () => {
-      mockRolesService.delete.mockResolvedValue(mockRole);
+      mockRolesService.delete.mockResolvedValue(undefined);
 
       const result = await controller.delete('role-id');
 
       expect(mockRolesService.delete).toHaveBeenCalledWith('role-id');
-      expect(result).toEqual(mockRole);
+      expect(result).toBeUndefined();
     });
   });
 });

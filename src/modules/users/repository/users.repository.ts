@@ -67,7 +67,7 @@ export class UsersRepository {
     });
   }
 
-  async delete(id: string) {
-    return this.database.user.delete({ where: { id } });
+  async delete(id: string): Promise<void> {
+    await this.database.user.delete({ where: { id } });
   }
 }

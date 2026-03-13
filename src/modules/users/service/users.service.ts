@@ -39,7 +39,8 @@ export class UsersService {
     });
   }
 
-  async findOneByEmail(email: string) {
+  /** Returns user with password hash for auth flow only. Do not use for general queries. */
+  async findForAuth(email: string) {
     return this.usersRepository.findOneByEmail(email);
   }
 

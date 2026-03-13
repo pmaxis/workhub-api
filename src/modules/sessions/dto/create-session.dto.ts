@@ -1,4 +1,5 @@
 import { IsNotEmpty, IsString, IsDate } from 'class-validator';
+import { Type } from 'class-transformer';
 
 export class CreateSessionDto {
   @IsString()
@@ -9,6 +10,7 @@ export class CreateSessionDto {
   @IsNotEmpty()
   refreshToken: string;
 
+  @Type(() => Date)
   @IsDate()
   @IsNotEmpty()
   expiresAt: Date;

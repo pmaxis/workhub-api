@@ -1,27 +1,6 @@
-import { PermissionDefinition, Action } from '@/common/ability/ability.types';
+import { createCrudAbilityDefinitions } from '@/common/ability/createCrudAbilityDefinitions';
 
-export const ROLES_PERMISSIONS = {
-  CREATE: 'roles.create',
-  READ: 'roles.read',
-  UPDATE: 'roles.update',
-  DELETE: 'roles.delete',
-} as const;
+const { permissions: ROLES_PERMISSIONS, definitions: rolesAbilityDefinitions } =
+  createCrudAbilityDefinitions('roles', 'Role');
 
-export const rolesAbilityDefinitions: PermissionDefinition[] = [
-  {
-    permission: ROLES_PERMISSIONS.CREATE,
-    define: (can) => can(Action.Create, 'Role'),
-  },
-  {
-    permission: ROLES_PERMISSIONS.READ,
-    define: (can) => can(Action.Read, 'Role'),
-  },
-  {
-    permission: ROLES_PERMISSIONS.UPDATE,
-    define: (can) => can(Action.Update, 'Role'),
-  },
-  {
-    permission: ROLES_PERMISSIONS.DELETE,
-    define: (can) => can(Action.Delete, 'Role'),
-  },
-];
+export { ROLES_PERMISSIONS, rolesAbilityDefinitions };

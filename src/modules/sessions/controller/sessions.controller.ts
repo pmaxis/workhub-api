@@ -9,13 +9,13 @@ export class SessionsController {
 
   @Get()
   @CheckPolicies((ability) => ability.can(Action.Read, 'Session'))
-  findAll() {
+  async findAll() {
     return this.sessionsService.findAll();
   }
 
   @Delete(':id')
   @CheckPolicies((ability) => ability.can(Action.Delete, 'Session'))
-  delete(@Param('id') id: string) {
-    return this.sessionsService.delete(id);
+  async delete(@Param('id') id: string) {
+    await this.sessionsService.delete(id);
   }
 }

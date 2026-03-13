@@ -78,12 +78,12 @@ describe('UsersService', () => {
     });
   });
 
-  describe('findOneByEmail', () => {
-    it('should return user by email', async () => {
-      const user = { id: '1', email: 'a@b.com' };
+  describe('findForAuth', () => {
+    it('should return user by email for auth', async () => {
+      const user = { id: '1', email: 'a@b.com', password: 'hash' };
       mockUsersRepository.findOneByEmail.mockResolvedValue(user);
 
-      const result = await service.findOneByEmail('a@b.com');
+      const result = await service.findForAuth('a@b.com');
 
       expect(result).toEqual(user);
       expect(mockUsersRepository.findOneByEmail).toHaveBeenCalledWith('a@b.com');

@@ -31,7 +31,7 @@ export class SessionsRepository {
     return this.database.session.update({ where: { id }, data: { refreshToken, expiresAt } });
   }
 
-  async delete(id: string) {
-    return this.database.session.delete({ where: { id } });
+  async delete(id: string): Promise<void> {
+    await this.database.session.delete({ where: { id } });
   }
 }

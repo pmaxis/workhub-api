@@ -12,25 +12,25 @@ export class PermissionsController {
 
   @Post()
   @CheckPolicies((ability) => ability.can(Action.Create, 'Permission'))
-  create(@Body() createPermissionDto: CreatePermissionDto): Promise<PermissionResponseDto> {
+  async create(@Body() createPermissionDto: CreatePermissionDto): Promise<PermissionResponseDto> {
     return this.permissionsService.create(createPermissionDto);
   }
 
   @Get()
   @CheckPolicies((ability) => ability.can(Action.Read, 'Permission'))
-  findAll(): Promise<PermissionResponseDto[]> {
+  async findAll(): Promise<PermissionResponseDto[]> {
     return this.permissionsService.findAll();
   }
 
   @Get(':id')
   @CheckPolicies((ability) => ability.can(Action.Read, 'Permission'))
-  findOne(@Param('id') id: string): Promise<PermissionResponseDto | null> {
+  async findOne(@Param('id') id: string): Promise<PermissionResponseDto | null> {
     return this.permissionsService.findOne(id);
   }
 
   @Patch(':id')
   @CheckPolicies((ability) => ability.can(Action.Update, 'Permission'))
-  update(
+  async update(
     @Param('id') id: string,
     @Body() updatePermissionDto: UpdatePermissionDto,
   ): Promise<PermissionResponseDto | null> {
@@ -39,7 +39,7 @@ export class PermissionsController {
 
   @Delete(':id')
   @CheckPolicies((ability) => ability.can(Action.Delete, 'Permission'))
-  delete(@Param('id') id: string): Promise<void> {
-    return this.permissionsService.delete(id);
+  async delete(@Param('id') id: string): Promise<void> {
+    await this.permissionsService.delete(id);
   }
 }
