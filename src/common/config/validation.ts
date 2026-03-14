@@ -10,6 +10,7 @@ export const validationSchema = Joi.object({
 
   COOKIE_SECRET: Joi.string().required(),
   COOKIE_PATH: Joi.string().required(),
+  COOKIE_SECURE: Joi.string().valid('true', 'false').default('false'),
 
   ACCESS_TOKEN_SECRET: Joi.string().required(),
   REFRESH_TOKEN_SECRET: Joi.string().required(),

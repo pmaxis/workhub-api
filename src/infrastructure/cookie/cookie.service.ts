@@ -14,10 +14,14 @@ export class CookieService {
     this.isProduction = this.config.getOrThrow<string>('app.env') === 'production';
   }
 
+  private get secure(): boolean {
+    return this.config.get<boolean>('cookie.secure') ?? this.isProduction;
+  }
+
   setAuthCookies(res: Response, refreshToken: string) {
     res.cookie('refresh_token', refreshToken, {
       httpOnly: true,
-      secure: this.isProduction,
+      secure: this.secure,
       sameSite: 'lax',
       path: this.path,
       maxAge: this.maxAge,
@@ -28,7 +32,7 @@ export class CookieService {
   clearAuthCookies(res: Response) {
     res.clearCookie('refresh_token', {
       httpOnly: true,
-      secure: this.isProduction,
+      secure: this.secure,
       sameSite: 'lax',
       path: this.path,
     });

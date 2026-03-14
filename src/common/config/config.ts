@@ -15,6 +15,7 @@ export default () => ({
     secret: process.env.COOKIE_SECRET,
     maxAge: ms(process.env.REFRESH_TOKEN_TTL as ms.StringValue),
     path: process.env.COOKIE_PATH,
+    secure: process.env.COOKIE_SECURE === 'true',
   },
   tokens: {
     accessToken: {
