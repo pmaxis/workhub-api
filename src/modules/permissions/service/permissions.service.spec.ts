@@ -19,6 +19,7 @@ describe('PermissionsService', () => {
     create: jest.fn(),
     findAll: jest.fn(),
     findById: jest.fn(),
+    findByIdForCheck: jest.fn(),
     update: jest.fn(),
     delete: jest.fn(),
   };
@@ -82,10 +83,12 @@ describe('PermissionsService', () => {
     it('should update a permission', async () => {
       const dto: UpdatePermissionDto = { key: 'write:users', description: 'Write users' };
       const updated = { ...mockPermission, ...dto };
+      mockPermissionsRepository.findByIdForCheck.mockResolvedValue(mockPermission);
       mockPermissionsRepository.update.mockResolvedValue(updated);
 
       const result = await service.update('permission-id', dto);
 
+      expect(mockPermissionsRepository.findByIdForCheck).toHaveBeenCalledWith('permission-id');
       expect(mockPermissionsRepository.update).toHaveBeenCalledWith('permission-id', dto);
       expect(result).toEqual(updated);
     });
@@ -93,10 +96,12 @@ describe('PermissionsService', () => {
 
   describe('delete', () => {
     it('should delete a permission', async () => {
+      mockPermissionsRepository.findByIdForCheck.mockResolvedValue(mockPermission);
       mockPermissionsRepository.delete.mockResolvedValue(undefined);
 
       await service.delete('permission-id');
 
+      expect(mockPermissionsRepository.findByIdForCheck).toHaveBeenCalledWith('permission-id');
       expect(mockPermissionsRepository.delete).toHaveBeenCalledWith('permission-id');
     });
   });

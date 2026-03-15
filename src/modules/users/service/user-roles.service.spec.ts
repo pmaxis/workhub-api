@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UserRolesService } from '@/modules/users/service/user-roles.service';
 import { UserRolesRepository } from '@/modules/users/repository/user-roles.repository';
+import { RolesRepository } from '@/modules/roles/repository/roles.repository';
 
 describe('UserRolesService', () => {
   let service: UserRolesService;
@@ -10,16 +11,19 @@ describe('UserRolesService', () => {
     deleteRole: jest.fn(),
   };
 
+  const mockRolesRepository = {
+    findByIdForCheck: jest.fn(),
+  };
+
   beforeEach(async () => {
     jest.clearAllMocks();
+    mockRolesRepository.findByIdForCheck.mockResolvedValue({ id: 'role-id', slug: 'editor' });
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         UserRolesService,
-        {
-          provide: UserRolesRepository,
-          useValue: mockUserRolesRepository,
-        },
+        { provide: UserRolesRepository, useValue: mockUserRolesRepository },
+        { provide: RolesRepository, useValue: mockRolesRepository },
       ],
     }).compile();
 
@@ -36,6 +40,7 @@ describe('UserRolesService', () => {
 
       await service.addRole('user-id', 'role-id');
 
+      expect(mockRolesRepository.findByIdForCheck).toHaveBeenCalledWith('role-id');
       expect(mockUserRolesRepository.addRole).toHaveBeenCalledWith({
         userId: 'user-id',
         roleId: 'role-id',
@@ -49,6 +54,7 @@ describe('UserRolesService', () => {
 
       await service.deleteRole('user-id', 'role-id');
 
+      expect(mockRolesRepository.findByIdForCheck).toHaveBeenCalledWith('role-id');
       expect(mockUserRolesRepository.deleteRole).toHaveBeenCalledWith('user-id', 'role-id');
     });
   });

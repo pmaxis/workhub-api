@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { DatabaseService } from '@/infrastructure/database/database.service';
+import { ADMIN_ROLE_SLUG } from '@/common/constants/reserved';
 
 @Injectable()
 export class RolesRepository {
@@ -11,6 +12,7 @@ export class RolesRepository {
 
   async findAll() {
     return this.database.role.findMany({
+      where: { slug: { not: ADMIN_ROLE_SLUG } },
       include: {
         permissions: {
           include: { permission: true },
@@ -20,7 +22,7 @@ export class RolesRepository {
   }
 
   async findById(id: string) {
-    return this.database.role.findUnique({
+    const role = await this.database.role.findUnique({
       where: { id },
       include: {
         permissions: {
@@ -28,6 +30,11 @@ export class RolesRepository {
         },
       },
     });
+    return role?.slug === ADMIN_ROLE_SLUG ? null : role;
+  }
+
+  async findByIdForCheck(id: string) {
+    return this.database.role.findUnique({ where: { id } });
   }
 
   async update(id: string, data: { slug: string; name: string }) {

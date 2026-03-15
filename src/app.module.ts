@@ -13,6 +13,7 @@ import { AuthModule } from '@/modules/auth/auth.module';
 import { SessionsModule } from '@/modules/sessions/sessions.module';
 import { RolesModule } from '@/modules/roles/roles.module';
 import { PermissionsModule } from '@/modules/permissions/permissions.module';
+import { ProfileModule } from '@/modules/profile/profile.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { PermissionsModule } from '@/modules/permissions/permissions.module';
     SessionsModule,
     RolesModule,
     PermissionsModule,
+    ProfileModule,
   ],
   controllers: [],
   providers: [

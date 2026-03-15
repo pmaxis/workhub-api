@@ -6,8 +6,8 @@ import { UpdateRoleDto } from '@/modules/roles/dto/update-role.dto';
 
 const mockRole = {
   id: 'role-id',
-  slug: 'admin',
-  name: 'Administrator',
+  slug: 'editor',
+  name: 'Editor',
   permissions: [],
   createdAt: new Date(),
   updatedAt: new Date(),
@@ -20,6 +20,7 @@ describe('RolesService', () => {
     create: jest.fn(),
     findAll: jest.fn(),
     findById: jest.fn(),
+    findByIdForCheck: jest.fn(),
     update: jest.fn(),
     delete: jest.fn(),
   };
@@ -46,7 +47,7 @@ describe('RolesService', () => {
 
   describe('create', () => {
     it('should create a role', async () => {
-      const dto: CreateRoleDto = { slug: 'admin', name: 'Administrator' };
+      const dto: CreateRoleDto = { slug: 'editor', name: 'Editor' };
       mockRolesRepository.create.mockResolvedValue(mockRole);
 
       const result = await service.create(dto);
@@ -81,12 +82,14 @@ describe('RolesService', () => {
 
   describe('update', () => {
     it('should update a role', async () => {
-      const dto: UpdateRoleDto = { slug: 'editor', name: 'Editor' };
+      const dto: UpdateRoleDto = { slug: 'manager', name: 'Manager' };
       const updated = { ...mockRole, ...dto };
+      mockRolesRepository.findByIdForCheck.mockResolvedValue(mockRole);
       mockRolesRepository.update.mockResolvedValue(updated);
 
       const result = await service.update('role-id', dto);
 
+      expect(mockRolesRepository.findByIdForCheck).toHaveBeenCalledWith('role-id');
       expect(mockRolesRepository.update).toHaveBeenCalledWith('role-id', dto);
       expect(result).toEqual(updated);
     });
@@ -94,10 +97,12 @@ describe('RolesService', () => {
 
   describe('delete', () => {
     it('should delete a role', async () => {
+      mockRolesRepository.findByIdForCheck.mockResolvedValue(mockRole);
       mockRolesRepository.delete.mockResolvedValue(undefined);
 
       await service.delete('role-id');
 
+      expect(mockRolesRepository.findByIdForCheck).toHaveBeenCalledWith('role-id');
       expect(mockRolesRepository.delete).toHaveBeenCalledWith('role-id');
     });
   });

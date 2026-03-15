@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { DatabaseService } from '@/infrastructure/database/database.service';
+import { ADMIN_ROLE_SLUG } from '@/common/constants/reserved';
 
 @Injectable()
 export class UsersRepository {
@@ -17,6 +18,11 @@ export class UsersRepository {
 
   async findAll() {
     return this.database.user.findMany({
+      where: {
+        roles: {
+          none: { role: { slug: ADMIN_ROLE_SLUG } },
+        },
+      },
       include: {
         roles: {
           include: {
@@ -28,7 +34,7 @@ export class UsersRepository {
   }
 
   async findOne(id: string) {
-    return this.database.user.findUnique({
+    const user = await this.database.user.findUnique({
       where: { id },
       include: {
         roles: {
@@ -38,6 +44,9 @@ export class UsersRepository {
         },
       },
     });
+    if (!user) return null;
+    const hasAdminRole = user.roles.some((ur) => ur.role.slug === ADMIN_ROLE_SLUG);
+    return hasAdminRole ? null : user;
   }
 
   async findOneByEmail(email: string) {

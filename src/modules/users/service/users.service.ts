@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { hashPassword } from '@/common/utils/hash.util';
 import { UsersRepository } from '@/modules/users/repository/users.repository';
 import { CreateUserDto } from '@/modules/users/dto/create-user.dto';
@@ -45,6 +45,8 @@ export class UsersService {
   }
 
   async update(id: string, updateUserDto: UpdateUserDto): Promise<UserResponseDto> {
+    const existing = await this.findOne(id);
+    if (!existing) throw new NotFoundException('User not found');
     const { password, ...rest } = updateUserDto;
     const hashedPassword = password ? await hashPassword(password) : undefined;
     const user = await this.usersRepository.update(id, { ...rest, password: hashedPassword });
@@ -55,6 +57,8 @@ export class UsersService {
   }
 
   async delete(id: string): Promise<void> {
+    const existing = await this.findOne(id);
+    if (!existing) throw new NotFoundException('User not found');
     await this.usersRepository.delete(id);
   }
 }

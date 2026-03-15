@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { DatabaseService } from '@/infrastructure/database/database.service';
+import { MANAGE_ALL_PERMISSION_KEY } from '@/common/constants/reserved';
 
 @Injectable()
 export class PermissionsRepository {
@@ -10,10 +11,17 @@ export class PermissionsRepository {
   }
 
   async findAll() {
-    return this.database.permission.findMany();
+    return this.database.permission.findMany({
+      where: { key: { not: MANAGE_ALL_PERMISSION_KEY } },
+    });
   }
 
   async findById(id: string) {
+    const permission = await this.database.permission.findUnique({ where: { id } });
+    return permission?.key === MANAGE_ALL_PERMISSION_KEY ? null : permission;
+  }
+
+  async findByIdForCheck(id: string) {
     return this.database.permission.findUnique({ where: { id } });
   }
 
