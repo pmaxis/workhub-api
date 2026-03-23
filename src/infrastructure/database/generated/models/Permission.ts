@@ -322,18 +322,6 @@ export type PermissionScalarRelationFilter = {
   isNot?: Prisma.PermissionWhereInput;
 };
 
-export type StringFieldUpdateOperationsInput = {
-  set?: string;
-};
-
-export type NullableStringFieldUpdateOperationsInput = {
-  set?: string | null;
-};
-
-export type DateTimeFieldUpdateOperationsInput = {
-  set?: Date | string;
-};
-
 export type PermissionCreateNestedOneWithoutRolesInput = {
   create?: Prisma.XOR<
     Prisma.PermissionCreateWithoutRolesInput,

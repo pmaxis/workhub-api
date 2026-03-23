@@ -1,18 +1,24 @@
 model User {
-  id        String   @id @default(cuid())
+  id                String           @id @default(cuid())
 
-  email     String   @unique
-  password  String
+  email             String           @unique
+  password          String
 
-  lastName  String   @map("last_name")
-  firstName String   @map("first_name")
-  thirdName String?  @map("third_name")
+  lastName          String           @map("last_name")
+  firstName         String           @map("first_name")
+  thirdName         String?          @map("third_name")
 
-  sessions  Session[]
-  roles     UserRole[]
+  isActivated       Boolean          @default(false) @map("is_activated")
 
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  sessions          Session[]
+  roles             UserRole[]
+  invitations       Invitation[]
+
+  freelancerProfile FreelancerProfile?
+  clientProfile     ClientProfile?
+
+  createdAt         DateTime         @default(now()) @map("created_at")
+  updatedAt         DateTime         @updatedAt      @map("updated_at")
 
   @@map("users")
 }
@@ -21,9 +27,64 @@ model UserRole {
   userId String @map("user_id")
   roleId String @map("role_id")
 
-  user   User @relation(fields: [userId], references: [id])
-  role   Role @relation(fields: [roleId], references: [id])
+  user   User   @relation(fields: [userId], references: [id])
+  role   Role   @relation(fields: [roleId], references: [id])
 
   @@id([userId, roleId])
   @@map("user_roles")
+}
+
+model FreelancerProfile {
+  id         String           @id @default(cuid())
+
+  userId     String           @unique @map("user_id")
+  user       User             @relation(fields: [userId], references: [id])
+
+  clients    ClientRelation[]
+
+  createdAt  DateTime         @default(now()) @map("created_at")
+  updatedAt  DateTime         @updatedAt @map("updated_at")
+
+  @@map("freelancer_profiles")
+}
+
+model ClientProfile {
+  id            String           @id @default(cuid())
+
+  userId        String           @unique @map("user_id")
+  user          User             @relation(fields: [userId], references: [id])
+
+  companyMembers CompanyMember[]
+  clientRelations ClientRelation[]
+
+  createdAt     DateTime         @default(now()) @map("created_at")
+  updatedAt     DateTime         @updatedAt @map("updated_at")
+
+  @@map("client_profiles")
+}
+
+model ClientRelation {
+  status              ClientStatus
+
+  freelancerProfileId String            @map("freelancer_profile_id")
+  freelancerProfile   FreelancerProfile @relation(fields: [freelancerProfileId], references: [id])
+
+  clientProfileId     String            @map("client_profile_id")
+  clientProfile       ClientProfile     @relation(fields: [clientProfileId], references: [id])
+
+  companyId           String?           @map("company_id")
+  company             Company?          @relation(fields: [companyId], references: [id])
+
+  createdAt           DateTime          @default(now()) @map("created_at")
+  updatedAt           DateTime          @updatedAt @map("updated_at")
+
+  @@id([freelancerProfileId, clientProfileId])
+
+  @@map("client_relationships")
+}
+
+enum ClientStatus {
+  ACTIVE
+  POTENTIAL
+  ARCHIVE
 }

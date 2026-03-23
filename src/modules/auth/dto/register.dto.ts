@@ -2,6 +2,10 @@ import { IsEmail, IsNotEmpty, IsString, MaxLength, MinLength, IsOptional } from 
 
 export class RegisterDto {
   @IsString()
+  @IsOptional()
+  invitationToken?: string;
+
+  @IsString()
   @IsNotEmpty()
   @IsEmail()
   email: string;

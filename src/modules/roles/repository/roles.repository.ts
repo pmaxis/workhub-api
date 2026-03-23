@@ -37,6 +37,14 @@ export class RolesRepository {
     return this.database.role.findUnique({ where: { id } });
   }
 
+  async findBySlug(slug: string): Promise<{ id: string; slug: string; name: string } | null> {
+    const role = await this.database.role.findUnique({
+      where: { slug },
+      select: { id: true, slug: true, name: true },
+    });
+    return role as { id: string; slug: string; name: string } | null;
+  }
+
   async update(id: string, data: { slug: string; name: string }) {
     return this.database.role.update({
       where: { id },

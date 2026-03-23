@@ -14,6 +14,7 @@ import { SessionsModule } from '@/modules/sessions/sessions.module';
 import { RolesModule } from '@/modules/roles/roles.module';
 import { PermissionsModule } from '@/modules/permissions/permissions.module';
 import { ProfileModule } from '@/modules/profile/profile.module';
+import { InvitationsModule } from './modules/invitations/invitations.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { ProfileModule } from '@/modules/profile/profile.module';
     RolesModule,
     PermissionsModule,
     ProfileModule,
+    InvitationsModule,
   ],
   controllers: [],
   providers: [

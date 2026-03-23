@@ -7,10 +7,16 @@
  *
  * 🟢 You can import this file directly.
  */
+export type * from './models/Company.js';
+export type * from './models/CompanyMember.js';
+export type * from './models/Invitation.js';
 export type * from './models/Permission.js';
 export type * from './models/Role.js';
 export type * from './models/RolePermission.js';
 export type * from './models/Session.js';
 export type * from './models/User.js';
 export type * from './models/UserRole.js';
+export type * from './models/FreelancerProfile.js';
+export type * from './models/ClientProfile.js';
+export type * from './models/ClientRelation.js';
 export type * from './commonInputTypes.js';

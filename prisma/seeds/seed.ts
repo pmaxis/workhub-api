@@ -17,21 +17,27 @@ async function seed() {
     update: {},
   });
 
-  const role = await prisma.role.upsert({
+  const adminRole = await prisma.role.upsert({
     where: { slug: 'admin' },
     create: { slug: 'admin', name: 'Адміністратор' },
+    update: {},
+  });
+
+  await prisma.role.upsert({
+    where: { slug: 'client' },
+    create: { slug: 'client', name: 'Клієнт' },
     update: {},
   });
 
   await prisma.rolePermission.upsert({
     where: {
       roleId_permissionId: {
-        roleId: role.id,
+        roleId: adminRole.id,
         permissionId: permission.id,
       },
     },
     create: {
-      roleId: role.id,
+      roleId: adminRole.id,
       permissionId: permission.id,
     },
     update: {},
@@ -54,12 +60,12 @@ async function seed() {
     where: {
       userId_roleId: {
         userId: user.id,
-        roleId: role.id,
+        roleId: adminRole.id,
       },
     },
     create: {
       userId: user.id,
-      roleId: role.id,
+      roleId: adminRole.id,
     },
     update: {},
   });

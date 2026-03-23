@@ -1,0 +1,26 @@
+model Invitation {
+  id          String           @id @default(cuid())
+
+  email       String
+  token       String           @unique
+  status      InvitationStatus
+
+  invitedById String           @map("invited_by_id")
+  invitedBy   User             @relation(fields: [invitedById], references: [id])
+  
+  companyId   String?          @map("company_id")
+  company     Company?         @relation(fields: [companyId], references: [id])
+
+  expiresAt   DateTime         @map("expires_at")
+
+  createdAt   DateTime         @default(now()) @map("created_at")
+  updatedAt   DateTime         @updatedAt @map("updated_at")
+
+  @@map("invitations")
+}
+
+enum InvitationStatus {
+  PENDING
+  ACCEPTED
+  EXPIRED
+}

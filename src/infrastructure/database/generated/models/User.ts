@@ -30,6 +30,7 @@ export type UserMinAggregateOutputType = {
   lastName: string | null;
   firstName: string | null;
   thirdName: string | null;
+  isActivated: boolean | null;
   createdAt: Date | null;
   updatedAt: Date | null;
 };
@@ -41,6 +42,7 @@ export type UserMaxAggregateOutputType = {
   lastName: string | null;
   firstName: string | null;
   thirdName: string | null;
+  isActivated: boolean | null;
   createdAt: Date | null;
   updatedAt: Date | null;
 };
@@ -52,6 +54,7 @@ export type UserCountAggregateOutputType = {
   lastName: number;
   firstName: number;
   thirdName: number;
+  isActivated: number;
   createdAt: number;
   updatedAt: number;
   _all: number;
@@ -64,6 +67,7 @@ export type UserMinAggregateInputType = {
   lastName?: true;
   firstName?: true;
   thirdName?: true;
+  isActivated?: true;
   createdAt?: true;
   updatedAt?: true;
 };
@@ -75,6 +79,7 @@ export type UserMaxAggregateInputType = {
   lastName?: true;
   firstName?: true;
   thirdName?: true;
+  isActivated?: true;
   createdAt?: true;
   updatedAt?: true;
 };
@@ -86,6 +91,7 @@ export type UserCountAggregateInputType = {
   lastName?: true;
   firstName?: true;
   thirdName?: true;
+  isActivated?: true;
   createdAt?: true;
   updatedAt?: true;
   _all?: true;
@@ -171,6 +177,7 @@ export type UserGroupByOutputType = {
   lastName: string;
   firstName: string;
   thirdName: string | null;
+  isActivated: boolean;
   createdAt: Date;
   updatedAt: Date;
   _count: UserCountAggregateOutputType | null;
@@ -200,10 +207,20 @@ export type UserWhereInput = {
   lastName?: Prisma.StringFilter<'User'> | string;
   firstName?: Prisma.StringFilter<'User'> | string;
   thirdName?: Prisma.StringNullableFilter<'User'> | string | null;
+  isActivated?: Prisma.BoolFilter<'User'> | boolean;
   createdAt?: Prisma.DateTimeFilter<'User'> | Date | string;
   updatedAt?: Prisma.DateTimeFilter<'User'> | Date | string;
   sessions?: Prisma.SessionListRelationFilter;
   roles?: Prisma.UserRoleListRelationFilter;
+  invitations?: Prisma.InvitationListRelationFilter;
+  freelancerProfile?: Prisma.XOR<
+    Prisma.FreelancerProfileNullableScalarRelationFilter,
+    Prisma.FreelancerProfileWhereInput
+  > | null;
+  clientProfile?: Prisma.XOR<
+    Prisma.ClientProfileNullableScalarRelationFilter,
+    Prisma.ClientProfileWhereInput
+  > | null;
 };
 
 export type UserOrderByWithRelationInput = {
@@ -213,10 +230,14 @@ export type UserOrderByWithRelationInput = {
   lastName?: Prisma.SortOrder;
   firstName?: Prisma.SortOrder;
   thirdName?: Prisma.SortOrderInput | Prisma.SortOrder;
+  isActivated?: Prisma.SortOrder;
   createdAt?: Prisma.SortOrder;
   updatedAt?: Prisma.SortOrder;
   sessions?: Prisma.SessionOrderByRelationAggregateInput;
   roles?: Prisma.UserRoleOrderByRelationAggregateInput;
+  invitations?: Prisma.InvitationOrderByRelationAggregateInput;
+  freelancerProfile?: Prisma.FreelancerProfileOrderByWithRelationInput;
+  clientProfile?: Prisma.ClientProfileOrderByWithRelationInput;
 };
 
 export type UserWhereUniqueInput = Prisma.AtLeast<
@@ -230,10 +251,20 @@ export type UserWhereUniqueInput = Prisma.AtLeast<
     lastName?: Prisma.StringFilter<'User'> | string;
     firstName?: Prisma.StringFilter<'User'> | string;
     thirdName?: Prisma.StringNullableFilter<'User'> | string | null;
+    isActivated?: Prisma.BoolFilter<'User'> | boolean;
     createdAt?: Prisma.DateTimeFilter<'User'> | Date | string;
     updatedAt?: Prisma.DateTimeFilter<'User'> | Date | string;
     sessions?: Prisma.SessionListRelationFilter;
     roles?: Prisma.UserRoleListRelationFilter;
+    invitations?: Prisma.InvitationListRelationFilter;
+    freelancerProfile?: Prisma.XOR<
+      Prisma.FreelancerProfileNullableScalarRelationFilter,
+      Prisma.FreelancerProfileWhereInput
+    > | null;
+    clientProfile?: Prisma.XOR<
+      Prisma.ClientProfileNullableScalarRelationFilter,
+      Prisma.ClientProfileWhereInput
+    > | null;
   },
   'id' | 'email'
 >;
@@ -245,6 +276,7 @@ export type UserOrderByWithAggregationInput = {
   lastName?: Prisma.SortOrder;
   firstName?: Prisma.SortOrder;
   thirdName?: Prisma.SortOrderInput | Prisma.SortOrder;
+  isActivated?: Prisma.SortOrder;
   createdAt?: Prisma.SortOrder;
   updatedAt?: Prisma.SortOrder;
   _count?: Prisma.UserCountOrderByAggregateInput;
@@ -262,6 +294,7 @@ export type UserScalarWhereWithAggregatesInput = {
   lastName?: Prisma.StringWithAggregatesFilter<'User'> | string;
   firstName?: Prisma.StringWithAggregatesFilter<'User'> | string;
   thirdName?: Prisma.StringNullableWithAggregatesFilter<'User'> | string | null;
+  isActivated?: Prisma.BoolWithAggregatesFilter<'User'> | boolean;
   createdAt?: Prisma.DateTimeWithAggregatesFilter<'User'> | Date | string;
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<'User'> | Date | string;
 };
@@ -273,10 +306,14 @@ export type UserCreateInput = {
   lastName: string;
   firstName: string;
   thirdName?: string | null;
+  isActivated?: boolean;
   createdAt?: Date | string;
   updatedAt?: Date | string;
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput;
   roles?: Prisma.UserRoleCreateNestedManyWithoutUserInput;
+  invitations?: Prisma.InvitationCreateNestedManyWithoutInvitedByInput;
+  freelancerProfile?: Prisma.FreelancerProfileCreateNestedOneWithoutUserInput;
+  clientProfile?: Prisma.ClientProfileCreateNestedOneWithoutUserInput;
 };
 
 export type UserUncheckedCreateInput = {
@@ -286,10 +323,14 @@ export type UserUncheckedCreateInput = {
   lastName: string;
   firstName: string;
   thirdName?: string | null;
+  isActivated?: boolean;
   createdAt?: Date | string;
   updatedAt?: Date | string;
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput;
   roles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput;
+  invitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutInvitedByInput;
+  freelancerProfile?: Prisma.FreelancerProfileUncheckedCreateNestedOneWithoutUserInput;
+  clientProfile?: Prisma.ClientProfileUncheckedCreateNestedOneWithoutUserInput;
 };
 
 export type UserUpdateInput = {
@@ -299,10 +340,14 @@ export type UserUpdateInput = {
   lastName?: Prisma.StringFieldUpdateOperationsInput | string;
   firstName?: Prisma.StringFieldUpdateOperationsInput | string;
   thirdName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  isActivated?: Prisma.BoolFieldUpdateOperationsInput | boolean;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput;
   roles?: Prisma.UserRoleUpdateManyWithoutUserNestedInput;
+  invitations?: Prisma.InvitationUpdateManyWithoutInvitedByNestedInput;
+  freelancerProfile?: Prisma.FreelancerProfileUpdateOneWithoutUserNestedInput;
+  clientProfile?: Prisma.ClientProfileUpdateOneWithoutUserNestedInput;
 };
 
 export type UserUncheckedUpdateInput = {
@@ -312,10 +357,14 @@ export type UserUncheckedUpdateInput = {
   lastName?: Prisma.StringFieldUpdateOperationsInput | string;
   firstName?: Prisma.StringFieldUpdateOperationsInput | string;
   thirdName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  isActivated?: Prisma.BoolFieldUpdateOperationsInput | boolean;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput;
   roles?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput;
+  invitations?: Prisma.InvitationUncheckedUpdateManyWithoutInvitedByNestedInput;
+  freelancerProfile?: Prisma.FreelancerProfileUncheckedUpdateOneWithoutUserNestedInput;
+  clientProfile?: Prisma.ClientProfileUncheckedUpdateOneWithoutUserNestedInput;
 };
 
 export type UserCreateManyInput = {
@@ -325,6 +374,7 @@ export type UserCreateManyInput = {
   lastName: string;
   firstName: string;
   thirdName?: string | null;
+  isActivated?: boolean;
   createdAt?: Date | string;
   updatedAt?: Date | string;
 };
@@ -336,6 +386,7 @@ export type UserUpdateManyMutationInput = {
   lastName?: Prisma.StringFieldUpdateOperationsInput | string;
   firstName?: Prisma.StringFieldUpdateOperationsInput | string;
   thirdName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  isActivated?: Prisma.BoolFieldUpdateOperationsInput | boolean;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 };
@@ -347,6 +398,7 @@ export type UserUncheckedUpdateManyInput = {
   lastName?: Prisma.StringFieldUpdateOperationsInput | string;
   firstName?: Prisma.StringFieldUpdateOperationsInput | string;
   thirdName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  isActivated?: Prisma.BoolFieldUpdateOperationsInput | boolean;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 };
@@ -363,6 +415,7 @@ export type UserCountOrderByAggregateInput = {
   lastName?: Prisma.SortOrder;
   firstName?: Prisma.SortOrder;
   thirdName?: Prisma.SortOrder;
+  isActivated?: Prisma.SortOrder;
   createdAt?: Prisma.SortOrder;
   updatedAt?: Prisma.SortOrder;
 };
@@ -374,6 +427,7 @@ export type UserMaxOrderByAggregateInput = {
   lastName?: Prisma.SortOrder;
   firstName?: Prisma.SortOrder;
   thirdName?: Prisma.SortOrder;
+  isActivated?: Prisma.SortOrder;
   createdAt?: Prisma.SortOrder;
   updatedAt?: Prisma.SortOrder;
 };
@@ -385,8 +439,35 @@ export type UserMinOrderByAggregateInput = {
   lastName?: Prisma.SortOrder;
   firstName?: Prisma.SortOrder;
   thirdName?: Prisma.SortOrder;
+  isActivated?: Prisma.SortOrder;
   createdAt?: Prisma.SortOrder;
   updatedAt?: Prisma.SortOrder;
+};
+
+export type UserCreateNestedOneWithoutInvitationsInput = {
+  create?: Prisma.XOR<
+    Prisma.UserCreateWithoutInvitationsInput,
+    Prisma.UserUncheckedCreateWithoutInvitationsInput
+  >;
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutInvitationsInput;
+  connect?: Prisma.UserWhereUniqueInput;
+};
+
+export type UserUpdateOneRequiredWithoutInvitationsNestedInput = {
+  create?: Prisma.XOR<
+    Prisma.UserCreateWithoutInvitationsInput,
+    Prisma.UserUncheckedCreateWithoutInvitationsInput
+  >;
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutInvitationsInput;
+  upsert?: Prisma.UserUpsertWithoutInvitationsInput;
+  connect?: Prisma.UserWhereUniqueInput;
+  update?: Prisma.XOR<
+    Prisma.XOR<
+      Prisma.UserUpdateToOneWithWhereWithoutInvitationsInput,
+      Prisma.UserUpdateWithoutInvitationsInput
+    >,
+    Prisma.UserUncheckedUpdateWithoutInvitationsInput
+  >;
 };
 
 export type UserCreateNestedOneWithoutSessionsInput = {
@@ -415,6 +496,10 @@ export type UserUpdateOneRequiredWithoutSessionsNestedInput = {
   >;
 };
 
+export type BoolFieldUpdateOperationsInput = {
+  set?: boolean;
+};
+
 export type UserCreateNestedOneWithoutRolesInput = {
   create?: Prisma.XOR<
     Prisma.UserCreateWithoutRolesInput,
@@ -441,6 +526,150 @@ export type UserUpdateOneRequiredWithoutRolesNestedInput = {
   >;
 };
 
+export type UserCreateNestedOneWithoutFreelancerProfileInput = {
+  create?: Prisma.XOR<
+    Prisma.UserCreateWithoutFreelancerProfileInput,
+    Prisma.UserUncheckedCreateWithoutFreelancerProfileInput
+  >;
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutFreelancerProfileInput;
+  connect?: Prisma.UserWhereUniqueInput;
+};
+
+export type UserUpdateOneRequiredWithoutFreelancerProfileNestedInput = {
+  create?: Prisma.XOR<
+    Prisma.UserCreateWithoutFreelancerProfileInput,
+    Prisma.UserUncheckedCreateWithoutFreelancerProfileInput
+  >;
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutFreelancerProfileInput;
+  upsert?: Prisma.UserUpsertWithoutFreelancerProfileInput;
+  connect?: Prisma.UserWhereUniqueInput;
+  update?: Prisma.XOR<
+    Prisma.XOR<
+      Prisma.UserUpdateToOneWithWhereWithoutFreelancerProfileInput,
+      Prisma.UserUpdateWithoutFreelancerProfileInput
+    >,
+    Prisma.UserUncheckedUpdateWithoutFreelancerProfileInput
+  >;
+};
+
+export type UserCreateNestedOneWithoutClientProfileInput = {
+  create?: Prisma.XOR<
+    Prisma.UserCreateWithoutClientProfileInput,
+    Prisma.UserUncheckedCreateWithoutClientProfileInput
+  >;
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutClientProfileInput;
+  connect?: Prisma.UserWhereUniqueInput;
+};
+
+export type UserUpdateOneRequiredWithoutClientProfileNestedInput = {
+  create?: Prisma.XOR<
+    Prisma.UserCreateWithoutClientProfileInput,
+    Prisma.UserUncheckedCreateWithoutClientProfileInput
+  >;
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutClientProfileInput;
+  upsert?: Prisma.UserUpsertWithoutClientProfileInput;
+  connect?: Prisma.UserWhereUniqueInput;
+  update?: Prisma.XOR<
+    Prisma.XOR<
+      Prisma.UserUpdateToOneWithWhereWithoutClientProfileInput,
+      Prisma.UserUpdateWithoutClientProfileInput
+    >,
+    Prisma.UserUncheckedUpdateWithoutClientProfileInput
+  >;
+};
+
+export type UserCreateWithoutInvitationsInput = {
+  id?: string;
+  email: string;
+  password: string;
+  lastName: string;
+  firstName: string;
+  thirdName?: string | null;
+  isActivated?: boolean;
+  createdAt?: Date | string;
+  updatedAt?: Date | string;
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput;
+  roles?: Prisma.UserRoleCreateNestedManyWithoutUserInput;
+  freelancerProfile?: Prisma.FreelancerProfileCreateNestedOneWithoutUserInput;
+  clientProfile?: Prisma.ClientProfileCreateNestedOneWithoutUserInput;
+};
+
+export type UserUncheckedCreateWithoutInvitationsInput = {
+  id?: string;
+  email: string;
+  password: string;
+  lastName: string;
+  firstName: string;
+  thirdName?: string | null;
+  isActivated?: boolean;
+  createdAt?: Date | string;
+  updatedAt?: Date | string;
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput;
+  roles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput;
+  freelancerProfile?: Prisma.FreelancerProfileUncheckedCreateNestedOneWithoutUserInput;
+  clientProfile?: Prisma.ClientProfileUncheckedCreateNestedOneWithoutUserInput;
+};
+
+export type UserCreateOrConnectWithoutInvitationsInput = {
+  where: Prisma.UserWhereUniqueInput;
+  create: Prisma.XOR<
+    Prisma.UserCreateWithoutInvitationsInput,
+    Prisma.UserUncheckedCreateWithoutInvitationsInput
+  >;
+};
+
+export type UserUpsertWithoutInvitationsInput = {
+  update: Prisma.XOR<
+    Prisma.UserUpdateWithoutInvitationsInput,
+    Prisma.UserUncheckedUpdateWithoutInvitationsInput
+  >;
+  create: Prisma.XOR<
+    Prisma.UserCreateWithoutInvitationsInput,
+    Prisma.UserUncheckedCreateWithoutInvitationsInput
+  >;
+  where?: Prisma.UserWhereInput;
+};
+
+export type UserUpdateToOneWithWhereWithoutInvitationsInput = {
+  where?: Prisma.UserWhereInput;
+  data: Prisma.XOR<
+    Prisma.UserUpdateWithoutInvitationsInput,
+    Prisma.UserUncheckedUpdateWithoutInvitationsInput
+  >;
+};
+
+export type UserUpdateWithoutInvitationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string;
+  email?: Prisma.StringFieldUpdateOperationsInput | string;
+  password?: Prisma.StringFieldUpdateOperationsInput | string;
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string;
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string;
+  thirdName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  isActivated?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput;
+  roles?: Prisma.UserRoleUpdateManyWithoutUserNestedInput;
+  freelancerProfile?: Prisma.FreelancerProfileUpdateOneWithoutUserNestedInput;
+  clientProfile?: Prisma.ClientProfileUpdateOneWithoutUserNestedInput;
+};
+
+export type UserUncheckedUpdateWithoutInvitationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string;
+  email?: Prisma.StringFieldUpdateOperationsInput | string;
+  password?: Prisma.StringFieldUpdateOperationsInput | string;
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string;
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string;
+  thirdName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  isActivated?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput;
+  roles?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput;
+  freelancerProfile?: Prisma.FreelancerProfileUncheckedUpdateOneWithoutUserNestedInput;
+  clientProfile?: Prisma.ClientProfileUncheckedUpdateOneWithoutUserNestedInput;
+};
+
 export type UserCreateWithoutSessionsInput = {
   id?: string;
   email: string;
@@ -448,9 +677,13 @@ export type UserCreateWithoutSessionsInput = {
   lastName: string;
   firstName: string;
   thirdName?: string | null;
+  isActivated?: boolean;
   createdAt?: Date | string;
   updatedAt?: Date | string;
   roles?: Prisma.UserRoleCreateNestedManyWithoutUserInput;
+  invitations?: Prisma.InvitationCreateNestedManyWithoutInvitedByInput;
+  freelancerProfile?: Prisma.FreelancerProfileCreateNestedOneWithoutUserInput;
+  clientProfile?: Prisma.ClientProfileCreateNestedOneWithoutUserInput;
 };
 
 export type UserUncheckedCreateWithoutSessionsInput = {
@@ -460,9 +693,13 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   lastName: string;
   firstName: string;
   thirdName?: string | null;
+  isActivated?: boolean;
   createdAt?: Date | string;
   updatedAt?: Date | string;
   roles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput;
+  invitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutInvitedByInput;
+  freelancerProfile?: Prisma.FreelancerProfileUncheckedCreateNestedOneWithoutUserInput;
+  clientProfile?: Prisma.ClientProfileUncheckedCreateNestedOneWithoutUserInput;
 };
 
 export type UserCreateOrConnectWithoutSessionsInput = {
@@ -500,9 +737,13 @@ export type UserUpdateWithoutSessionsInput = {
   lastName?: Prisma.StringFieldUpdateOperationsInput | string;
   firstName?: Prisma.StringFieldUpdateOperationsInput | string;
   thirdName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  isActivated?: Prisma.BoolFieldUpdateOperationsInput | boolean;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   roles?: Prisma.UserRoleUpdateManyWithoutUserNestedInput;
+  invitations?: Prisma.InvitationUpdateManyWithoutInvitedByNestedInput;
+  freelancerProfile?: Prisma.FreelancerProfileUpdateOneWithoutUserNestedInput;
+  clientProfile?: Prisma.ClientProfileUpdateOneWithoutUserNestedInput;
 };
 
 export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -512,9 +753,13 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   lastName?: Prisma.StringFieldUpdateOperationsInput | string;
   firstName?: Prisma.StringFieldUpdateOperationsInput | string;
   thirdName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  isActivated?: Prisma.BoolFieldUpdateOperationsInput | boolean;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   roles?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput;
+  invitations?: Prisma.InvitationUncheckedUpdateManyWithoutInvitedByNestedInput;
+  freelancerProfile?: Prisma.FreelancerProfileUncheckedUpdateOneWithoutUserNestedInput;
+  clientProfile?: Prisma.ClientProfileUncheckedUpdateOneWithoutUserNestedInput;
 };
 
 export type UserCreateWithoutRolesInput = {
@@ -524,9 +769,13 @@ export type UserCreateWithoutRolesInput = {
   lastName: string;
   firstName: string;
   thirdName?: string | null;
+  isActivated?: boolean;
   createdAt?: Date | string;
   updatedAt?: Date | string;
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput;
+  invitations?: Prisma.InvitationCreateNestedManyWithoutInvitedByInput;
+  freelancerProfile?: Prisma.FreelancerProfileCreateNestedOneWithoutUserInput;
+  clientProfile?: Prisma.ClientProfileCreateNestedOneWithoutUserInput;
 };
 
 export type UserUncheckedCreateWithoutRolesInput = {
@@ -536,9 +785,13 @@ export type UserUncheckedCreateWithoutRolesInput = {
   lastName: string;
   firstName: string;
   thirdName?: string | null;
+  isActivated?: boolean;
   createdAt?: Date | string;
   updatedAt?: Date | string;
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput;
+  invitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutInvitedByInput;
+  freelancerProfile?: Prisma.FreelancerProfileUncheckedCreateNestedOneWithoutUserInput;
+  clientProfile?: Prisma.ClientProfileUncheckedCreateNestedOneWithoutUserInput;
 };
 
 export type UserCreateOrConnectWithoutRolesInput = {
@@ -573,9 +826,13 @@ export type UserUpdateWithoutRolesInput = {
   lastName?: Prisma.StringFieldUpdateOperationsInput | string;
   firstName?: Prisma.StringFieldUpdateOperationsInput | string;
   thirdName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  isActivated?: Prisma.BoolFieldUpdateOperationsInput | boolean;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput;
+  invitations?: Prisma.InvitationUpdateManyWithoutInvitedByNestedInput;
+  freelancerProfile?: Prisma.FreelancerProfileUpdateOneWithoutUserNestedInput;
+  clientProfile?: Prisma.ClientProfileUpdateOneWithoutUserNestedInput;
 };
 
 export type UserUncheckedUpdateWithoutRolesInput = {
@@ -585,9 +842,197 @@ export type UserUncheckedUpdateWithoutRolesInput = {
   lastName?: Prisma.StringFieldUpdateOperationsInput | string;
   firstName?: Prisma.StringFieldUpdateOperationsInput | string;
   thirdName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  isActivated?: Prisma.BoolFieldUpdateOperationsInput | boolean;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput;
+  invitations?: Prisma.InvitationUncheckedUpdateManyWithoutInvitedByNestedInput;
+  freelancerProfile?: Prisma.FreelancerProfileUncheckedUpdateOneWithoutUserNestedInput;
+  clientProfile?: Prisma.ClientProfileUncheckedUpdateOneWithoutUserNestedInput;
+};
+
+export type UserCreateWithoutFreelancerProfileInput = {
+  id?: string;
+  email: string;
+  password: string;
+  lastName: string;
+  firstName: string;
+  thirdName?: string | null;
+  isActivated?: boolean;
+  createdAt?: Date | string;
+  updatedAt?: Date | string;
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput;
+  roles?: Prisma.UserRoleCreateNestedManyWithoutUserInput;
+  invitations?: Prisma.InvitationCreateNestedManyWithoutInvitedByInput;
+  clientProfile?: Prisma.ClientProfileCreateNestedOneWithoutUserInput;
+};
+
+export type UserUncheckedCreateWithoutFreelancerProfileInput = {
+  id?: string;
+  email: string;
+  password: string;
+  lastName: string;
+  firstName: string;
+  thirdName?: string | null;
+  isActivated?: boolean;
+  createdAt?: Date | string;
+  updatedAt?: Date | string;
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput;
+  roles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput;
+  invitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutInvitedByInput;
+  clientProfile?: Prisma.ClientProfileUncheckedCreateNestedOneWithoutUserInput;
+};
+
+export type UserCreateOrConnectWithoutFreelancerProfileInput = {
+  where: Prisma.UserWhereUniqueInput;
+  create: Prisma.XOR<
+    Prisma.UserCreateWithoutFreelancerProfileInput,
+    Prisma.UserUncheckedCreateWithoutFreelancerProfileInput
+  >;
+};
+
+export type UserUpsertWithoutFreelancerProfileInput = {
+  update: Prisma.XOR<
+    Prisma.UserUpdateWithoutFreelancerProfileInput,
+    Prisma.UserUncheckedUpdateWithoutFreelancerProfileInput
+  >;
+  create: Prisma.XOR<
+    Prisma.UserCreateWithoutFreelancerProfileInput,
+    Prisma.UserUncheckedCreateWithoutFreelancerProfileInput
+  >;
+  where?: Prisma.UserWhereInput;
+};
+
+export type UserUpdateToOneWithWhereWithoutFreelancerProfileInput = {
+  where?: Prisma.UserWhereInput;
+  data: Prisma.XOR<
+    Prisma.UserUpdateWithoutFreelancerProfileInput,
+    Prisma.UserUncheckedUpdateWithoutFreelancerProfileInput
+  >;
+};
+
+export type UserUpdateWithoutFreelancerProfileInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string;
+  email?: Prisma.StringFieldUpdateOperationsInput | string;
+  password?: Prisma.StringFieldUpdateOperationsInput | string;
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string;
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string;
+  thirdName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  isActivated?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput;
+  roles?: Prisma.UserRoleUpdateManyWithoutUserNestedInput;
+  invitations?: Prisma.InvitationUpdateManyWithoutInvitedByNestedInput;
+  clientProfile?: Prisma.ClientProfileUpdateOneWithoutUserNestedInput;
+};
+
+export type UserUncheckedUpdateWithoutFreelancerProfileInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string;
+  email?: Prisma.StringFieldUpdateOperationsInput | string;
+  password?: Prisma.StringFieldUpdateOperationsInput | string;
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string;
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string;
+  thirdName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  isActivated?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput;
+  roles?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput;
+  invitations?: Prisma.InvitationUncheckedUpdateManyWithoutInvitedByNestedInput;
+  clientProfile?: Prisma.ClientProfileUncheckedUpdateOneWithoutUserNestedInput;
+};
+
+export type UserCreateWithoutClientProfileInput = {
+  id?: string;
+  email: string;
+  password: string;
+  lastName: string;
+  firstName: string;
+  thirdName?: string | null;
+  isActivated?: boolean;
+  createdAt?: Date | string;
+  updatedAt?: Date | string;
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput;
+  roles?: Prisma.UserRoleCreateNestedManyWithoutUserInput;
+  invitations?: Prisma.InvitationCreateNestedManyWithoutInvitedByInput;
+  freelancerProfile?: Prisma.FreelancerProfileCreateNestedOneWithoutUserInput;
+};
+
+export type UserUncheckedCreateWithoutClientProfileInput = {
+  id?: string;
+  email: string;
+  password: string;
+  lastName: string;
+  firstName: string;
+  thirdName?: string | null;
+  isActivated?: boolean;
+  createdAt?: Date | string;
+  updatedAt?: Date | string;
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput;
+  roles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput;
+  invitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutInvitedByInput;
+  freelancerProfile?: Prisma.FreelancerProfileUncheckedCreateNestedOneWithoutUserInput;
+};
+
+export type UserCreateOrConnectWithoutClientProfileInput = {
+  where: Prisma.UserWhereUniqueInput;
+  create: Prisma.XOR<
+    Prisma.UserCreateWithoutClientProfileInput,
+    Prisma.UserUncheckedCreateWithoutClientProfileInput
+  >;
+};
+
+export type UserUpsertWithoutClientProfileInput = {
+  update: Prisma.XOR<
+    Prisma.UserUpdateWithoutClientProfileInput,
+    Prisma.UserUncheckedUpdateWithoutClientProfileInput
+  >;
+  create: Prisma.XOR<
+    Prisma.UserCreateWithoutClientProfileInput,
+    Prisma.UserUncheckedCreateWithoutClientProfileInput
+  >;
+  where?: Prisma.UserWhereInput;
+};
+
+export type UserUpdateToOneWithWhereWithoutClientProfileInput = {
+  where?: Prisma.UserWhereInput;
+  data: Prisma.XOR<
+    Prisma.UserUpdateWithoutClientProfileInput,
+    Prisma.UserUncheckedUpdateWithoutClientProfileInput
+  >;
+};
+
+export type UserUpdateWithoutClientProfileInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string;
+  email?: Prisma.StringFieldUpdateOperationsInput | string;
+  password?: Prisma.StringFieldUpdateOperationsInput | string;
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string;
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string;
+  thirdName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  isActivated?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput;
+  roles?: Prisma.UserRoleUpdateManyWithoutUserNestedInput;
+  invitations?: Prisma.InvitationUpdateManyWithoutInvitedByNestedInput;
+  freelancerProfile?: Prisma.FreelancerProfileUpdateOneWithoutUserNestedInput;
+};
+
+export type UserUncheckedUpdateWithoutClientProfileInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string;
+  email?: Prisma.StringFieldUpdateOperationsInput | string;
+  password?: Prisma.StringFieldUpdateOperationsInput | string;
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string;
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string;
+  thirdName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  isActivated?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput;
+  roles?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput;
+  invitations?: Prisma.InvitationUncheckedUpdateManyWithoutInvitedByNestedInput;
+  freelancerProfile?: Prisma.FreelancerProfileUncheckedUpdateOneWithoutUserNestedInput;
 };
 
 /**
@@ -597,6 +1042,7 @@ export type UserUncheckedUpdateWithoutRolesInput = {
 export type UserCountOutputType = {
   sessions: number;
   roles: number;
+  invitations: number;
 };
 
 export type UserCountOutputTypeSelect<
@@ -604,6 +1050,7 @@ export type UserCountOutputTypeSelect<
 > = {
   sessions?: boolean | UserCountOutputTypeCountSessionsArgs;
   roles?: boolean | UserCountOutputTypeCountRolesArgs;
+  invitations?: boolean | UserCountOutputTypeCountInvitationsArgs;
 };
 
 /**
@@ -636,6 +1083,15 @@ export type UserCountOutputTypeCountRolesArgs<
   where?: Prisma.UserRoleWhereInput;
 };
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountInvitationsArgs<
+  ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
+> = {
+  where?: Prisma.InvitationWhereInput;
+};
+
 export type UserSelect<
   ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
 > = runtime.Types.Extensions.GetSelect<
@@ -646,10 +1102,14 @@ export type UserSelect<
     lastName?: boolean;
     firstName?: boolean;
     thirdName?: boolean;
+    isActivated?: boolean;
     createdAt?: boolean;
     updatedAt?: boolean;
     sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>;
     roles?: boolean | Prisma.User$rolesArgs<ExtArgs>;
+    invitations?: boolean | Prisma.User$invitationsArgs<ExtArgs>;
+    freelancerProfile?: boolean | Prisma.User$freelancerProfileArgs<ExtArgs>;
+    clientProfile?: boolean | Prisma.User$clientProfileArgs<ExtArgs>;
     _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>;
   },
   ExtArgs['result']['user']
@@ -665,6 +1125,7 @@ export type UserSelectCreateManyAndReturn<
     lastName?: boolean;
     firstName?: boolean;
     thirdName?: boolean;
+    isActivated?: boolean;
     createdAt?: boolean;
     updatedAt?: boolean;
   },
@@ -681,6 +1142,7 @@ export type UserSelectUpdateManyAndReturn<
     lastName?: boolean;
     firstName?: boolean;
     thirdName?: boolean;
+    isActivated?: boolean;
     createdAt?: boolean;
     updatedAt?: boolean;
   },
@@ -694,6 +1156,7 @@ export type UserSelectScalar = {
   lastName?: boolean;
   firstName?: boolean;
   thirdName?: boolean;
+  isActivated?: boolean;
   createdAt?: boolean;
   updatedAt?: boolean;
 };
@@ -701,7 +1164,15 @@ export type UserSelectScalar = {
 export type UserOmit<
   ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
 > = runtime.Types.Extensions.GetOmit<
-  'id' | 'email' | 'password' | 'lastName' | 'firstName' | 'thirdName' | 'createdAt' | 'updatedAt',
+  | 'id'
+  | 'email'
+  | 'password'
+  | 'lastName'
+  | 'firstName'
+  | 'thirdName'
+  | 'isActivated'
+  | 'createdAt'
+  | 'updatedAt',
   ExtArgs['result']['user']
 >;
 export type UserInclude<
@@ -709,6 +1180,9 @@ export type UserInclude<
 > = {
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>;
   roles?: boolean | Prisma.User$rolesArgs<ExtArgs>;
+  invitations?: boolean | Prisma.User$invitationsArgs<ExtArgs>;
+  freelancerProfile?: boolean | Prisma.User$freelancerProfileArgs<ExtArgs>;
+  clientProfile?: boolean | Prisma.User$clientProfileArgs<ExtArgs>;
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>;
 };
 export type UserIncludeCreateManyAndReturn<
@@ -725,6 +1199,9 @@ export type $UserPayload<
   objects: {
     sessions: Prisma.$SessionPayload<ExtArgs>[];
     roles: Prisma.$UserRolePayload<ExtArgs>[];
+    invitations: Prisma.$InvitationPayload<ExtArgs>[];
+    freelancerProfile: Prisma.$FreelancerProfilePayload<ExtArgs> | null;
+    clientProfile: Prisma.$ClientProfilePayload<ExtArgs> | null;
   };
   scalars: runtime.Types.Extensions.GetPayloadResult<
     {
@@ -734,6 +1211,7 @@ export type $UserPayload<
       lastName: string;
       firstName: string;
       thirdName: string | null;
+      isActivated: boolean;
       createdAt: Date;
       updatedAt: Date;
     },
@@ -1268,6 +1746,43 @@ export interface Prisma__UserClient<
       >
     | Null
   >;
+  invitations<T extends Prisma.User$invitationsArgs<ExtArgs> = {}>(
+    args?: Prisma.Subset<T, Prisma.User$invitationsArgs<ExtArgs>>,
+  ): Prisma.PrismaPromise<
+    | runtime.Types.Result.GetResult<
+        Prisma.$InvitationPayload<ExtArgs>,
+        T,
+        'findMany',
+        GlobalOmitOptions
+      >
+    | Null
+  >;
+  freelancerProfile<T extends Prisma.User$freelancerProfileArgs<ExtArgs> = {}>(
+    args?: Prisma.Subset<T, Prisma.User$freelancerProfileArgs<ExtArgs>>,
+  ): Prisma.Prisma__FreelancerProfileClient<
+    runtime.Types.Result.GetResult<
+      Prisma.$FreelancerProfilePayload<ExtArgs>,
+      T,
+      'findUniqueOrThrow',
+      GlobalOmitOptions
+    > | null,
+    null,
+    ExtArgs,
+    GlobalOmitOptions
+  >;
+  clientProfile<T extends Prisma.User$clientProfileArgs<ExtArgs> = {}>(
+    args?: Prisma.Subset<T, Prisma.User$clientProfileArgs<ExtArgs>>,
+  ): Prisma.Prisma__ClientProfileClient<
+    runtime.Types.Result.GetResult<
+      Prisma.$ClientProfilePayload<ExtArgs>,
+      T,
+      'findUniqueOrThrow',
+      GlobalOmitOptions
+    > | null,
+    null,
+    ExtArgs,
+    GlobalOmitOptions
+  >;
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1305,6 +1820,7 @@ export interface UserFieldRefs {
   readonly lastName: Prisma.FieldRef<'User', 'String'>;
   readonly firstName: Prisma.FieldRef<'User', 'String'>;
   readonly thirdName: Prisma.FieldRef<'User', 'String'>;
+  readonly isActivated: Prisma.FieldRef<'User', 'Boolean'>;
   readonly createdAt: Prisma.FieldRef<'User', 'DateTime'>;
   readonly updatedAt: Prisma.FieldRef<'User', 'DateTime'>;
 }
@@ -1771,6 +2287,74 @@ export type User$rolesArgs<
   take?: number;
   skip?: number;
   distinct?: Prisma.UserRoleScalarFieldEnum | Prisma.UserRoleScalarFieldEnum[];
+};
+
+/**
+ * User.invitations
+ */
+export type User$invitationsArgs<
+  ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
+> = {
+  /**
+   * Select specific fields to fetch from the Invitation
+   */
+  select?: Prisma.InvitationSelect<ExtArgs> | null;
+  /**
+   * Omit specific fields from the Invitation
+   */
+  omit?: Prisma.InvitationOmit<ExtArgs> | null;
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.InvitationInclude<ExtArgs> | null;
+  where?: Prisma.InvitationWhereInput;
+  orderBy?: Prisma.InvitationOrderByWithRelationInput | Prisma.InvitationOrderByWithRelationInput[];
+  cursor?: Prisma.InvitationWhereUniqueInput;
+  take?: number;
+  skip?: number;
+  distinct?: Prisma.InvitationScalarFieldEnum | Prisma.InvitationScalarFieldEnum[];
+};
+
+/**
+ * User.freelancerProfile
+ */
+export type User$freelancerProfileArgs<
+  ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
+> = {
+  /**
+   * Select specific fields to fetch from the FreelancerProfile
+   */
+  select?: Prisma.FreelancerProfileSelect<ExtArgs> | null;
+  /**
+   * Omit specific fields from the FreelancerProfile
+   */
+  omit?: Prisma.FreelancerProfileOmit<ExtArgs> | null;
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.FreelancerProfileInclude<ExtArgs> | null;
+  where?: Prisma.FreelancerProfileWhereInput;
+};
+
+/**
+ * User.clientProfile
+ */
+export type User$clientProfileArgs<
+  ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
+> = {
+  /**
+   * Select specific fields to fetch from the ClientProfile
+   */
+  select?: Prisma.ClientProfileSelect<ExtArgs> | null;
+  /**
+   * Omit specific fields from the ClientProfile
+   */
+  omit?: Prisma.ClientProfileOmit<ExtArgs> | null;
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ClientProfileInclude<ExtArgs> | null;
+  where?: Prisma.ClientProfileWhereInput;
 };
 
 /**

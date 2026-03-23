@@ -4,7 +4,11 @@ import { UnauthorizedException, BadRequestException } from '@nestjs/common';
 import { AuthService } from '@/modules/auth/service/auth.service';
 import { UsersService } from '@/modules/users/service/users.service';
 import { UserPermissionsRepository } from '@/modules/users/repository/user-permissions.repository';
+import { UserRolesRepository } from '@/modules/users/repository/user-roles.repository';
 import { SessionsService } from '@/modules/sessions/service/sessions.service';
+import { InvitationsService } from '@/modules/invitations/service/invitations.service';
+import { RolesRepository } from '@/modules/roles/repository/roles.repository';
+import { DatabaseService } from '@/infrastructure/database/database.service';
 import { TokensService } from '@/infrastructure/tokens/tokens.service';
 import { LoginDto } from '@/modules/auth/dto/login.dto';
 import { RegisterDto } from '@/modules/auth/dto/register.dto';
@@ -42,6 +46,27 @@ const mockTokensService = {
   hashToken: jest.fn().mockReturnValue('hashed-token'),
 };
 
+const mockUserRolesRepository = {
+  addRole: jest.fn(),
+  deleteRole: jest.fn(),
+};
+
+const mockInvitationsService = {
+  accept: jest.fn(),
+  getInvitationForRegistration: jest.fn(),
+};
+
+const mockRolesRepository = {
+  findBySlug: jest.fn(),
+};
+
+const mockDatabaseService = {
+  user: { findMany: jest.fn() },
+  clientProfile: { create: jest.fn() },
+  freelancerProfile: { findUnique: jest.fn() },
+  clientRelation: { create: jest.fn() },
+};
+
 describe('AuthService', () => {
   let service: AuthService;
 
@@ -53,8 +78,12 @@ describe('AuthService', () => {
         { provide: ConfigService, useValue: mockConfigService },
         { provide: UsersService, useValue: mockUsersService },
         { provide: UserPermissionsRepository, useValue: mockUserPermissionsRepository },
+        { provide: UserRolesRepository, useValue: mockUserRolesRepository },
         { provide: SessionsService, useValue: mockSessionsService },
         { provide: TokensService, useValue: mockTokensService },
+        { provide: InvitationsService, useValue: mockInvitationsService },
+        { provide: RolesRepository, useValue: mockRolesRepository },
+        { provide: DatabaseService, useValue: mockDatabaseService },
       ],
     }).compile();
 
@@ -122,7 +151,10 @@ describe('AuthService', () => {
 
       expect(result).toEqual({ accessToken: 'access-token', refreshToken: 'refresh-token' });
       expect(mockUsersService.findForAuth).toHaveBeenCalledWith(registerDto.email);
-      expect(mockUsersService.create).toHaveBeenCalledWith(registerDto);
+      expect(mockUsersService.create).toHaveBeenCalledWith({
+        ...registerDto,
+        isActivated: false,
+      });
     });
 
     it('should throw BadRequestException when email already exists', async () => {

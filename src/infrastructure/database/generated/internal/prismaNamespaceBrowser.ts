@@ -48,12 +48,18 @@ export const JsonNull = runtime.JsonNull;
 export const AnyNull = runtime.AnyNull;
 
 export const ModelName = {
+  Company: 'Company',
+  CompanyMember: 'CompanyMember',
+  Invitation: 'Invitation',
   Permission: 'Permission',
   Role: 'Role',
   RolePermission: 'RolePermission',
   Session: 'Session',
   User: 'User',
   UserRole: 'UserRole',
+  FreelancerProfile: 'FreelancerProfile',
+  ClientProfile: 'ClientProfile',
+  ClientRelation: 'ClientRelation',
 } as const;
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName];
@@ -71,6 +77,40 @@ export const TransactionIsolationLevel = runtime.makeStrictEnum({
 
 export type TransactionIsolationLevel =
   (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel];
+
+export const CompanyScalarFieldEnum = {
+  id: 'id',
+  slug: 'slug',
+  name: 'name',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+} as const;
+
+export type CompanyScalarFieldEnum =
+  (typeof CompanyScalarFieldEnum)[keyof typeof CompanyScalarFieldEnum];
+
+export const CompanyMemberScalarFieldEnum = {
+  clientProfileId: 'clientProfileId',
+  companyId: 'companyId',
+} as const;
+
+export type CompanyMemberScalarFieldEnum =
+  (typeof CompanyMemberScalarFieldEnum)[keyof typeof CompanyMemberScalarFieldEnum];
+
+export const InvitationScalarFieldEnum = {
+  id: 'id',
+  email: 'email',
+  token: 'token',
+  status: 'status',
+  invitedById: 'invitedById',
+  companyId: 'companyId',
+  expiresAt: 'expiresAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+} as const;
+
+export type InvitationScalarFieldEnum =
+  (typeof InvitationScalarFieldEnum)[keyof typeof InvitationScalarFieldEnum];
 
 export const PermissionScalarFieldEnum = {
   id: 'id',
@@ -122,6 +162,7 @@ export const UserScalarFieldEnum = {
   lastName: 'lastName',
   firstName: 'firstName',
   thirdName: 'thirdName',
+  isActivated: 'isActivated',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
 } as const;
@@ -135,6 +176,38 @@ export const UserRoleScalarFieldEnum = {
 
 export type UserRoleScalarFieldEnum =
   (typeof UserRoleScalarFieldEnum)[keyof typeof UserRoleScalarFieldEnum];
+
+export const FreelancerProfileScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+} as const;
+
+export type FreelancerProfileScalarFieldEnum =
+  (typeof FreelancerProfileScalarFieldEnum)[keyof typeof FreelancerProfileScalarFieldEnum];
+
+export const ClientProfileScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+} as const;
+
+export type ClientProfileScalarFieldEnum =
+  (typeof ClientProfileScalarFieldEnum)[keyof typeof ClientProfileScalarFieldEnum];
+
+export const ClientRelationScalarFieldEnum = {
+  status: 'status',
+  freelancerProfileId: 'freelancerProfileId',
+  clientProfileId: 'clientProfileId',
+  companyId: 'companyId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+} as const;
+
+export type ClientRelationScalarFieldEnum =
+  (typeof ClientRelationScalarFieldEnum)[keyof typeof ClientRelationScalarFieldEnum];
 
 export const SortOrder = {
   asc: 'asc',

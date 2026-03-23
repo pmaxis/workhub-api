@@ -1,0 +1,27 @@
+model Company {
+  id             String          @id @default(cuid())
+
+  slug           String          @unique
+  name           String
+
+  companyMembers CompanyMember[]
+  invitations    Invitation[]
+  clientRelations ClientRelation[]
+
+  createdAt      DateTime        @default(now()) @map("created_at")
+  updatedAt      DateTime        @updatedAt @map("updated_at")
+
+  @@map("companies")
+}
+
+model CompanyMember {
+  clientProfileId String        @map("client_profile_id")
+  clientProfile   ClientProfile @relation(fields: [clientProfileId], references: [id])
+
+  companyId       String        @map("company_id")
+  company         Company       @relation(fields: [companyId], references: [id])
+
+  @@id([clientProfileId, companyId])
+
+  @@map("company_members")
+}

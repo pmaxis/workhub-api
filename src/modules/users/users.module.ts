@@ -26,6 +26,12 @@ import { userRolesAbilityDefinitions } from '@/modules/users/ability/user-roles.
     UserRolesRepository,
     UserPermissionsRepository,
   ],
-  exports: [UsersService, UserRolesService, UserPermissionsRepository],
+  exports: [
+    UsersService,
+    UsersRepository,
+    UserRolesService,
+    UserPermissionsRepository,
+    UserRolesRepository,
+  ],
 })
 export class UsersModule {}

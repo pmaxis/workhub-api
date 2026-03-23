@@ -1,25 +1,26 @@
 model Role {
-  id          String   @id @default(cuid())
+  id             String           @id @default(cuid())
 
-  slug        String   @unique
-  name        String   @unique
+  slug           String           @unique
+  name           String           @unique
 
-  permissions RolePermission[]
-  users       UserRole[]
+  permissions    RolePermission[]
+  users          UserRole[]
 
-  createdAt   DateTime @default(now()) @map("created_at")
-  updatedAt   DateTime @updatedAt @map("updated_at")
+  createdAt      DateTime         @default(now()) @map("created_at")
+  updatedAt      DateTime         @updatedAt @map("updated_at")
   
   @@map("roles")
 }
 
 model RolePermission {
-  roleId       String @map("role_id")
-  permissionId String @map("permission_id")
+  roleId       String     @map("role_id")
+  permissionId String     @map("permission_id")
 
-  role         Role     @relation(fields: [roleId], references: [id])
+  role         Role       @relation(fields: [roleId], references: [id])
   permission   Permission @relation(fields: [permissionId], references: [id])
 
   @@id([roleId, permissionId])
+
   @@map("role_permissions")
 }

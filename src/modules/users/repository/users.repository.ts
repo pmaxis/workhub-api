@@ -12,6 +12,7 @@ export class UsersRepository {
     lastName: string;
     firstName: string;
     thirdName?: string;
+    isActivated?: boolean;
   }) {
     return this.database.user.create({ data });
   }

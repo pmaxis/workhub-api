@@ -28,8 +28,8 @@ export * from './enums.js';
  * const prisma = new PrismaClient({
  *   adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL })
  * })
- * // Fetch zero or more Permissions
- * const permissions = await prisma.permission.findMany()
+ * // Fetch zero or more Companies
+ * const companies = await prisma.company.findMany()
  * ```
  *
  * Read more in our [docs](https://pris.ly/d/client).
@@ -42,6 +42,21 @@ export type PrismaClient<
 > = $Class.PrismaClient<LogOpts, OmitOpts, ExtArgs>;
 export { Prisma };
 
+/**
+ * Model Company
+ *
+ */
+export type Company = Prisma.CompanyModel;
+/**
+ * Model CompanyMember
+ *
+ */
+export type CompanyMember = Prisma.CompanyMemberModel;
+/**
+ * Model Invitation
+ *
+ */
+export type Invitation = Prisma.InvitationModel;
 /**
  * Model Permission
  *
@@ -72,3 +87,18 @@ export type User = Prisma.UserModel;
  *
  */
 export type UserRole = Prisma.UserRoleModel;
+/**
+ * Model FreelancerProfile
+ *
+ */
+export type FreelancerProfile = Prisma.FreelancerProfileModel;
+/**
+ * Model ClientProfile
+ *
+ */
+export type ClientProfile = Prisma.ClientProfileModel;
+/**
+ * Model ClientRelation
+ *
+ */
+export type ClientRelation = Prisma.ClientRelationModel;
