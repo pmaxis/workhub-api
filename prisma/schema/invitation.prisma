@@ -6,7 +6,7 @@ model Invitation {
   status      InvitationStatus
 
   invitedById String           @map("invited_by_id")
-  invitedBy   User             @relation(fields: [invitedById], references: [id])
+  invitedBy   User             @relation(fields: [invitedById], references: [id], onDelete: Cascade)
   
   companyId   String?          @map("company_id")
   company     Company?         @relation(fields: [companyId], references: [id])
