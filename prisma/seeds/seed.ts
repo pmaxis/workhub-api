@@ -70,6 +70,12 @@ async function seed() {
     update: {},
   });
 
+  await prisma.freelancerProfile.upsert({
+    where: { userId: user.id },
+    create: { userId: user.id },
+    update: {},
+  });
+
   console.log('Seed completed: admin@test.com / password');
   await prisma.$disconnect();
 }

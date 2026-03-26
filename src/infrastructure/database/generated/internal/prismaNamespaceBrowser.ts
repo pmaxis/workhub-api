@@ -52,9 +52,11 @@ export const ModelName = {
   CompanyMember: 'CompanyMember',
   Invitation: 'Invitation',
   Permission: 'Permission',
+  Project: 'Project',
   Role: 'Role',
   RolePermission: 'RolePermission',
   Session: 'Session',
+  Task: 'Task',
   User: 'User',
   UserRole: 'UserRole',
   FreelancerProfile: 'FreelancerProfile',
@@ -123,6 +125,19 @@ export const PermissionScalarFieldEnum = {
 export type PermissionScalarFieldEnum =
   (typeof PermissionScalarFieldEnum)[keyof typeof PermissionScalarFieldEnum];
 
+export const ProjectScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description',
+  freelancerProfileId: 'freelancerProfileId',
+  clientProfileId: 'clientProfileId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+} as const;
+
+export type ProjectScalarFieldEnum =
+  (typeof ProjectScalarFieldEnum)[keyof typeof ProjectScalarFieldEnum];
+
 export const RoleScalarFieldEnum = {
   id: 'id',
   slug: 'slug',
@@ -154,6 +169,19 @@ export const SessionScalarFieldEnum = {
 
 export type SessionScalarFieldEnum =
   (typeof SessionScalarFieldEnum)[keyof typeof SessionScalarFieldEnum];
+
+export const TaskScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  description: 'description',
+  status: 'status',
+  projectId: 'projectId',
+  assigneeId: 'assigneeId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+} as const;
+
+export type TaskScalarFieldEnum = (typeof TaskScalarFieldEnum)[keyof typeof TaskScalarFieldEnum];
 
 export const UserScalarFieldEnum = {
   id: 'id',

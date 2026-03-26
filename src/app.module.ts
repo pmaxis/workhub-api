@@ -15,6 +15,8 @@ import { RolesModule } from '@/modules/roles/roles.module';
 import { PermissionsModule } from '@/modules/permissions/permissions.module';
 import { ProfileModule } from '@/modules/profile/profile.module';
 import { InvitationsModule } from './modules/invitations/invitations.module';
+import { ProjectsModule } from '@/modules/projects/projects.module';
+import { TasksModule } from '@/modules/tasks/tasks.module';
 
 @Module({
   imports: [
@@ -33,6 +35,8 @@ import { InvitationsModule } from './modules/invitations/invitations.module';
     PermissionsModule,
     ProfileModule,
     InvitationsModule,
+    ProjectsModule,
+    TasksModule,
   ],
   controllers: [],
   providers: [

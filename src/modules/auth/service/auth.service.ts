@@ -108,6 +108,10 @@ export class AuthService {
           },
         });
       }
+    } else {
+      await this.database.freelancerProfile.create({
+        data: { userId: user.id },
+      });
     }
 
     return this.createAuthSession(user.id, ipAddress, userAgent);

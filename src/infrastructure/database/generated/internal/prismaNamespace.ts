@@ -379,9 +379,11 @@ export const ModelName = {
   CompanyMember: 'CompanyMember',
   Invitation: 'Invitation',
   Permission: 'Permission',
+  Project: 'Project',
   Role: 'Role',
   RolePermission: 'RolePermission',
   Session: 'Session',
+  Task: 'Task',
   User: 'User',
   UserRole: 'UserRole',
   FreelancerProfile: 'FreelancerProfile',
@@ -411,9 +413,11 @@ export type TypeMap<
       | 'companyMember'
       | 'invitation'
       | 'permission'
+      | 'project'
       | 'role'
       | 'rolePermission'
       | 'session'
+      | 'task'
       | 'user'
       | 'userRole'
       | 'freelancerProfile'
@@ -720,6 +724,80 @@ export type TypeMap<
         };
       };
     };
+    Project: {
+      payload: Prisma.$ProjectPayload<ExtArgs>;
+      fields: Prisma.ProjectFieldRefs;
+      operations: {
+        findUnique: {
+          args: Prisma.ProjectFindUniqueArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProjectPayload> | null;
+        };
+        findUniqueOrThrow: {
+          args: Prisma.ProjectFindUniqueOrThrowArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProjectPayload>;
+        };
+        findFirst: {
+          args: Prisma.ProjectFindFirstArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProjectPayload> | null;
+        };
+        findFirstOrThrow: {
+          args: Prisma.ProjectFindFirstOrThrowArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProjectPayload>;
+        };
+        findMany: {
+          args: Prisma.ProjectFindManyArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProjectPayload>[];
+        };
+        create: {
+          args: Prisma.ProjectCreateArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProjectPayload>;
+        };
+        createMany: {
+          args: Prisma.ProjectCreateManyArgs<ExtArgs>;
+          result: BatchPayload;
+        };
+        createManyAndReturn: {
+          args: Prisma.ProjectCreateManyAndReturnArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProjectPayload>[];
+        };
+        delete: {
+          args: Prisma.ProjectDeleteArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProjectPayload>;
+        };
+        update: {
+          args: Prisma.ProjectUpdateArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProjectPayload>;
+        };
+        deleteMany: {
+          args: Prisma.ProjectDeleteManyArgs<ExtArgs>;
+          result: BatchPayload;
+        };
+        updateMany: {
+          args: Prisma.ProjectUpdateManyArgs<ExtArgs>;
+          result: BatchPayload;
+        };
+        updateManyAndReturn: {
+          args: Prisma.ProjectUpdateManyAndReturnArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProjectPayload>[];
+        };
+        upsert: {
+          args: Prisma.ProjectUpsertArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProjectPayload>;
+        };
+        aggregate: {
+          args: Prisma.ProjectAggregateArgs<ExtArgs>;
+          result: runtime.Types.Utils.Optional<Prisma.AggregateProject>;
+        };
+        groupBy: {
+          args: Prisma.ProjectGroupByArgs<ExtArgs>;
+          result: runtime.Types.Utils.Optional<Prisma.ProjectGroupByOutputType>[];
+        };
+        count: {
+          args: Prisma.ProjectCountArgs<ExtArgs>;
+          result: runtime.Types.Utils.Optional<Prisma.ProjectCountAggregateOutputType> | number;
+        };
+      };
+    };
     Role: {
       payload: Prisma.$RolePayload<ExtArgs>;
       fields: Prisma.RoleFieldRefs;
@@ -941,6 +1019,80 @@ export type TypeMap<
         count: {
           args: Prisma.SessionCountArgs<ExtArgs>;
           result: runtime.Types.Utils.Optional<Prisma.SessionCountAggregateOutputType> | number;
+        };
+      };
+    };
+    Task: {
+      payload: Prisma.$TaskPayload<ExtArgs>;
+      fields: Prisma.TaskFieldRefs;
+      operations: {
+        findUnique: {
+          args: Prisma.TaskFindUniqueArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TaskPayload> | null;
+        };
+        findUniqueOrThrow: {
+          args: Prisma.TaskFindUniqueOrThrowArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TaskPayload>;
+        };
+        findFirst: {
+          args: Prisma.TaskFindFirstArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TaskPayload> | null;
+        };
+        findFirstOrThrow: {
+          args: Prisma.TaskFindFirstOrThrowArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TaskPayload>;
+        };
+        findMany: {
+          args: Prisma.TaskFindManyArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TaskPayload>[];
+        };
+        create: {
+          args: Prisma.TaskCreateArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TaskPayload>;
+        };
+        createMany: {
+          args: Prisma.TaskCreateManyArgs<ExtArgs>;
+          result: BatchPayload;
+        };
+        createManyAndReturn: {
+          args: Prisma.TaskCreateManyAndReturnArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TaskPayload>[];
+        };
+        delete: {
+          args: Prisma.TaskDeleteArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TaskPayload>;
+        };
+        update: {
+          args: Prisma.TaskUpdateArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TaskPayload>;
+        };
+        deleteMany: {
+          args: Prisma.TaskDeleteManyArgs<ExtArgs>;
+          result: BatchPayload;
+        };
+        updateMany: {
+          args: Prisma.TaskUpdateManyArgs<ExtArgs>;
+          result: BatchPayload;
+        };
+        updateManyAndReturn: {
+          args: Prisma.TaskUpdateManyAndReturnArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TaskPayload>[];
+        };
+        upsert: {
+          args: Prisma.TaskUpsertArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TaskPayload>;
+        };
+        aggregate: {
+          args: Prisma.TaskAggregateArgs<ExtArgs>;
+          result: runtime.Types.Utils.Optional<Prisma.AggregateTask>;
+        };
+        groupBy: {
+          args: Prisma.TaskGroupByArgs<ExtArgs>;
+          result: runtime.Types.Utils.Optional<Prisma.TaskGroupByOutputType>[];
+        };
+        count: {
+          args: Prisma.TaskCountArgs<ExtArgs>;
+          result: runtime.Types.Utils.Optional<Prisma.TaskCountAggregateOutputType> | number;
         };
       };
     };
@@ -1404,6 +1556,19 @@ export const PermissionScalarFieldEnum = {
 export type PermissionScalarFieldEnum =
   (typeof PermissionScalarFieldEnum)[keyof typeof PermissionScalarFieldEnum];
 
+export const ProjectScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description',
+  freelancerProfileId: 'freelancerProfileId',
+  clientProfileId: 'clientProfileId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+} as const;
+
+export type ProjectScalarFieldEnum =
+  (typeof ProjectScalarFieldEnum)[keyof typeof ProjectScalarFieldEnum];
+
 export const RoleScalarFieldEnum = {
   id: 'id',
   slug: 'slug',
@@ -1435,6 +1600,19 @@ export const SessionScalarFieldEnum = {
 
 export type SessionScalarFieldEnum =
   (typeof SessionScalarFieldEnum)[keyof typeof SessionScalarFieldEnum];
+
+export const TaskScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  description: 'description',
+  status: 'status',
+  projectId: 'projectId',
+  assigneeId: 'assigneeId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+} as const;
+
+export type TaskScalarFieldEnum = (typeof TaskScalarFieldEnum)[keyof typeof TaskScalarFieldEnum];
 
 export const UserScalarFieldEnum = {
   id: 'id',
@@ -1549,6 +1727,22 @@ export type EnumInvitationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<
 export type ListEnumInvitationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<
   $PrismaModel,
   'InvitationStatus[]'
+>;
+
+/**
+ * Reference to a field of type 'TaskStatus'
+ */
+export type EnumTaskStatusFieldRefInput<$PrismaModel> = FieldRefInputType<
+  $PrismaModel,
+  'TaskStatus'
+>;
+
+/**
+ * Reference to a field of type 'TaskStatus[]'
+ */
+export type ListEnumTaskStatusFieldRefInput<$PrismaModel> = FieldRefInputType<
+  $PrismaModel,
+  'TaskStatus[]'
 >;
 
 /**
@@ -1689,9 +1883,11 @@ export type GlobalOmitConfig = {
   companyMember?: Prisma.CompanyMemberOmit;
   invitation?: Prisma.InvitationOmit;
   permission?: Prisma.PermissionOmit;
+  project?: Prisma.ProjectOmit;
   role?: Prisma.RoleOmit;
   rolePermission?: Prisma.RolePermissionOmit;
   session?: Prisma.SessionOmit;
+  task?: Prisma.TaskOmit;
   user?: Prisma.UserOmit;
   userRole?: Prisma.UserRoleOmit;
   freelancerProfile?: Prisma.FreelancerProfileOmit;

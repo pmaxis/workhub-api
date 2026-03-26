@@ -37,6 +37,11 @@ export type Invitation = Prisma.InvitationModel;
  */
 export type Permission = Prisma.PermissionModel;
 /**
+ * Model Project
+ *
+ */
+export type Project = Prisma.ProjectModel;
+/**
  * Model Role
  *
  */
@@ -51,6 +56,11 @@ export type RolePermission = Prisma.RolePermissionModel;
  *
  */
 export type Session = Prisma.SessionModel;
+/**
+ * Model Task
+ *
+ */
+export type Task = Prisma.TaskModel;
 /**
  * Model User
  *

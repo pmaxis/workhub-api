@@ -63,7 +63,10 @@ const mockRolesRepository = {
 const mockDatabaseService = {
   user: { findMany: jest.fn() },
   clientProfile: { create: jest.fn() },
-  freelancerProfile: { findUnique: jest.fn() },
+  freelancerProfile: {
+    findUnique: jest.fn(),
+    create: jest.fn().mockResolvedValue({ id: 'freelancer-profile-1', userId: 'user-1' }),
+  },
   clientRelation: { create: jest.fn() },
 };
 
@@ -154,6 +157,9 @@ describe('AuthService', () => {
       expect(mockUsersService.create).toHaveBeenCalledWith({
         ...registerDto,
         isActivated: false,
+      });
+      expect(mockDatabaseService.freelancerProfile.create).toHaveBeenCalledWith({
+        data: { userId: createdUser.id },
       });
     });
 

@@ -1,0 +1,19 @@
+model Project {
+  id                  String            @id @default(cuid())
+
+  name                String
+  description         String?
+
+  freelancerProfileId String            @map("freelancer_profile_id")
+  freelancer          FreelancerProfile @relation(fields: [freelancerProfileId], references: [id])
+
+  clientProfileId     String?           @map("client_profile_id")
+  clientProfile       ClientProfile?    @relation(fields: [clientProfileId], references: [id])
+
+  tasks               Task[]
+
+  createdAt           DateTime          @default(now()) @map("created_at")
+  updatedAt           DateTime          @updatedAt @map("updated_at")
+
+  @@map("projects")
+}
