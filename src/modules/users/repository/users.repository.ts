@@ -1,6 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { DatabaseService } from '@/infrastructure/database/database.service';
+import { Role } from '@/infrastructure/database/generated/client';
 import { ADMIN_ROLE_SLUG } from '@/common/constants/reserved';
+
+const rolesInclude = {
+  roles: {
+    include: {
+      role: true,
+    },
+  },
+} as const;
 
 @Injectable()
 export class UsersRepository {
@@ -16,19 +25,10 @@ export class UsersRepository {
   }) {
     const user = await this.database.user.create({
       data,
-      include: {
-        roles: {
-          include: {
-            role: true,
-          },
-        },
-      },
+      include: rolesInclude,
     });
 
-    return {
-      ...user,
-      roles: user.roles.map((ur) => ur.role),
-    };
+    return this.mapUser(user);
   }
 
   async findAll() {
@@ -42,44 +42,32 @@ export class UsersRepository {
           },
         },
       },
-      include: {
-        roles: {
-          include: {
-            role: true,
-          },
-        },
-      },
+      include: rolesInclude,
     });
 
-    return users.map((u) => ({
-      ...u,
-      roles: u.roles.map((ur) => ur.role),
-    }));
+    return users.map((user) => this.mapUser(user));
   }
 
   async findOne(id: string) {
-    const user = await this.database.user.findFirst({
+    const user = await this.database.user.findUnique({
       where: {
         id,
         roles: {
-          none: { role: { slug: ADMIN_ROLE_SLUG } },
-        },
-      },
-      include: {
-        roles: {
-          include: {
-            role: true,
+          none: {
+            role: {
+              slug: ADMIN_ROLE_SLUG,
+            },
           },
         },
       },
+      include: rolesInclude,
     });
 
-    if (!user) return null;
+    if (!user) {
+      return null;
+    }
 
-    return {
-      ...user,
-      roles: user.roles.map((ur) => ur.role),
-    };
+    return this.mapUser(user);
   }
 
   async findOneByEmail(email: string) {
@@ -99,22 +87,47 @@ export class UsersRepository {
     const user = await this.database.user.update({
       where: { id },
       data,
-      include: {
-        roles: {
-          include: {
-            role: true,
-          },
-        },
-      },
+      include: rolesInclude,
     });
 
-    return {
-      ...user,
-      roles: user.roles.map((ur) => ur.role),
-    };
+    return this.mapUser(user);
   }
 
   async delete(id: string): Promise<void> {
     await this.database.user.delete({ where: { id } });
+  }
+
+  private mapUser(user: {
+    id: string;
+    email: string;
+    lastName: string;
+    firstName: string;
+    thirdName: string | null;
+    isActivated: boolean;
+    createdAt: Date;
+    updatedAt: Date;
+    roles: { role: Role }[];
+  }): {
+    id: string;
+    email: string;
+    lastName: string;
+    firstName: string;
+    thirdName: string | null;
+    isActivated: boolean;
+    createdAt: Date;
+    updatedAt: Date;
+    roles: Role[];
+  } {
+    return {
+      id: user.id,
+      email: user.email,
+      lastName: user.lastName,
+      firstName: user.firstName,
+      thirdName: user.thirdName,
+      isActivated: user.isActivated,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt,
+      roles: user.roles.map((ur) => ur.role),
+    };
   }
 }
