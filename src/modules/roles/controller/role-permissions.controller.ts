@@ -1,7 +1,8 @@
-import { Controller, Post, Body, Param, Delete } from '@nestjs/common';
+import { Controller, Post, Body, Param, Delete, HttpCode } from '@nestjs/common';
 import { Action } from '@/common/ability/ability.types';
 import { CheckPolicies } from '@/common/decorators/policy.decorator';
 import { RolePermissionsService } from '@/modules/roles/service/role-permissions.service';
+import { AddPermissionDto } from '@/modules/roles/dto/add-permission.dto';
 
 @Controller('roles/:roleId/permissions')
 export class RolePermissionsController {
@@ -9,19 +10,17 @@ export class RolePermissionsController {
 
   @Post()
   @CheckPolicies((ability) => ability.can(Action.Manage, 'RolePermission'))
-  async addPermission(
-    @Param('roleId') roleId: string,
-    @Body() body: { permissionId: string },
-  ): Promise<void> {
-    await this.rolePermissionsService.addPermission(roleId, body.permissionId);
+  addPermission(@Param('roleId') roleId: string, @Body() dto: AddPermissionDto): Promise<void> {
+    return this.rolePermissionsService.addPermission(roleId, dto.permissionId);
   }
 
   @Delete(':permissionId')
+  @HttpCode(204)
   @CheckPolicies((ability) => ability.can(Action.Manage, 'RolePermission'))
-  async deletePermission(
+  deletePermission(
     @Param('roleId') roleId: string,
     @Param('permissionId') permissionId: string,
   ): Promise<void> {
-    await this.rolePermissionsService.deletePermission(roleId, permissionId);
+    return this.rolePermissionsService.deletePermission(roleId, permissionId);
   }
 }

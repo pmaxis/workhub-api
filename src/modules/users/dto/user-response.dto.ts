@@ -28,7 +28,13 @@ export class UserResponseDto {
     this.firstName = user.firstName;
     this.lastName = user.lastName;
     this.thirdName = user.thirdName;
-    this.roles = user.roles.map((r) => new RoleResponseDto(r));
+    this.roles = user.roles.map(
+      (r) =>
+        new RoleResponseDto({
+          ...r,
+          permissions: [],
+        }),
+    );
     this.createdAt = user.createdAt;
     this.updatedAt = user.updatedAt;
   }

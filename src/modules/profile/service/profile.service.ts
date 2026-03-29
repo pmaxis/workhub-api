@@ -14,7 +14,13 @@ export class ProfileService {
     if (!user) return null;
     return new UserResponseDto({
       ...user,
-      roles: user.roles.map((ur) => new RoleResponseDto(ur.role)),
+      roles: user.roles.map(
+        (ur) =>
+          new RoleResponseDto({
+            ...ur.role,
+            permissions: [],
+          }),
+      ),
     });
   }
 
@@ -30,7 +36,13 @@ export class ProfileService {
     });
     return new UserResponseDto({
       ...updated,
-      roles: updated.roles.map((ur) => new RoleResponseDto(ur.role)),
+      roles: updated.roles.map(
+        (ur) =>
+          new RoleResponseDto({
+            ...ur.role,
+            permissions: [],
+          }),
+      ),
     });
   }
 }

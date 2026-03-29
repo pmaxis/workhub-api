@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { RolePermissionsController } from '@/modules/roles/controller/role-permissions.controller';
 import { RolePermissionsService } from '@/modules/roles/service/role-permissions.service';
+import { AddPermissionDto } from '@/modules/roles/dto/add-permission.dto';
 
 describe('RolePermissionsController', () => {
   let controller: RolePermissionsController;
@@ -33,8 +34,9 @@ describe('RolePermissionsController', () => {
   describe('addPermission', () => {
     it('should add permission to role', async () => {
       mockRolePermissionsService.addPermission.mockResolvedValue(undefined);
+      const dto: AddPermissionDto = { permissionId: 'permission-id' };
 
-      await controller.addPermission('role-id', { permissionId: 'permission-id' });
+      await controller.addPermission('role-id', dto);
 
       expect(mockRolePermissionsService.addPermission).toHaveBeenCalledWith(
         'role-id',

@@ -19,6 +19,6 @@ import { rolePermissionsAbilityDefinitions } from '@/modules/roles/ability/role-
   ],
   controllers: [RolesController, RolePermissionsController],
   providers: [RolesService, RolePermissionsService, RolesRepository, RolePermissionsRepository],
-  exports: [RolesService, RolePermissionsService, RolesRepository],
+  exports: [RolesService, RolePermissionsService, RolesRepository, RolePermissionsRepository],
 })
 export class RolesModule {}

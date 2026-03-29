@@ -22,9 +22,14 @@ export class PermissionsService {
     return permissions.map((permission) => new PermissionResponseDto(permission));
   }
 
-  async findOne(id: string): Promise<PermissionResponseDto | null> {
+  async findOne(id: string): Promise<PermissionResponseDto> {
     const permission = await this.permissionsRepository.findById(id);
-    return permission ? new PermissionResponseDto(permission) : null;
+
+    if (!permission) {
+      throw new NotFoundException('Permission not found');
+    }
+
+    return new PermissionResponseDto(permission);
   }
 
   async update(
