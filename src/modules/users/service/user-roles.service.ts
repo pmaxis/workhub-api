@@ -1,19 +1,23 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { UserRolesRepository } from '@/modules/users/repository/user-roles.repository';
-import { RolesRepository } from '@/modules/roles/repository/roles.repository';
 import { ADMIN_ROLE_SLUG } from '@/common/constants/reserved';
+import { UsersService } from '@/modules/users/service/users.service';
+import { RolesService } from '@/modules/roles/service/roles.service';
 
 @Injectable()
 export class UserRolesService {
   constructor(
     private readonly userRolesRepository: UserRolesRepository,
-    private readonly rolesRepository: RolesRepository,
+    private readonly usersService: UsersService,
+    private readonly rolesService: RolesService,
   ) {}
 
   async addRole(userId: string, roleId: string): Promise<void> {
-    const isAdmin = await this.isRoleAdmin(roleId);
+    await this.usersService.findOne(userId);
 
-    if (isAdmin) {
+    const role = await this.rolesService.findOne(roleId);
+
+    if (role?.slug === ADMIN_ROLE_SLUG) {
       throw new BadRequestException('Cannot assign reserved role');
     }
 
@@ -21,17 +25,14 @@ export class UserRolesService {
   }
 
   async deleteRole(userId: string, roleId: string): Promise<void> {
-    const isAdmin = await this.isRoleAdmin(roleId);
+    await this.usersService.findOne(userId);
 
-    if (isAdmin) {
+    const role = await this.rolesService.findOne(roleId);
+
+    if (role?.slug === ADMIN_ROLE_SLUG) {
       throw new BadRequestException('Cannot remove reserved role');
     }
 
     await this.userRolesRepository.deleteRole(userId, roleId);
-  }
-
-  private async isRoleAdmin(roleId: string): Promise<boolean> {
-    const role = await this.rolesRepository.findByIdForCheck(roleId);
-    return role?.slug === ADMIN_ROLE_SLUG;
   }
 }

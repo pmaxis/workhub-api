@@ -14,12 +14,53 @@ export class UsersRepository {
     thirdName?: string;
     isActivated?: boolean;
   }) {
-    return this.database.user.create({ data });
+    const user = await this.database.user.create({
+      data,
+      include: {
+        roles: {
+          include: {
+            role: true,
+          },
+        },
+      },
+    });
+
+    return {
+      ...user,
+      roles: user.roles.map((ur) => ur.role),
+    };
   }
 
   async findAll() {
-    return this.database.user.findMany({
+    const users = await this.database.user.findMany({
       where: {
+        roles: {
+          none: {
+            role: {
+              slug: ADMIN_ROLE_SLUG,
+            },
+          },
+        },
+      },
+      include: {
+        roles: {
+          include: {
+            role: true,
+          },
+        },
+      },
+    });
+
+    return users.map((u) => ({
+      ...u,
+      roles: u.roles.map((ur) => ur.role),
+    }));
+  }
+
+  async findOne(id: string) {
+    const user = await this.database.user.findFirst({
+      where: {
+        id,
         roles: {
           none: { role: { slug: ADMIN_ROLE_SLUG } },
         },
@@ -32,22 +73,13 @@ export class UsersRepository {
         },
       },
     });
-  }
 
-  async findOne(id: string) {
-    const user = await this.database.user.findUnique({
-      where: { id },
-      include: {
-        roles: {
-          include: {
-            role: true,
-          },
-        },
-      },
-    });
     if (!user) return null;
-    const hasAdminRole = user.roles.some((ur) => ur.role.slug === ADMIN_ROLE_SLUG);
-    return hasAdminRole ? null : user;
+
+    return {
+      ...user,
+      roles: user.roles.map((ur) => ur.role),
+    };
   }
 
   async findOneByEmail(email: string) {
@@ -64,7 +96,7 @@ export class UsersRepository {
       thirdName?: string;
     },
   ) {
-    return this.database.user.update({
+    const user = await this.database.user.update({
       where: { id },
       data,
       include: {
@@ -75,6 +107,11 @@ export class UsersRepository {
         },
       },
     });
+
+    return {
+      ...user,
+      roles: user.roles.map((ur) => ur.role),
+    };
   }
 
   async delete(id: string): Promise<void> {

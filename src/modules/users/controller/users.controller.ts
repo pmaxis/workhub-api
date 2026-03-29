@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode } from '@nestjs/common';
 import { Action } from '@/common/ability/ability.types';
 import { CheckPolicies } from '@/common/decorators/policy.decorator';
 import { UsersService } from '@/modules/users/service/users.service';
@@ -12,34 +12,32 @@ export class UsersController {
 
   @Post()
   @CheckPolicies((ability) => ability.can(Action.Create, 'User'))
-  async create(@Body() createUserDto: CreateUserDto): Promise<UserResponseDto> {
-    return await this.usersService.create(createUserDto);
+  create(@Body() createUserDto: CreateUserDto): Promise<UserResponseDto> {
+    return this.usersService.create(createUserDto);
   }
 
   @Get()
   @CheckPolicies((ability) => ability.can(Action.Read, 'User'))
-  async findAll(): Promise<UserResponseDto[]> {
-    return await this.usersService.findAll();
+  findAll(): Promise<UserResponseDto[]> {
+    return this.usersService.findAll();
   }
 
   @Get(':id')
   @CheckPolicies((ability) => ability.can(Action.Read, 'User'))
-  async findOne(@Param('id') id: string): Promise<UserResponseDto | null> {
-    return await this.usersService.findOne(id);
+  findOne(@Param('id') id: string): Promise<UserResponseDto> {
+    return this.usersService.findOne(id);
   }
 
   @Patch(':id')
   @CheckPolicies((ability) => ability.can(Action.Update, 'User'))
-  async update(
-    @Param('id') id: string,
-    @Body() updateUserDto: UpdateUserDto,
-  ): Promise<UserResponseDto | null> {
-    return await this.usersService.update(id, updateUserDto);
+  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto): Promise<UserResponseDto> {
+    return this.usersService.update(id, updateUserDto);
   }
 
   @Delete(':id')
+  @HttpCode(204)
   @CheckPolicies((ability) => ability.can(Action.Delete, 'User'))
-  async delete(@Param('id') id: string): Promise<void> {
-    await this.usersService.delete(id);
+  delete(@Param('id') id: string): Promise<void> {
+    return this.usersService.delete(id);
   }
 }

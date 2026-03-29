@@ -1,7 +1,8 @@
-import { Controller, Post, Body, Param, Delete } from '@nestjs/common';
+import { Controller, Post, Body, Param, Delete, HttpCode } from '@nestjs/common';
 import { Action } from '@/common/ability/ability.types';
 import { CheckPolicies } from '@/common/decorators/policy.decorator';
 import { UserRolesService } from '@/modules/users/service/user-roles.service';
+import { AddRoleDto } from '@/modules/users/dto/add-role.dto';
 
 @Controller('users/:userId/roles')
 export class UserRolesController {
@@ -9,16 +10,14 @@ export class UserRolesController {
 
   @Post()
   @CheckPolicies((ability) => ability.can(Action.Manage, 'UserRole'))
-  async addRole(@Param('userId') userId: string, @Body() body: { roleId: string }): Promise<void> {
-    await this.userRolesService.addRole(userId, body.roleId);
+  addRole(@Param('userId') userId: string, @Body() dto: AddRoleDto): Promise<void> {
+    return this.userRolesService.addRole(userId, dto.roleId);
   }
 
   @Delete(':roleId')
+  @HttpCode(204)
   @CheckPolicies((ability) => ability.can(Action.Manage, 'UserRole'))
-  async deleteRole(
-    @Param('userId') userId: string,
-    @Param('roleId') roleId: string,
-  ): Promise<void> {
-    await this.userRolesService.deleteRole(userId, roleId);
+  deleteRole(@Param('userId') userId: string, @Param('roleId') roleId: string): Promise<void> {
+    return this.userRolesService.deleteRole(userId, roleId);
   }
 }

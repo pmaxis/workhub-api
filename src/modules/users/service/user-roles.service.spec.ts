@@ -1,7 +1,12 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { UserRolesService } from '@/modules/users/service/user-roles.service';
 import { UserRolesRepository } from '@/modules/users/repository/user-roles.repository';
-import { RolesRepository } from '@/modules/roles/repository/roles.repository';
+import { UsersService } from '@/modules/users/service/users.service';
+import { RolesService } from '@/modules/roles/service/roles.service';
+import { UserResponseDto } from '@/modules/users/dto/user-response.dto';
+import { RoleResponseDto } from '@/modules/roles/dto/role-response.dto';
+import { ADMIN_ROLE_SLUG } from '@/common/constants/reserved';
 
 describe('UserRolesService', () => {
   let service: UserRolesService;
@@ -11,19 +16,28 @@ describe('UserRolesService', () => {
     deleteRole: jest.fn(),
   };
 
-  const mockRolesRepository = {
-    findByIdForCheck: jest.fn(),
+  const mockUsersService: jest.Mocked<Pick<UsersService, 'findOne'>> = {
+    findOne: jest.fn(),
+  };
+
+  const mockRolesService: jest.Mocked<Pick<RolesService, 'findOne'>> = {
+    findOne: jest.fn(),
   };
 
   beforeEach(async () => {
     jest.clearAllMocks();
-    mockRolesRepository.findByIdForCheck.mockResolvedValue({ id: 'role-id', slug: 'editor' });
+    mockUsersService.findOne.mockResolvedValue({ id: 'user-id' } as UserResponseDto);
+    mockRolesService.findOne.mockResolvedValue({
+      id: 'role-id',
+      slug: 'editor',
+    } as RoleResponseDto);
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         UserRolesService,
         { provide: UserRolesRepository, useValue: mockUserRolesRepository },
-        { provide: RolesRepository, useValue: mockRolesRepository },
+        { provide: UsersService, useValue: mockUsersService },
+        { provide: RolesService, useValue: mockRolesService },
       ],
     }).compile();
 
@@ -40,11 +54,30 @@ describe('UserRolesService', () => {
 
       await service.addRole('user-id', 'role-id');
 
-      expect(mockRolesRepository.findByIdForCheck).toHaveBeenCalledWith('role-id');
+      expect(mockUsersService.findOne).toHaveBeenCalledWith('user-id');
+      expect(mockRolesService.findOne).toHaveBeenCalledWith('role-id');
       expect(mockUserRolesRepository.addRole).toHaveBeenCalledWith({
         userId: 'user-id',
         roleId: 'role-id',
       });
+    });
+
+    it('should not add role when user does not exist', async () => {
+      mockUsersService.findOne.mockRejectedValue(new NotFoundException());
+
+      await expect(service.addRole('missing', 'role-id')).rejects.toThrow(NotFoundException);
+      expect(mockRolesService.findOne).not.toHaveBeenCalled();
+      expect(mockUserRolesRepository.addRole).not.toHaveBeenCalled();
+    });
+
+    it('should reject reserved admin role', async () => {
+      mockRolesService.findOne.mockResolvedValue({
+        id: 'role-id',
+        slug: ADMIN_ROLE_SLUG,
+      } as RoleResponseDto);
+
+      await expect(service.addRole('user-id', 'role-id')).rejects.toThrow(BadRequestException);
+      expect(mockUserRolesRepository.addRole).not.toHaveBeenCalled();
     });
   });
 
@@ -54,8 +87,19 @@ describe('UserRolesService', () => {
 
       await service.deleteRole('user-id', 'role-id');
 
-      expect(mockRolesRepository.findByIdForCheck).toHaveBeenCalledWith('role-id');
+      expect(mockUsersService.findOne).toHaveBeenCalledWith('user-id');
+      expect(mockRolesService.findOne).toHaveBeenCalledWith('role-id');
       expect(mockUserRolesRepository.deleteRole).toHaveBeenCalledWith('user-id', 'role-id');
+    });
+
+    it('should reject removing reserved admin role', async () => {
+      mockRolesService.findOne.mockResolvedValue({
+        id: 'role-id',
+        slug: ADMIN_ROLE_SLUG,
+      } as RoleResponseDto);
+
+      await expect(service.deleteRole('user-id', 'role-id')).rejects.toThrow(BadRequestException);
+      expect(mockUserRolesRepository.deleteRole).not.toHaveBeenCalled();
     });
   });
 });
