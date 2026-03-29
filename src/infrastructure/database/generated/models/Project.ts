@@ -27,8 +27,7 @@ export type ProjectMinAggregateOutputType = {
   id: string | null;
   name: string | null;
   description: string | null;
-  freelancerProfileId: string | null;
-  clientProfileId: string | null;
+  ownerId: string | null;
   createdAt: Date | null;
   updatedAt: Date | null;
 };
@@ -37,8 +36,7 @@ export type ProjectMaxAggregateOutputType = {
   id: string | null;
   name: string | null;
   description: string | null;
-  freelancerProfileId: string | null;
-  clientProfileId: string | null;
+  ownerId: string | null;
   createdAt: Date | null;
   updatedAt: Date | null;
 };
@@ -47,8 +45,7 @@ export type ProjectCountAggregateOutputType = {
   id: number;
   name: number;
   description: number;
-  freelancerProfileId: number;
-  clientProfileId: number;
+  ownerId: number;
   createdAt: number;
   updatedAt: number;
   _all: number;
@@ -58,8 +55,7 @@ export type ProjectMinAggregateInputType = {
   id?: true;
   name?: true;
   description?: true;
-  freelancerProfileId?: true;
-  clientProfileId?: true;
+  ownerId?: true;
   createdAt?: true;
   updatedAt?: true;
 };
@@ -68,8 +64,7 @@ export type ProjectMaxAggregateInputType = {
   id?: true;
   name?: true;
   description?: true;
-  freelancerProfileId?: true;
-  clientProfileId?: true;
+  ownerId?: true;
   createdAt?: true;
   updatedAt?: true;
 };
@@ -78,8 +73,7 @@ export type ProjectCountAggregateInputType = {
   id?: true;
   name?: true;
   description?: true;
-  freelancerProfileId?: true;
-  clientProfileId?: true;
+  ownerId?: true;
   createdAt?: true;
   updatedAt?: true;
   _all?: true;
@@ -162,8 +156,7 @@ export type ProjectGroupByOutputType = {
   id: string;
   name: string;
   description: string | null;
-  freelancerProfileId: string;
-  clientProfileId: string | null;
+  ownerId: string;
   createdAt: Date;
   updatedAt: Date;
   _count: ProjectCountAggregateOutputType | null;
@@ -190,18 +183,10 @@ export type ProjectWhereInput = {
   id?: Prisma.StringFilter<'Project'> | string;
   name?: Prisma.StringFilter<'Project'> | string;
   description?: Prisma.StringNullableFilter<'Project'> | string | null;
-  freelancerProfileId?: Prisma.StringFilter<'Project'> | string;
-  clientProfileId?: Prisma.StringNullableFilter<'Project'> | string | null;
+  ownerId?: Prisma.StringFilter<'Project'> | string;
   createdAt?: Prisma.DateTimeFilter<'Project'> | Date | string;
   updatedAt?: Prisma.DateTimeFilter<'Project'> | Date | string;
-  freelancer?: Prisma.XOR<
-    Prisma.FreelancerProfileScalarRelationFilter,
-    Prisma.FreelancerProfileWhereInput
-  >;
-  clientProfile?: Prisma.XOR<
-    Prisma.ClientProfileNullableScalarRelationFilter,
-    Prisma.ClientProfileWhereInput
-  > | null;
+  owner?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>;
   tasks?: Prisma.TaskListRelationFilter;
 };
 
@@ -209,12 +194,10 @@ export type ProjectOrderByWithRelationInput = {
   id?: Prisma.SortOrder;
   name?: Prisma.SortOrder;
   description?: Prisma.SortOrderInput | Prisma.SortOrder;
-  freelancerProfileId?: Prisma.SortOrder;
-  clientProfileId?: Prisma.SortOrderInput | Prisma.SortOrder;
+  ownerId?: Prisma.SortOrder;
   createdAt?: Prisma.SortOrder;
   updatedAt?: Prisma.SortOrder;
-  freelancer?: Prisma.FreelancerProfileOrderByWithRelationInput;
-  clientProfile?: Prisma.ClientProfileOrderByWithRelationInput;
+  owner?: Prisma.UserOrderByWithRelationInput;
   tasks?: Prisma.TaskOrderByRelationAggregateInput;
 };
 
@@ -226,18 +209,10 @@ export type ProjectWhereUniqueInput = Prisma.AtLeast<
     NOT?: Prisma.ProjectWhereInput | Prisma.ProjectWhereInput[];
     name?: Prisma.StringFilter<'Project'> | string;
     description?: Prisma.StringNullableFilter<'Project'> | string | null;
-    freelancerProfileId?: Prisma.StringFilter<'Project'> | string;
-    clientProfileId?: Prisma.StringNullableFilter<'Project'> | string | null;
+    ownerId?: Prisma.StringFilter<'Project'> | string;
     createdAt?: Prisma.DateTimeFilter<'Project'> | Date | string;
     updatedAt?: Prisma.DateTimeFilter<'Project'> | Date | string;
-    freelancer?: Prisma.XOR<
-      Prisma.FreelancerProfileScalarRelationFilter,
-      Prisma.FreelancerProfileWhereInput
-    >;
-    clientProfile?: Prisma.XOR<
-      Prisma.ClientProfileNullableScalarRelationFilter,
-      Prisma.ClientProfileWhereInput
-    > | null;
+    owner?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>;
     tasks?: Prisma.TaskListRelationFilter;
   },
   'id'
@@ -247,8 +222,7 @@ export type ProjectOrderByWithAggregationInput = {
   id?: Prisma.SortOrder;
   name?: Prisma.SortOrder;
   description?: Prisma.SortOrderInput | Prisma.SortOrder;
-  freelancerProfileId?: Prisma.SortOrder;
-  clientProfileId?: Prisma.SortOrderInput | Prisma.SortOrder;
+  ownerId?: Prisma.SortOrder;
   createdAt?: Prisma.SortOrder;
   updatedAt?: Prisma.SortOrder;
   _count?: Prisma.ProjectCountOrderByAggregateInput;
@@ -267,8 +241,7 @@ export type ProjectScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<'Project'> | string;
   name?: Prisma.StringWithAggregatesFilter<'Project'> | string;
   description?: Prisma.StringNullableWithAggregatesFilter<'Project'> | string | null;
-  freelancerProfileId?: Prisma.StringWithAggregatesFilter<'Project'> | string;
-  clientProfileId?: Prisma.StringNullableWithAggregatesFilter<'Project'> | string | null;
+  ownerId?: Prisma.StringWithAggregatesFilter<'Project'> | string;
   createdAt?: Prisma.DateTimeWithAggregatesFilter<'Project'> | Date | string;
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<'Project'> | Date | string;
 };
@@ -279,8 +252,7 @@ export type ProjectCreateInput = {
   description?: string | null;
   createdAt?: Date | string;
   updatedAt?: Date | string;
-  freelancer: Prisma.FreelancerProfileCreateNestedOneWithoutProjectsInput;
-  clientProfile?: Prisma.ClientProfileCreateNestedOneWithoutProjectsInput;
+  owner: Prisma.UserCreateNestedOneWithoutProjectsInput;
   tasks?: Prisma.TaskCreateNestedManyWithoutProjectInput;
 };
 
@@ -288,8 +260,7 @@ export type ProjectUncheckedCreateInput = {
   id?: string;
   name: string;
   description?: string | null;
-  freelancerProfileId: string;
-  clientProfileId?: string | null;
+  ownerId: string;
   createdAt?: Date | string;
   updatedAt?: Date | string;
   tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutProjectInput;
@@ -301,8 +272,7 @@ export type ProjectUpdateInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-  freelancer?: Prisma.FreelancerProfileUpdateOneRequiredWithoutProjectsNestedInput;
-  clientProfile?: Prisma.ClientProfileUpdateOneWithoutProjectsNestedInput;
+  owner?: Prisma.UserUpdateOneRequiredWithoutProjectsNestedInput;
   tasks?: Prisma.TaskUpdateManyWithoutProjectNestedInput;
 };
 
@@ -310,8 +280,7 @@ export type ProjectUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string;
   name?: Prisma.StringFieldUpdateOperationsInput | string;
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  freelancerProfileId?: Prisma.StringFieldUpdateOperationsInput | string;
-  clientProfileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  ownerId?: Prisma.StringFieldUpdateOperationsInput | string;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   tasks?: Prisma.TaskUncheckedUpdateManyWithoutProjectNestedInput;
@@ -321,8 +290,7 @@ export type ProjectCreateManyInput = {
   id?: string;
   name: string;
   description?: string | null;
-  freelancerProfileId: string;
-  clientProfileId?: string | null;
+  ownerId: string;
   createdAt?: Date | string;
   updatedAt?: Date | string;
 };
@@ -339,8 +307,7 @@ export type ProjectUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string;
   name?: Prisma.StringFieldUpdateOperationsInput | string;
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  freelancerProfileId?: Prisma.StringFieldUpdateOperationsInput | string;
-  clientProfileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  ownerId?: Prisma.StringFieldUpdateOperationsInput | string;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 };
@@ -349,8 +316,7 @@ export type ProjectCountOrderByAggregateInput = {
   id?: Prisma.SortOrder;
   name?: Prisma.SortOrder;
   description?: Prisma.SortOrder;
-  freelancerProfileId?: Prisma.SortOrder;
-  clientProfileId?: Prisma.SortOrder;
+  ownerId?: Prisma.SortOrder;
   createdAt?: Prisma.SortOrder;
   updatedAt?: Prisma.SortOrder;
 };
@@ -359,8 +325,7 @@ export type ProjectMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder;
   name?: Prisma.SortOrder;
   description?: Prisma.SortOrder;
-  freelancerProfileId?: Prisma.SortOrder;
-  clientProfileId?: Prisma.SortOrder;
+  ownerId?: Prisma.SortOrder;
   createdAt?: Prisma.SortOrder;
   updatedAt?: Prisma.SortOrder;
 };
@@ -369,8 +334,7 @@ export type ProjectMinOrderByAggregateInput = {
   id?: Prisma.SortOrder;
   name?: Prisma.SortOrder;
   description?: Prisma.SortOrder;
-  freelancerProfileId?: Prisma.SortOrder;
-  clientProfileId?: Prisma.SortOrder;
+  ownerId?: Prisma.SortOrder;
   createdAt?: Prisma.SortOrder;
   updatedAt?: Prisma.SortOrder;
 };
@@ -416,175 +380,89 @@ export type ProjectUpdateOneRequiredWithoutTasksNestedInput = {
   >;
 };
 
-export type ProjectCreateNestedManyWithoutFreelancerInput = {
+export type ProjectCreateNestedManyWithoutOwnerInput = {
   create?:
     | Prisma.XOR<
-        Prisma.ProjectCreateWithoutFreelancerInput,
-        Prisma.ProjectUncheckedCreateWithoutFreelancerInput
+        Prisma.ProjectCreateWithoutOwnerInput,
+        Prisma.ProjectUncheckedCreateWithoutOwnerInput
       >
-    | Prisma.ProjectCreateWithoutFreelancerInput[]
-    | Prisma.ProjectUncheckedCreateWithoutFreelancerInput[];
+    | Prisma.ProjectCreateWithoutOwnerInput[]
+    | Prisma.ProjectUncheckedCreateWithoutOwnerInput[];
   connectOrCreate?:
-    | Prisma.ProjectCreateOrConnectWithoutFreelancerInput
-    | Prisma.ProjectCreateOrConnectWithoutFreelancerInput[];
-  createMany?: Prisma.ProjectCreateManyFreelancerInputEnvelope;
+    | Prisma.ProjectCreateOrConnectWithoutOwnerInput
+    | Prisma.ProjectCreateOrConnectWithoutOwnerInput[];
+  createMany?: Prisma.ProjectCreateManyOwnerInputEnvelope;
   connect?: Prisma.ProjectWhereUniqueInput | Prisma.ProjectWhereUniqueInput[];
 };
 
-export type ProjectUncheckedCreateNestedManyWithoutFreelancerInput = {
+export type ProjectUncheckedCreateNestedManyWithoutOwnerInput = {
   create?:
     | Prisma.XOR<
-        Prisma.ProjectCreateWithoutFreelancerInput,
-        Prisma.ProjectUncheckedCreateWithoutFreelancerInput
+        Prisma.ProjectCreateWithoutOwnerInput,
+        Prisma.ProjectUncheckedCreateWithoutOwnerInput
       >
-    | Prisma.ProjectCreateWithoutFreelancerInput[]
-    | Prisma.ProjectUncheckedCreateWithoutFreelancerInput[];
+    | Prisma.ProjectCreateWithoutOwnerInput[]
+    | Prisma.ProjectUncheckedCreateWithoutOwnerInput[];
   connectOrCreate?:
-    | Prisma.ProjectCreateOrConnectWithoutFreelancerInput
-    | Prisma.ProjectCreateOrConnectWithoutFreelancerInput[];
-  createMany?: Prisma.ProjectCreateManyFreelancerInputEnvelope;
+    | Prisma.ProjectCreateOrConnectWithoutOwnerInput
+    | Prisma.ProjectCreateOrConnectWithoutOwnerInput[];
+  createMany?: Prisma.ProjectCreateManyOwnerInputEnvelope;
   connect?: Prisma.ProjectWhereUniqueInput | Prisma.ProjectWhereUniqueInput[];
 };
 
-export type ProjectUpdateManyWithoutFreelancerNestedInput = {
+export type ProjectUpdateManyWithoutOwnerNestedInput = {
   create?:
     | Prisma.XOR<
-        Prisma.ProjectCreateWithoutFreelancerInput,
-        Prisma.ProjectUncheckedCreateWithoutFreelancerInput
+        Prisma.ProjectCreateWithoutOwnerInput,
+        Prisma.ProjectUncheckedCreateWithoutOwnerInput
       >
-    | Prisma.ProjectCreateWithoutFreelancerInput[]
-    | Prisma.ProjectUncheckedCreateWithoutFreelancerInput[];
+    | Prisma.ProjectCreateWithoutOwnerInput[]
+    | Prisma.ProjectUncheckedCreateWithoutOwnerInput[];
   connectOrCreate?:
-    | Prisma.ProjectCreateOrConnectWithoutFreelancerInput
-    | Prisma.ProjectCreateOrConnectWithoutFreelancerInput[];
+    | Prisma.ProjectCreateOrConnectWithoutOwnerInput
+    | Prisma.ProjectCreateOrConnectWithoutOwnerInput[];
   upsert?:
-    | Prisma.ProjectUpsertWithWhereUniqueWithoutFreelancerInput
-    | Prisma.ProjectUpsertWithWhereUniqueWithoutFreelancerInput[];
-  createMany?: Prisma.ProjectCreateManyFreelancerInputEnvelope;
+    | Prisma.ProjectUpsertWithWhereUniqueWithoutOwnerInput
+    | Prisma.ProjectUpsertWithWhereUniqueWithoutOwnerInput[];
+  createMany?: Prisma.ProjectCreateManyOwnerInputEnvelope;
   set?: Prisma.ProjectWhereUniqueInput | Prisma.ProjectWhereUniqueInput[];
   disconnect?: Prisma.ProjectWhereUniqueInput | Prisma.ProjectWhereUniqueInput[];
   delete?: Prisma.ProjectWhereUniqueInput | Prisma.ProjectWhereUniqueInput[];
   connect?: Prisma.ProjectWhereUniqueInput | Prisma.ProjectWhereUniqueInput[];
   update?:
-    | Prisma.ProjectUpdateWithWhereUniqueWithoutFreelancerInput
-    | Prisma.ProjectUpdateWithWhereUniqueWithoutFreelancerInput[];
+    | Prisma.ProjectUpdateWithWhereUniqueWithoutOwnerInput
+    | Prisma.ProjectUpdateWithWhereUniqueWithoutOwnerInput[];
   updateMany?:
-    | Prisma.ProjectUpdateManyWithWhereWithoutFreelancerInput
-    | Prisma.ProjectUpdateManyWithWhereWithoutFreelancerInput[];
+    | Prisma.ProjectUpdateManyWithWhereWithoutOwnerInput
+    | Prisma.ProjectUpdateManyWithWhereWithoutOwnerInput[];
   deleteMany?: Prisma.ProjectScalarWhereInput | Prisma.ProjectScalarWhereInput[];
 };
 
-export type ProjectUncheckedUpdateManyWithoutFreelancerNestedInput = {
+export type ProjectUncheckedUpdateManyWithoutOwnerNestedInput = {
   create?:
     | Prisma.XOR<
-        Prisma.ProjectCreateWithoutFreelancerInput,
-        Prisma.ProjectUncheckedCreateWithoutFreelancerInput
+        Prisma.ProjectCreateWithoutOwnerInput,
+        Prisma.ProjectUncheckedCreateWithoutOwnerInput
       >
-    | Prisma.ProjectCreateWithoutFreelancerInput[]
-    | Prisma.ProjectUncheckedCreateWithoutFreelancerInput[];
+    | Prisma.ProjectCreateWithoutOwnerInput[]
+    | Prisma.ProjectUncheckedCreateWithoutOwnerInput[];
   connectOrCreate?:
-    | Prisma.ProjectCreateOrConnectWithoutFreelancerInput
-    | Prisma.ProjectCreateOrConnectWithoutFreelancerInput[];
+    | Prisma.ProjectCreateOrConnectWithoutOwnerInput
+    | Prisma.ProjectCreateOrConnectWithoutOwnerInput[];
   upsert?:
-    | Prisma.ProjectUpsertWithWhereUniqueWithoutFreelancerInput
-    | Prisma.ProjectUpsertWithWhereUniqueWithoutFreelancerInput[];
-  createMany?: Prisma.ProjectCreateManyFreelancerInputEnvelope;
+    | Prisma.ProjectUpsertWithWhereUniqueWithoutOwnerInput
+    | Prisma.ProjectUpsertWithWhereUniqueWithoutOwnerInput[];
+  createMany?: Prisma.ProjectCreateManyOwnerInputEnvelope;
   set?: Prisma.ProjectWhereUniqueInput | Prisma.ProjectWhereUniqueInput[];
   disconnect?: Prisma.ProjectWhereUniqueInput | Prisma.ProjectWhereUniqueInput[];
   delete?: Prisma.ProjectWhereUniqueInput | Prisma.ProjectWhereUniqueInput[];
   connect?: Prisma.ProjectWhereUniqueInput | Prisma.ProjectWhereUniqueInput[];
   update?:
-    | Prisma.ProjectUpdateWithWhereUniqueWithoutFreelancerInput
-    | Prisma.ProjectUpdateWithWhereUniqueWithoutFreelancerInput[];
+    | Prisma.ProjectUpdateWithWhereUniqueWithoutOwnerInput
+    | Prisma.ProjectUpdateWithWhereUniqueWithoutOwnerInput[];
   updateMany?:
-    | Prisma.ProjectUpdateManyWithWhereWithoutFreelancerInput
-    | Prisma.ProjectUpdateManyWithWhereWithoutFreelancerInput[];
-  deleteMany?: Prisma.ProjectScalarWhereInput | Prisma.ProjectScalarWhereInput[];
-};
-
-export type ProjectCreateNestedManyWithoutClientProfileInput = {
-  create?:
-    | Prisma.XOR<
-        Prisma.ProjectCreateWithoutClientProfileInput,
-        Prisma.ProjectUncheckedCreateWithoutClientProfileInput
-      >
-    | Prisma.ProjectCreateWithoutClientProfileInput[]
-    | Prisma.ProjectUncheckedCreateWithoutClientProfileInput[];
-  connectOrCreate?:
-    | Prisma.ProjectCreateOrConnectWithoutClientProfileInput
-    | Prisma.ProjectCreateOrConnectWithoutClientProfileInput[];
-  createMany?: Prisma.ProjectCreateManyClientProfileInputEnvelope;
-  connect?: Prisma.ProjectWhereUniqueInput | Prisma.ProjectWhereUniqueInput[];
-};
-
-export type ProjectUncheckedCreateNestedManyWithoutClientProfileInput = {
-  create?:
-    | Prisma.XOR<
-        Prisma.ProjectCreateWithoutClientProfileInput,
-        Prisma.ProjectUncheckedCreateWithoutClientProfileInput
-      >
-    | Prisma.ProjectCreateWithoutClientProfileInput[]
-    | Prisma.ProjectUncheckedCreateWithoutClientProfileInput[];
-  connectOrCreate?:
-    | Prisma.ProjectCreateOrConnectWithoutClientProfileInput
-    | Prisma.ProjectCreateOrConnectWithoutClientProfileInput[];
-  createMany?: Prisma.ProjectCreateManyClientProfileInputEnvelope;
-  connect?: Prisma.ProjectWhereUniqueInput | Prisma.ProjectWhereUniqueInput[];
-};
-
-export type ProjectUpdateManyWithoutClientProfileNestedInput = {
-  create?:
-    | Prisma.XOR<
-        Prisma.ProjectCreateWithoutClientProfileInput,
-        Prisma.ProjectUncheckedCreateWithoutClientProfileInput
-      >
-    | Prisma.ProjectCreateWithoutClientProfileInput[]
-    | Prisma.ProjectUncheckedCreateWithoutClientProfileInput[];
-  connectOrCreate?:
-    | Prisma.ProjectCreateOrConnectWithoutClientProfileInput
-    | Prisma.ProjectCreateOrConnectWithoutClientProfileInput[];
-  upsert?:
-    | Prisma.ProjectUpsertWithWhereUniqueWithoutClientProfileInput
-    | Prisma.ProjectUpsertWithWhereUniqueWithoutClientProfileInput[];
-  createMany?: Prisma.ProjectCreateManyClientProfileInputEnvelope;
-  set?: Prisma.ProjectWhereUniqueInput | Prisma.ProjectWhereUniqueInput[];
-  disconnect?: Prisma.ProjectWhereUniqueInput | Prisma.ProjectWhereUniqueInput[];
-  delete?: Prisma.ProjectWhereUniqueInput | Prisma.ProjectWhereUniqueInput[];
-  connect?: Prisma.ProjectWhereUniqueInput | Prisma.ProjectWhereUniqueInput[];
-  update?:
-    | Prisma.ProjectUpdateWithWhereUniqueWithoutClientProfileInput
-    | Prisma.ProjectUpdateWithWhereUniqueWithoutClientProfileInput[];
-  updateMany?:
-    | Prisma.ProjectUpdateManyWithWhereWithoutClientProfileInput
-    | Prisma.ProjectUpdateManyWithWhereWithoutClientProfileInput[];
-  deleteMany?: Prisma.ProjectScalarWhereInput | Prisma.ProjectScalarWhereInput[];
-};
-
-export type ProjectUncheckedUpdateManyWithoutClientProfileNestedInput = {
-  create?:
-    | Prisma.XOR<
-        Prisma.ProjectCreateWithoutClientProfileInput,
-        Prisma.ProjectUncheckedCreateWithoutClientProfileInput
-      >
-    | Prisma.ProjectCreateWithoutClientProfileInput[]
-    | Prisma.ProjectUncheckedCreateWithoutClientProfileInput[];
-  connectOrCreate?:
-    | Prisma.ProjectCreateOrConnectWithoutClientProfileInput
-    | Prisma.ProjectCreateOrConnectWithoutClientProfileInput[];
-  upsert?:
-    | Prisma.ProjectUpsertWithWhereUniqueWithoutClientProfileInput
-    | Prisma.ProjectUpsertWithWhereUniqueWithoutClientProfileInput[];
-  createMany?: Prisma.ProjectCreateManyClientProfileInputEnvelope;
-  set?: Prisma.ProjectWhereUniqueInput | Prisma.ProjectWhereUniqueInput[];
-  disconnect?: Prisma.ProjectWhereUniqueInput | Prisma.ProjectWhereUniqueInput[];
-  delete?: Prisma.ProjectWhereUniqueInput | Prisma.ProjectWhereUniqueInput[];
-  connect?: Prisma.ProjectWhereUniqueInput | Prisma.ProjectWhereUniqueInput[];
-  update?:
-    | Prisma.ProjectUpdateWithWhereUniqueWithoutClientProfileInput
-    | Prisma.ProjectUpdateWithWhereUniqueWithoutClientProfileInput[];
-  updateMany?:
-    | Prisma.ProjectUpdateManyWithWhereWithoutClientProfileInput
-    | Prisma.ProjectUpdateManyWithWhereWithoutClientProfileInput[];
+    | Prisma.ProjectUpdateManyWithWhereWithoutOwnerInput
+    | Prisma.ProjectUpdateManyWithWhereWithoutOwnerInput[];
   deleteMany?: Prisma.ProjectScalarWhereInput | Prisma.ProjectScalarWhereInput[];
 };
 
@@ -594,16 +472,14 @@ export type ProjectCreateWithoutTasksInput = {
   description?: string | null;
   createdAt?: Date | string;
   updatedAt?: Date | string;
-  freelancer: Prisma.FreelancerProfileCreateNestedOneWithoutProjectsInput;
-  clientProfile?: Prisma.ClientProfileCreateNestedOneWithoutProjectsInput;
+  owner: Prisma.UserCreateNestedOneWithoutProjectsInput;
 };
 
 export type ProjectUncheckedCreateWithoutTasksInput = {
   id?: string;
   name: string;
   description?: string | null;
-  freelancerProfileId: string;
-  clientProfileId?: string | null;
+  ownerId: string;
   createdAt?: Date | string;
   updatedAt?: Date | string;
 };
@@ -642,78 +518,74 @@ export type ProjectUpdateWithoutTasksInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-  freelancer?: Prisma.FreelancerProfileUpdateOneRequiredWithoutProjectsNestedInput;
-  clientProfile?: Prisma.ClientProfileUpdateOneWithoutProjectsNestedInput;
+  owner?: Prisma.UserUpdateOneRequiredWithoutProjectsNestedInput;
 };
 
 export type ProjectUncheckedUpdateWithoutTasksInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string;
   name?: Prisma.StringFieldUpdateOperationsInput | string;
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  freelancerProfileId?: Prisma.StringFieldUpdateOperationsInput | string;
-  clientProfileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  ownerId?: Prisma.StringFieldUpdateOperationsInput | string;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 };
 
-export type ProjectCreateWithoutFreelancerInput = {
+export type ProjectCreateWithoutOwnerInput = {
   id?: string;
   name: string;
   description?: string | null;
   createdAt?: Date | string;
   updatedAt?: Date | string;
-  clientProfile?: Prisma.ClientProfileCreateNestedOneWithoutProjectsInput;
   tasks?: Prisma.TaskCreateNestedManyWithoutProjectInput;
 };
 
-export type ProjectUncheckedCreateWithoutFreelancerInput = {
+export type ProjectUncheckedCreateWithoutOwnerInput = {
   id?: string;
   name: string;
   description?: string | null;
-  clientProfileId?: string | null;
   createdAt?: Date | string;
   updatedAt?: Date | string;
   tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutProjectInput;
 };
 
-export type ProjectCreateOrConnectWithoutFreelancerInput = {
+export type ProjectCreateOrConnectWithoutOwnerInput = {
   where: Prisma.ProjectWhereUniqueInput;
   create: Prisma.XOR<
-    Prisma.ProjectCreateWithoutFreelancerInput,
-    Prisma.ProjectUncheckedCreateWithoutFreelancerInput
+    Prisma.ProjectCreateWithoutOwnerInput,
+    Prisma.ProjectUncheckedCreateWithoutOwnerInput
   >;
 };
 
-export type ProjectCreateManyFreelancerInputEnvelope = {
-  data: Prisma.ProjectCreateManyFreelancerInput | Prisma.ProjectCreateManyFreelancerInput[];
+export type ProjectCreateManyOwnerInputEnvelope = {
+  data: Prisma.ProjectCreateManyOwnerInput | Prisma.ProjectCreateManyOwnerInput[];
   skipDuplicates?: boolean;
 };
 
-export type ProjectUpsertWithWhereUniqueWithoutFreelancerInput = {
+export type ProjectUpsertWithWhereUniqueWithoutOwnerInput = {
   where: Prisma.ProjectWhereUniqueInput;
   update: Prisma.XOR<
-    Prisma.ProjectUpdateWithoutFreelancerInput,
-    Prisma.ProjectUncheckedUpdateWithoutFreelancerInput
+    Prisma.ProjectUpdateWithoutOwnerInput,
+    Prisma.ProjectUncheckedUpdateWithoutOwnerInput
   >;
   create: Prisma.XOR<
-    Prisma.ProjectCreateWithoutFreelancerInput,
-    Prisma.ProjectUncheckedCreateWithoutFreelancerInput
+    Prisma.ProjectCreateWithoutOwnerInput,
+    Prisma.ProjectUncheckedCreateWithoutOwnerInput
   >;
 };
 
-export type ProjectUpdateWithWhereUniqueWithoutFreelancerInput = {
+export type ProjectUpdateWithWhereUniqueWithoutOwnerInput = {
   where: Prisma.ProjectWhereUniqueInput;
   data: Prisma.XOR<
-    Prisma.ProjectUpdateWithoutFreelancerInput,
-    Prisma.ProjectUncheckedUpdateWithoutFreelancerInput
+    Prisma.ProjectUpdateWithoutOwnerInput,
+    Prisma.ProjectUncheckedUpdateWithoutOwnerInput
   >;
 };
 
-export type ProjectUpdateManyWithWhereWithoutFreelancerInput = {
+export type ProjectUpdateManyWithWhereWithoutOwnerInput = {
   where: Prisma.ProjectScalarWhereInput;
   data: Prisma.XOR<
     Prisma.ProjectUpdateManyMutationInput,
-    Prisma.ProjectUncheckedUpdateManyWithoutFreelancerInput
+    Prisma.ProjectUncheckedUpdateManyWithoutOwnerInput
   >;
 };
 
@@ -724,145 +596,41 @@ export type ProjectScalarWhereInput = {
   id?: Prisma.StringFilter<'Project'> | string;
   name?: Prisma.StringFilter<'Project'> | string;
   description?: Prisma.StringNullableFilter<'Project'> | string | null;
-  freelancerProfileId?: Prisma.StringFilter<'Project'> | string;
-  clientProfileId?: Prisma.StringNullableFilter<'Project'> | string | null;
+  ownerId?: Prisma.StringFilter<'Project'> | string;
   createdAt?: Prisma.DateTimeFilter<'Project'> | Date | string;
   updatedAt?: Prisma.DateTimeFilter<'Project'> | Date | string;
 };
 
-export type ProjectCreateWithoutClientProfileInput = {
+export type ProjectCreateManyOwnerInput = {
   id?: string;
   name: string;
   description?: string | null;
   createdAt?: Date | string;
   updatedAt?: Date | string;
-  freelancer: Prisma.FreelancerProfileCreateNestedOneWithoutProjectsInput;
-  tasks?: Prisma.TaskCreateNestedManyWithoutProjectInput;
 };
 
-export type ProjectUncheckedCreateWithoutClientProfileInput = {
-  id?: string;
-  name: string;
-  description?: string | null;
-  freelancerProfileId: string;
-  createdAt?: Date | string;
-  updatedAt?: Date | string;
-  tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutProjectInput;
-};
-
-export type ProjectCreateOrConnectWithoutClientProfileInput = {
-  where: Prisma.ProjectWhereUniqueInput;
-  create: Prisma.XOR<
-    Prisma.ProjectCreateWithoutClientProfileInput,
-    Prisma.ProjectUncheckedCreateWithoutClientProfileInput
-  >;
-};
-
-export type ProjectCreateManyClientProfileInputEnvelope = {
-  data: Prisma.ProjectCreateManyClientProfileInput | Prisma.ProjectCreateManyClientProfileInput[];
-  skipDuplicates?: boolean;
-};
-
-export type ProjectUpsertWithWhereUniqueWithoutClientProfileInput = {
-  where: Prisma.ProjectWhereUniqueInput;
-  update: Prisma.XOR<
-    Prisma.ProjectUpdateWithoutClientProfileInput,
-    Prisma.ProjectUncheckedUpdateWithoutClientProfileInput
-  >;
-  create: Prisma.XOR<
-    Prisma.ProjectCreateWithoutClientProfileInput,
-    Prisma.ProjectUncheckedCreateWithoutClientProfileInput
-  >;
-};
-
-export type ProjectUpdateWithWhereUniqueWithoutClientProfileInput = {
-  where: Prisma.ProjectWhereUniqueInput;
-  data: Prisma.XOR<
-    Prisma.ProjectUpdateWithoutClientProfileInput,
-    Prisma.ProjectUncheckedUpdateWithoutClientProfileInput
-  >;
-};
-
-export type ProjectUpdateManyWithWhereWithoutClientProfileInput = {
-  where: Prisma.ProjectScalarWhereInput;
-  data: Prisma.XOR<
-    Prisma.ProjectUpdateManyMutationInput,
-    Prisma.ProjectUncheckedUpdateManyWithoutClientProfileInput
-  >;
-};
-
-export type ProjectCreateManyFreelancerInput = {
-  id?: string;
-  name: string;
-  description?: string | null;
-  clientProfileId?: string | null;
-  createdAt?: Date | string;
-  updatedAt?: Date | string;
-};
-
-export type ProjectUpdateWithoutFreelancerInput = {
+export type ProjectUpdateWithoutOwnerInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string;
   name?: Prisma.StringFieldUpdateOperationsInput | string;
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-  clientProfile?: Prisma.ClientProfileUpdateOneWithoutProjectsNestedInput;
   tasks?: Prisma.TaskUpdateManyWithoutProjectNestedInput;
 };
 
-export type ProjectUncheckedUpdateWithoutFreelancerInput = {
+export type ProjectUncheckedUpdateWithoutOwnerInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string;
   name?: Prisma.StringFieldUpdateOperationsInput | string;
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  clientProfileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   tasks?: Prisma.TaskUncheckedUpdateManyWithoutProjectNestedInput;
 };
 
-export type ProjectUncheckedUpdateManyWithoutFreelancerInput = {
+export type ProjectUncheckedUpdateManyWithoutOwnerInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string;
   name?: Prisma.StringFieldUpdateOperationsInput | string;
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  clientProfileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-};
-
-export type ProjectCreateManyClientProfileInput = {
-  id?: string;
-  name: string;
-  description?: string | null;
-  freelancerProfileId: string;
-  createdAt?: Date | string;
-  updatedAt?: Date | string;
-};
-
-export type ProjectUpdateWithoutClientProfileInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string;
-  name?: Prisma.StringFieldUpdateOperationsInput | string;
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-  freelancer?: Prisma.FreelancerProfileUpdateOneRequiredWithoutProjectsNestedInput;
-  tasks?: Prisma.TaskUpdateManyWithoutProjectNestedInput;
-};
-
-export type ProjectUncheckedUpdateWithoutClientProfileInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string;
-  name?: Prisma.StringFieldUpdateOperationsInput | string;
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  freelancerProfileId?: Prisma.StringFieldUpdateOperationsInput | string;
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-  tasks?: Prisma.TaskUncheckedUpdateManyWithoutProjectNestedInput;
-};
-
-export type ProjectUncheckedUpdateManyWithoutClientProfileInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string;
-  name?: Prisma.StringFieldUpdateOperationsInput | string;
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  freelancerProfileId?: Prisma.StringFieldUpdateOperationsInput | string;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 };
@@ -909,12 +677,10 @@ export type ProjectSelect<
     id?: boolean;
     name?: boolean;
     description?: boolean;
-    freelancerProfileId?: boolean;
-    clientProfileId?: boolean;
+    ownerId?: boolean;
     createdAt?: boolean;
     updatedAt?: boolean;
-    freelancer?: boolean | Prisma.FreelancerProfileDefaultArgs<ExtArgs>;
-    clientProfile?: boolean | Prisma.Project$clientProfileArgs<ExtArgs>;
+    owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>;
     tasks?: boolean | Prisma.Project$tasksArgs<ExtArgs>;
     _count?: boolean | Prisma.ProjectCountOutputTypeDefaultArgs<ExtArgs>;
   },
@@ -928,12 +694,10 @@ export type ProjectSelectCreateManyAndReturn<
     id?: boolean;
     name?: boolean;
     description?: boolean;
-    freelancerProfileId?: boolean;
-    clientProfileId?: boolean;
+    ownerId?: boolean;
     createdAt?: boolean;
     updatedAt?: boolean;
-    freelancer?: boolean | Prisma.FreelancerProfileDefaultArgs<ExtArgs>;
-    clientProfile?: boolean | Prisma.Project$clientProfileArgs<ExtArgs>;
+    owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>;
   },
   ExtArgs['result']['project']
 >;
@@ -945,12 +709,10 @@ export type ProjectSelectUpdateManyAndReturn<
     id?: boolean;
     name?: boolean;
     description?: boolean;
-    freelancerProfileId?: boolean;
-    clientProfileId?: boolean;
+    ownerId?: boolean;
     createdAt?: boolean;
     updatedAt?: boolean;
-    freelancer?: boolean | Prisma.FreelancerProfileDefaultArgs<ExtArgs>;
-    clientProfile?: boolean | Prisma.Project$clientProfileArgs<ExtArgs>;
+    owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>;
   },
   ExtArgs['result']['project']
 >;
@@ -959,8 +721,7 @@ export type ProjectSelectScalar = {
   id?: boolean;
   name?: boolean;
   description?: boolean;
-  freelancerProfileId?: boolean;
-  clientProfileId?: boolean;
+  ownerId?: boolean;
   createdAt?: boolean;
   updatedAt?: boolean;
 };
@@ -968,34 +729,25 @@ export type ProjectSelectScalar = {
 export type ProjectOmit<
   ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
 > = runtime.Types.Extensions.GetOmit<
-  | 'id'
-  | 'name'
-  | 'description'
-  | 'freelancerProfileId'
-  | 'clientProfileId'
-  | 'createdAt'
-  | 'updatedAt',
+  'id' | 'name' | 'description' | 'ownerId' | 'createdAt' | 'updatedAt',
   ExtArgs['result']['project']
 >;
 export type ProjectInclude<
   ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
 > = {
-  freelancer?: boolean | Prisma.FreelancerProfileDefaultArgs<ExtArgs>;
-  clientProfile?: boolean | Prisma.Project$clientProfileArgs<ExtArgs>;
+  owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>;
   tasks?: boolean | Prisma.Project$tasksArgs<ExtArgs>;
   _count?: boolean | Prisma.ProjectCountOutputTypeDefaultArgs<ExtArgs>;
 };
 export type ProjectIncludeCreateManyAndReturn<
   ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
 > = {
-  freelancer?: boolean | Prisma.FreelancerProfileDefaultArgs<ExtArgs>;
-  clientProfile?: boolean | Prisma.Project$clientProfileArgs<ExtArgs>;
+  owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>;
 };
 export type ProjectIncludeUpdateManyAndReturn<
   ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
 > = {
-  freelancer?: boolean | Prisma.FreelancerProfileDefaultArgs<ExtArgs>;
-  clientProfile?: boolean | Prisma.Project$clientProfileArgs<ExtArgs>;
+  owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>;
 };
 
 export type $ProjectPayload<
@@ -1003,8 +755,7 @@ export type $ProjectPayload<
 > = {
   name: 'Project';
   objects: {
-    freelancer: Prisma.$FreelancerProfilePayload<ExtArgs>;
-    clientProfile: Prisma.$ClientProfilePayload<ExtArgs> | null;
+    owner: Prisma.$UserPayload<ExtArgs>;
     tasks: Prisma.$TaskPayload<ExtArgs>[];
   };
   scalars: runtime.Types.Extensions.GetPayloadResult<
@@ -1012,8 +763,7 @@ export type $ProjectPayload<
       id: string;
       name: string;
       description: string | null;
-      freelancerProfileId: string;
-      clientProfileId: string | null;
+      ownerId: string;
       createdAt: Date;
       updatedAt: Date;
     },
@@ -1531,30 +1281,17 @@ export interface Prisma__ProjectClient<
   GlobalOmitOptions = {},
 > extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: 'PrismaPromise';
-  freelancer<T extends Prisma.FreelancerProfileDefaultArgs<ExtArgs> = {}>(
-    args?: Prisma.Subset<T, Prisma.FreelancerProfileDefaultArgs<ExtArgs>>,
-  ): Prisma.Prisma__FreelancerProfileClient<
+  owner<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(
+    args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>,
+  ): Prisma.Prisma__UserClient<
     | runtime.Types.Result.GetResult<
-        Prisma.$FreelancerProfilePayload<ExtArgs>,
+        Prisma.$UserPayload<ExtArgs>,
         T,
         'findUniqueOrThrow',
         GlobalOmitOptions
       >
     | Null,
     Null,
-    ExtArgs,
-    GlobalOmitOptions
-  >;
-  clientProfile<T extends Prisma.Project$clientProfileArgs<ExtArgs> = {}>(
-    args?: Prisma.Subset<T, Prisma.Project$clientProfileArgs<ExtArgs>>,
-  ): Prisma.Prisma__ClientProfileClient<
-    runtime.Types.Result.GetResult<
-      Prisma.$ClientProfilePayload<ExtArgs>,
-      T,
-      'findUniqueOrThrow',
-      GlobalOmitOptions
-    > | null,
-    null,
     ExtArgs,
     GlobalOmitOptions
   >;
@@ -1598,8 +1335,7 @@ export interface ProjectFieldRefs {
   readonly id: Prisma.FieldRef<'Project', 'String'>;
   readonly name: Prisma.FieldRef<'Project', 'String'>;
   readonly description: Prisma.FieldRef<'Project', 'String'>;
-  readonly freelancerProfileId: Prisma.FieldRef<'Project', 'String'>;
-  readonly clientProfileId: Prisma.FieldRef<'Project', 'String'>;
+  readonly ownerId: Prisma.FieldRef<'Project', 'String'>;
   readonly createdAt: Prisma.FieldRef<'Project', 'DateTime'>;
   readonly updatedAt: Prisma.FieldRef<'Project', 'DateTime'>;
 }
@@ -2022,27 +1758,6 @@ export type ProjectDeleteManyArgs<
    * Limit how many Projects to delete.
    */
   limit?: number;
-};
-
-/**
- * Project.clientProfile
- */
-export type Project$clientProfileArgs<
-  ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
-> = {
-  /**
-   * Select specific fields to fetch from the ClientProfile
-   */
-  select?: Prisma.ClientProfileSelect<ExtArgs> | null;
-  /**
-   * Omit specific fields from the ClientProfile
-   */
-  omit?: Prisma.ClientProfileOmit<ExtArgs> | null;
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ClientProfileInclude<ExtArgs> | null;
-  where?: Prisma.ClientProfileWhereInput;
 };
 
 /**

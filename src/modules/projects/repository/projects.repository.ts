@@ -5,42 +5,33 @@ import { DatabaseService } from '@/infrastructure/database/database.service';
 export class ProjectsRepository {
   constructor(private readonly database: DatabaseService) {}
 
-  async create(data: {
-    name: string;
-    description?: string | null;
-    freelancerProfileId: string;
-    clientProfileId?: string | null;
-  }) {
+  async create(data: { name: string; description?: string | null; ownerId: string }) {
     return this.database.project.create({
       data: {
         name: data.name,
         description: data.description ?? null,
-        freelancerProfileId: data.freelancerProfileId,
-        clientProfileId: data.clientProfileId ?? null,
+        ownerId: data.ownerId,
       },
       include: { _count: { select: { tasks: true } } },
     });
   }
 
-  async findManyByFreelancer(freelancerProfileId: string) {
+  async findManyByOwner(ownerId: string) {
     return this.database.project.findMany({
-      where: { freelancerProfileId },
+      where: { ownerId },
       include: { _count: { select: { tasks: true } } },
       orderBy: { updatedAt: 'desc' },
     });
   }
 
-  async findByIdForFreelancer(id: string, freelancerProfileId: string) {
+  async findByIdForOwner(id: string, ownerId: string) {
     return this.database.project.findFirst({
-      where: { id, freelancerProfileId },
+      where: { id, ownerId },
       include: { _count: { select: { tasks: true } } },
     });
   }
 
-  async update(
-    id: string,
-    data: { name?: string; description?: string | null; clientProfileId?: string | null },
-  ) {
+  async update(id: string, data: { name?: string; description?: string | null }) {
     return this.database.project.update({
       where: { id },
       data,

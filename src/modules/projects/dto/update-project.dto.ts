@@ -9,8 +9,4 @@ export class UpdateProjectDto {
   @IsString()
   @IsOptional()
   description?: string | null;
-
-  @IsString()
-  @IsOptional()
-  clientProfileId?: string | null;
 }

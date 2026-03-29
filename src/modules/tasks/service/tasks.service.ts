@@ -1,11 +1,5 @@
-import {
-  BadRequestException,
-  ForbiddenException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { TaskStatus } from '@/infrastructure/database/generated/enums';
-import { DatabaseService } from '@/infrastructure/database/database.service';
 import { ProjectsRepository } from '@/modules/projects/repository/projects.repository';
 import { TasksRepository } from '@/modules/tasks/repository/tasks.repository';
 import { CreateTaskDto } from '@/modules/tasks/dto/create-task.dto';
@@ -17,19 +11,7 @@ export class TasksService {
   constructor(
     private readonly tasksRepository: TasksRepository,
     private readonly projectsRepository: ProjectsRepository,
-    private readonly database: DatabaseService,
   ) {}
-
-  private async requireFreelancerProfileId(userId: string): Promise<string> {
-    const profile = await this.database.freelancerProfile.findUnique({
-      where: { userId },
-      select: { id: true },
-    });
-    if (!profile) {
-      throw new ForbiddenException('A freelancer profile is required for this action');
-    }
-    return profile.id;
-  }
 
   private toDto(row: {
     id: string;
@@ -54,15 +36,11 @@ export class TasksService {
   }
 
   async create(userId: string, dto: CreateTaskDto): Promise<TaskResponseDto> {
-    const freelancerProfileId = await this.requireFreelancerProfileId(userId);
-    const project = await this.projectsRepository.findByIdForFreelancer(
-      dto.projectId,
-      freelancerProfileId,
-    );
+    const project = await this.projectsRepository.findByIdForOwner(dto.projectId, userId);
     if (!project) throw new NotFoundException('Project not found');
 
-    const assigneeId = dto.assigneeId ?? freelancerProfileId;
-    if (assigneeId !== freelancerProfileId) {
+    const assigneeId = dto.assigneeId ?? userId;
+    if (assigneeId !== userId) {
       throw new BadRequestException('You can only assign tasks to yourself');
     }
 
@@ -77,28 +55,22 @@ export class TasksService {
   }
 
   async findAll(userId: string, projectId?: string): Promise<TaskResponseDto[]> {
-    const freelancerProfileId = await this.requireFreelancerProfileId(userId);
     if (projectId) {
-      const project = await this.projectsRepository.findByIdForFreelancer(
-        projectId,
-        freelancerProfileId,
-      );
+      const project = await this.projectsRepository.findByIdForOwner(projectId, userId);
       if (!project) throw new NotFoundException('Project not found');
     }
-    const rows = await this.tasksRepository.findManyByFreelancer(freelancerProfileId, projectId);
+    const rows = await this.tasksRepository.findManyByProjectOwner(userId, projectId);
     return rows.map((r) => this.toDto(r));
   }
 
   async findOne(userId: string, id: string): Promise<TaskResponseDto> {
-    const freelancerProfileId = await this.requireFreelancerProfileId(userId);
-    const row = await this.tasksRepository.findByIdForFreelancer(id, freelancerProfileId);
+    const row = await this.tasksRepository.findByIdForProjectOwner(id, userId);
     if (!row) throw new NotFoundException('Task not found');
     return this.toDto(row);
   }
 
   async update(userId: string, id: string, dto: UpdateTaskDto): Promise<TaskResponseDto> {
-    const freelancerProfileId = await this.requireFreelancerProfileId(userId);
-    const existing = await this.tasksRepository.findByIdForFreelancer(id, freelancerProfileId);
+    const existing = await this.tasksRepository.findByIdForProjectOwner(id, userId);
     if (!existing) throw new NotFoundException('Task not found');
 
     const data: {
@@ -119,8 +91,7 @@ export class TasksService {
   }
 
   async remove(userId: string, id: string): Promise<void> {
-    const freelancerProfileId = await this.requireFreelancerProfileId(userId);
-    const existing = await this.tasksRepository.findByIdForFreelancer(id, freelancerProfileId);
+    const existing = await this.tasksRepository.findByIdForProjectOwner(id, userId);
     if (!existing) throw new NotFoundException('Task not found');
     await this.tasksRepository.delete(id);
   }

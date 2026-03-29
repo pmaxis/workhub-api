@@ -1560,8 +1560,7 @@ export const ProjectScalarFieldEnum = {
   id: 'id',
   name: 'name',
   description: 'description',
-  freelancerProfileId: 'freelancerProfileId',
-  clientProfileId: 'clientProfileId',
+  ownerId: 'ownerId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
 } as const;

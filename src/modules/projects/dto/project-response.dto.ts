@@ -5,7 +5,7 @@ export class ProjectResponseDto {
   @Expose() id: string;
   @Expose() name: string;
   @Expose() description: string | null;
-  @Expose() clientProfileId: string | null;
+  @Expose() ownerId: string;
   @Expose() createdAt: Date;
   @Expose() updatedAt: Date;
   @Expose() tasksCount?: number;

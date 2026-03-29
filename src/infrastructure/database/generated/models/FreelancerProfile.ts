@@ -178,8 +178,6 @@ export type FreelancerProfileWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<'FreelancerProfile'> | Date | string;
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>;
   clients?: Prisma.ClientRelationListRelationFilter;
-  projects?: Prisma.ProjectListRelationFilter;
-  tasks?: Prisma.TaskListRelationFilter;
 };
 
 export type FreelancerProfileOrderByWithRelationInput = {
@@ -189,8 +187,6 @@ export type FreelancerProfileOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder;
   user?: Prisma.UserOrderByWithRelationInput;
   clients?: Prisma.ClientRelationOrderByRelationAggregateInput;
-  projects?: Prisma.ProjectOrderByRelationAggregateInput;
-  tasks?: Prisma.TaskOrderByRelationAggregateInput;
 };
 
 export type FreelancerProfileWhereUniqueInput = Prisma.AtLeast<
@@ -204,8 +200,6 @@ export type FreelancerProfileWhereUniqueInput = Prisma.AtLeast<
     updatedAt?: Prisma.DateTimeFilter<'FreelancerProfile'> | Date | string;
     user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>;
     clients?: Prisma.ClientRelationListRelationFilter;
-    projects?: Prisma.ProjectListRelationFilter;
-    tasks?: Prisma.TaskListRelationFilter;
   },
   'id' | 'userId'
 >;
@@ -240,8 +234,6 @@ export type FreelancerProfileCreateInput = {
   updatedAt?: Date | string;
   user: Prisma.UserCreateNestedOneWithoutFreelancerProfileInput;
   clients?: Prisma.ClientRelationCreateNestedManyWithoutFreelancerProfileInput;
-  projects?: Prisma.ProjectCreateNestedManyWithoutFreelancerInput;
-  tasks?: Prisma.TaskCreateNestedManyWithoutAssigneeInput;
 };
 
 export type FreelancerProfileUncheckedCreateInput = {
@@ -250,8 +242,6 @@ export type FreelancerProfileUncheckedCreateInput = {
   createdAt?: Date | string;
   updatedAt?: Date | string;
   clients?: Prisma.ClientRelationUncheckedCreateNestedManyWithoutFreelancerProfileInput;
-  projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutFreelancerInput;
-  tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutAssigneeInput;
 };
 
 export type FreelancerProfileUpdateInput = {
@@ -260,8 +250,6 @@ export type FreelancerProfileUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   user?: Prisma.UserUpdateOneRequiredWithoutFreelancerProfileNestedInput;
   clients?: Prisma.ClientRelationUpdateManyWithoutFreelancerProfileNestedInput;
-  projects?: Prisma.ProjectUpdateManyWithoutFreelancerNestedInput;
-  tasks?: Prisma.TaskUpdateManyWithoutAssigneeNestedInput;
 };
 
 export type FreelancerProfileUncheckedUpdateInput = {
@@ -270,8 +258,6 @@ export type FreelancerProfileUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   clients?: Prisma.ClientRelationUncheckedUpdateManyWithoutFreelancerProfileNestedInput;
-  projects?: Prisma.ProjectUncheckedUpdateManyWithoutFreelancerNestedInput;
-  tasks?: Prisma.TaskUncheckedUpdateManyWithoutAssigneeNestedInput;
 };
 
 export type FreelancerProfileCreateManyInput = {
@@ -292,11 +278,6 @@ export type FreelancerProfileUncheckedUpdateManyInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-};
-
-export type FreelancerProfileScalarRelationFilter = {
-  is?: Prisma.FreelancerProfileWhereInput;
-  isNot?: Prisma.FreelancerProfileWhereInput;
 };
 
 export type FreelancerProfileNullableScalarRelationFilter = {
@@ -325,56 +306,9 @@ export type FreelancerProfileMinOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder;
 };
 
-export type FreelancerProfileCreateNestedOneWithoutProjectsInput = {
-  create?: Prisma.XOR<
-    Prisma.FreelancerProfileCreateWithoutProjectsInput,
-    Prisma.FreelancerProfileUncheckedCreateWithoutProjectsInput
-  >;
-  connectOrCreate?: Prisma.FreelancerProfileCreateOrConnectWithoutProjectsInput;
-  connect?: Prisma.FreelancerProfileWhereUniqueInput;
-};
-
-export type FreelancerProfileUpdateOneRequiredWithoutProjectsNestedInput = {
-  create?: Prisma.XOR<
-    Prisma.FreelancerProfileCreateWithoutProjectsInput,
-    Prisma.FreelancerProfileUncheckedCreateWithoutProjectsInput
-  >;
-  connectOrCreate?: Prisma.FreelancerProfileCreateOrConnectWithoutProjectsInput;
-  upsert?: Prisma.FreelancerProfileUpsertWithoutProjectsInput;
-  connect?: Prisma.FreelancerProfileWhereUniqueInput;
-  update?: Prisma.XOR<
-    Prisma.XOR<
-      Prisma.FreelancerProfileUpdateToOneWithWhereWithoutProjectsInput,
-      Prisma.FreelancerProfileUpdateWithoutProjectsInput
-    >,
-    Prisma.FreelancerProfileUncheckedUpdateWithoutProjectsInput
-  >;
-};
-
-export type FreelancerProfileCreateNestedOneWithoutTasksInput = {
-  create?: Prisma.XOR<
-    Prisma.FreelancerProfileCreateWithoutTasksInput,
-    Prisma.FreelancerProfileUncheckedCreateWithoutTasksInput
-  >;
-  connectOrCreate?: Prisma.FreelancerProfileCreateOrConnectWithoutTasksInput;
-  connect?: Prisma.FreelancerProfileWhereUniqueInput;
-};
-
-export type FreelancerProfileUpdateOneRequiredWithoutTasksNestedInput = {
-  create?: Prisma.XOR<
-    Prisma.FreelancerProfileCreateWithoutTasksInput,
-    Prisma.FreelancerProfileUncheckedCreateWithoutTasksInput
-  >;
-  connectOrCreate?: Prisma.FreelancerProfileCreateOrConnectWithoutTasksInput;
-  upsert?: Prisma.FreelancerProfileUpsertWithoutTasksInput;
-  connect?: Prisma.FreelancerProfileWhereUniqueInput;
-  update?: Prisma.XOR<
-    Prisma.XOR<
-      Prisma.FreelancerProfileUpdateToOneWithWhereWithoutTasksInput,
-      Prisma.FreelancerProfileUpdateWithoutTasksInput
-    >,
-    Prisma.FreelancerProfileUncheckedUpdateWithoutTasksInput
-  >;
+export type FreelancerProfileScalarRelationFilter = {
+  is?: Prisma.FreelancerProfileWhereInput;
+  isNot?: Prisma.FreelancerProfileWhereInput;
 };
 
 export type FreelancerProfileCreateNestedOneWithoutUserInput = {
@@ -459,141 +393,11 @@ export type FreelancerProfileUpdateOneRequiredWithoutClientsNestedInput = {
   >;
 };
 
-export type FreelancerProfileCreateWithoutProjectsInput = {
-  id?: string;
-  createdAt?: Date | string;
-  updatedAt?: Date | string;
-  user: Prisma.UserCreateNestedOneWithoutFreelancerProfileInput;
-  clients?: Prisma.ClientRelationCreateNestedManyWithoutFreelancerProfileInput;
-  tasks?: Prisma.TaskCreateNestedManyWithoutAssigneeInput;
-};
-
-export type FreelancerProfileUncheckedCreateWithoutProjectsInput = {
-  id?: string;
-  userId: string;
-  createdAt?: Date | string;
-  updatedAt?: Date | string;
-  clients?: Prisma.ClientRelationUncheckedCreateNestedManyWithoutFreelancerProfileInput;
-  tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutAssigneeInput;
-};
-
-export type FreelancerProfileCreateOrConnectWithoutProjectsInput = {
-  where: Prisma.FreelancerProfileWhereUniqueInput;
-  create: Prisma.XOR<
-    Prisma.FreelancerProfileCreateWithoutProjectsInput,
-    Prisma.FreelancerProfileUncheckedCreateWithoutProjectsInput
-  >;
-};
-
-export type FreelancerProfileUpsertWithoutProjectsInput = {
-  update: Prisma.XOR<
-    Prisma.FreelancerProfileUpdateWithoutProjectsInput,
-    Prisma.FreelancerProfileUncheckedUpdateWithoutProjectsInput
-  >;
-  create: Prisma.XOR<
-    Prisma.FreelancerProfileCreateWithoutProjectsInput,
-    Prisma.FreelancerProfileUncheckedCreateWithoutProjectsInput
-  >;
-  where?: Prisma.FreelancerProfileWhereInput;
-};
-
-export type FreelancerProfileUpdateToOneWithWhereWithoutProjectsInput = {
-  where?: Prisma.FreelancerProfileWhereInput;
-  data: Prisma.XOR<
-    Prisma.FreelancerProfileUpdateWithoutProjectsInput,
-    Prisma.FreelancerProfileUncheckedUpdateWithoutProjectsInput
-  >;
-};
-
-export type FreelancerProfileUpdateWithoutProjectsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string;
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-  user?: Prisma.UserUpdateOneRequiredWithoutFreelancerProfileNestedInput;
-  clients?: Prisma.ClientRelationUpdateManyWithoutFreelancerProfileNestedInput;
-  tasks?: Prisma.TaskUpdateManyWithoutAssigneeNestedInput;
-};
-
-export type FreelancerProfileUncheckedUpdateWithoutProjectsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string;
-  userId?: Prisma.StringFieldUpdateOperationsInput | string;
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-  clients?: Prisma.ClientRelationUncheckedUpdateManyWithoutFreelancerProfileNestedInput;
-  tasks?: Prisma.TaskUncheckedUpdateManyWithoutAssigneeNestedInput;
-};
-
-export type FreelancerProfileCreateWithoutTasksInput = {
-  id?: string;
-  createdAt?: Date | string;
-  updatedAt?: Date | string;
-  user: Prisma.UserCreateNestedOneWithoutFreelancerProfileInput;
-  clients?: Prisma.ClientRelationCreateNestedManyWithoutFreelancerProfileInput;
-  projects?: Prisma.ProjectCreateNestedManyWithoutFreelancerInput;
-};
-
-export type FreelancerProfileUncheckedCreateWithoutTasksInput = {
-  id?: string;
-  userId: string;
-  createdAt?: Date | string;
-  updatedAt?: Date | string;
-  clients?: Prisma.ClientRelationUncheckedCreateNestedManyWithoutFreelancerProfileInput;
-  projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutFreelancerInput;
-};
-
-export type FreelancerProfileCreateOrConnectWithoutTasksInput = {
-  where: Prisma.FreelancerProfileWhereUniqueInput;
-  create: Prisma.XOR<
-    Prisma.FreelancerProfileCreateWithoutTasksInput,
-    Prisma.FreelancerProfileUncheckedCreateWithoutTasksInput
-  >;
-};
-
-export type FreelancerProfileUpsertWithoutTasksInput = {
-  update: Prisma.XOR<
-    Prisma.FreelancerProfileUpdateWithoutTasksInput,
-    Prisma.FreelancerProfileUncheckedUpdateWithoutTasksInput
-  >;
-  create: Prisma.XOR<
-    Prisma.FreelancerProfileCreateWithoutTasksInput,
-    Prisma.FreelancerProfileUncheckedCreateWithoutTasksInput
-  >;
-  where?: Prisma.FreelancerProfileWhereInput;
-};
-
-export type FreelancerProfileUpdateToOneWithWhereWithoutTasksInput = {
-  where?: Prisma.FreelancerProfileWhereInput;
-  data: Prisma.XOR<
-    Prisma.FreelancerProfileUpdateWithoutTasksInput,
-    Prisma.FreelancerProfileUncheckedUpdateWithoutTasksInput
-  >;
-};
-
-export type FreelancerProfileUpdateWithoutTasksInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string;
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-  user?: Prisma.UserUpdateOneRequiredWithoutFreelancerProfileNestedInput;
-  clients?: Prisma.ClientRelationUpdateManyWithoutFreelancerProfileNestedInput;
-  projects?: Prisma.ProjectUpdateManyWithoutFreelancerNestedInput;
-};
-
-export type FreelancerProfileUncheckedUpdateWithoutTasksInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string;
-  userId?: Prisma.StringFieldUpdateOperationsInput | string;
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-  clients?: Prisma.ClientRelationUncheckedUpdateManyWithoutFreelancerProfileNestedInput;
-  projects?: Prisma.ProjectUncheckedUpdateManyWithoutFreelancerNestedInput;
-};
-
 export type FreelancerProfileCreateWithoutUserInput = {
   id?: string;
   createdAt?: Date | string;
   updatedAt?: Date | string;
   clients?: Prisma.ClientRelationCreateNestedManyWithoutFreelancerProfileInput;
-  projects?: Prisma.ProjectCreateNestedManyWithoutFreelancerInput;
-  tasks?: Prisma.TaskCreateNestedManyWithoutAssigneeInput;
 };
 
 export type FreelancerProfileUncheckedCreateWithoutUserInput = {
@@ -601,8 +405,6 @@ export type FreelancerProfileUncheckedCreateWithoutUserInput = {
   createdAt?: Date | string;
   updatedAt?: Date | string;
   clients?: Prisma.ClientRelationUncheckedCreateNestedManyWithoutFreelancerProfileInput;
-  projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutFreelancerInput;
-  tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutAssigneeInput;
 };
 
 export type FreelancerProfileCreateOrConnectWithoutUserInput = {
@@ -638,8 +440,6 @@ export type FreelancerProfileUpdateWithoutUserInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   clients?: Prisma.ClientRelationUpdateManyWithoutFreelancerProfileNestedInput;
-  projects?: Prisma.ProjectUpdateManyWithoutFreelancerNestedInput;
-  tasks?: Prisma.TaskUpdateManyWithoutAssigneeNestedInput;
 };
 
 export type FreelancerProfileUncheckedUpdateWithoutUserInput = {
@@ -647,8 +447,6 @@ export type FreelancerProfileUncheckedUpdateWithoutUserInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   clients?: Prisma.ClientRelationUncheckedUpdateManyWithoutFreelancerProfileNestedInput;
-  projects?: Prisma.ProjectUncheckedUpdateManyWithoutFreelancerNestedInput;
-  tasks?: Prisma.TaskUncheckedUpdateManyWithoutAssigneeNestedInput;
 };
 
 export type FreelancerProfileCreateWithoutClientsInput = {
@@ -656,8 +454,6 @@ export type FreelancerProfileCreateWithoutClientsInput = {
   createdAt?: Date | string;
   updatedAt?: Date | string;
   user: Prisma.UserCreateNestedOneWithoutFreelancerProfileInput;
-  projects?: Prisma.ProjectCreateNestedManyWithoutFreelancerInput;
-  tasks?: Prisma.TaskCreateNestedManyWithoutAssigneeInput;
 };
 
 export type FreelancerProfileUncheckedCreateWithoutClientsInput = {
@@ -665,8 +461,6 @@ export type FreelancerProfileUncheckedCreateWithoutClientsInput = {
   userId: string;
   createdAt?: Date | string;
   updatedAt?: Date | string;
-  projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutFreelancerInput;
-  tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutAssigneeInput;
 };
 
 export type FreelancerProfileCreateOrConnectWithoutClientsInput = {
@@ -702,8 +496,6 @@ export type FreelancerProfileUpdateWithoutClientsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   user?: Prisma.UserUpdateOneRequiredWithoutFreelancerProfileNestedInput;
-  projects?: Prisma.ProjectUpdateManyWithoutFreelancerNestedInput;
-  tasks?: Prisma.TaskUpdateManyWithoutAssigneeNestedInput;
 };
 
 export type FreelancerProfileUncheckedUpdateWithoutClientsInput = {
@@ -711,8 +503,6 @@ export type FreelancerProfileUncheckedUpdateWithoutClientsInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-  projects?: Prisma.ProjectUncheckedUpdateManyWithoutFreelancerNestedInput;
-  tasks?: Prisma.TaskUncheckedUpdateManyWithoutAssigneeNestedInput;
 };
 
 /**
@@ -721,16 +511,12 @@ export type FreelancerProfileUncheckedUpdateWithoutClientsInput = {
 
 export type FreelancerProfileCountOutputType = {
   clients: number;
-  projects: number;
-  tasks: number;
 };
 
 export type FreelancerProfileCountOutputTypeSelect<
   ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
 > = {
   clients?: boolean | FreelancerProfileCountOutputTypeCountClientsArgs;
-  projects?: boolean | FreelancerProfileCountOutputTypeCountProjectsArgs;
-  tasks?: boolean | FreelancerProfileCountOutputTypeCountTasksArgs;
 };
 
 /**
@@ -754,24 +540,6 @@ export type FreelancerProfileCountOutputTypeCountClientsArgs<
   where?: Prisma.ClientRelationWhereInput;
 };
 
-/**
- * FreelancerProfileCountOutputType without action
- */
-export type FreelancerProfileCountOutputTypeCountProjectsArgs<
-  ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
-> = {
-  where?: Prisma.ProjectWhereInput;
-};
-
-/**
- * FreelancerProfileCountOutputType without action
- */
-export type FreelancerProfileCountOutputTypeCountTasksArgs<
-  ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
-> = {
-  where?: Prisma.TaskWhereInput;
-};
-
 export type FreelancerProfileSelect<
   ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
 > = runtime.Types.Extensions.GetSelect<
@@ -782,8 +550,6 @@ export type FreelancerProfileSelect<
     updatedAt?: boolean;
     user?: boolean | Prisma.UserDefaultArgs<ExtArgs>;
     clients?: boolean | Prisma.FreelancerProfile$clientsArgs<ExtArgs>;
-    projects?: boolean | Prisma.FreelancerProfile$projectsArgs<ExtArgs>;
-    tasks?: boolean | Prisma.FreelancerProfile$tasksArgs<ExtArgs>;
     _count?: boolean | Prisma.FreelancerProfileCountOutputTypeDefaultArgs<ExtArgs>;
   },
   ExtArgs['result']['freelancerProfile']
@@ -833,8 +599,6 @@ export type FreelancerProfileInclude<
 > = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>;
   clients?: boolean | Prisma.FreelancerProfile$clientsArgs<ExtArgs>;
-  projects?: boolean | Prisma.FreelancerProfile$projectsArgs<ExtArgs>;
-  tasks?: boolean | Prisma.FreelancerProfile$tasksArgs<ExtArgs>;
   _count?: boolean | Prisma.FreelancerProfileCountOutputTypeDefaultArgs<ExtArgs>;
 };
 export type FreelancerProfileIncludeCreateManyAndReturn<
@@ -855,8 +619,6 @@ export type $FreelancerProfilePayload<
   objects: {
     user: Prisma.$UserPayload<ExtArgs>;
     clients: Prisma.$ClientRelationPayload<ExtArgs>[];
-    projects: Prisma.$ProjectPayload<ExtArgs>[];
-    tasks: Prisma.$TaskPayload<ExtArgs>[];
   };
   scalars: runtime.Types.Extensions.GetPayloadResult<
     {
@@ -1430,23 +1192,6 @@ export interface Prisma__FreelancerProfileClient<
       >
     | Null
   >;
-  projects<T extends Prisma.FreelancerProfile$projectsArgs<ExtArgs> = {}>(
-    args?: Prisma.Subset<T, Prisma.FreelancerProfile$projectsArgs<ExtArgs>>,
-  ): Prisma.PrismaPromise<
-    | runtime.Types.Result.GetResult<
-        Prisma.$ProjectPayload<ExtArgs>,
-        T,
-        'findMany',
-        GlobalOmitOptions
-      >
-    | Null
-  >;
-  tasks<T extends Prisma.FreelancerProfile$tasksArgs<ExtArgs> = {}>(
-    args?: Prisma.Subset<T, Prisma.FreelancerProfile$tasksArgs<ExtArgs>>,
-  ): Prisma.PrismaPromise<
-    | runtime.Types.Result.GetResult<Prisma.$TaskPayload<ExtArgs>, T, 'findMany', GlobalOmitOptions>
-    | Null
-  >;
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1954,58 +1699,6 @@ export type FreelancerProfile$clientsArgs<
   take?: number;
   skip?: number;
   distinct?: Prisma.ClientRelationScalarFieldEnum | Prisma.ClientRelationScalarFieldEnum[];
-};
-
-/**
- * FreelancerProfile.projects
- */
-export type FreelancerProfile$projectsArgs<
-  ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
-> = {
-  /**
-   * Select specific fields to fetch from the Project
-   */
-  select?: Prisma.ProjectSelect<ExtArgs> | null;
-  /**
-   * Omit specific fields from the Project
-   */
-  omit?: Prisma.ProjectOmit<ExtArgs> | null;
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ProjectInclude<ExtArgs> | null;
-  where?: Prisma.ProjectWhereInput;
-  orderBy?: Prisma.ProjectOrderByWithRelationInput | Prisma.ProjectOrderByWithRelationInput[];
-  cursor?: Prisma.ProjectWhereUniqueInput;
-  take?: number;
-  skip?: number;
-  distinct?: Prisma.ProjectScalarFieldEnum | Prisma.ProjectScalarFieldEnum[];
-};
-
-/**
- * FreelancerProfile.tasks
- */
-export type FreelancerProfile$tasksArgs<
-  ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
-> = {
-  /**
-   * Select specific fields to fetch from the Task
-   */
-  select?: Prisma.TaskSelect<ExtArgs> | null;
-  /**
-   * Omit specific fields from the Task
-   */
-  omit?: Prisma.TaskOmit<ExtArgs> | null;
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.TaskInclude<ExtArgs> | null;
-  where?: Prisma.TaskWhereInput;
-  orderBy?: Prisma.TaskOrderByWithRelationInput | Prisma.TaskOrderByWithRelationInput[];
-  cursor?: Prisma.TaskWhereUniqueInput;
-  take?: number;
-  skip?: number;
-  distinct?: Prisma.TaskScalarFieldEnum | Prisma.TaskScalarFieldEnum[];
 };
 
 /**

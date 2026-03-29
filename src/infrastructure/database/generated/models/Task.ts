@@ -203,10 +203,7 @@ export type TaskWhereInput = {
   createdAt?: Prisma.DateTimeFilter<'Task'> | Date | string;
   updatedAt?: Prisma.DateTimeFilter<'Task'> | Date | string;
   project?: Prisma.XOR<Prisma.ProjectScalarRelationFilter, Prisma.ProjectWhereInput>;
-  assignee?: Prisma.XOR<
-    Prisma.FreelancerProfileScalarRelationFilter,
-    Prisma.FreelancerProfileWhereInput
-  >;
+  assignee?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>;
 };
 
 export type TaskOrderByWithRelationInput = {
@@ -219,7 +216,7 @@ export type TaskOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder;
   updatedAt?: Prisma.SortOrder;
   project?: Prisma.ProjectOrderByWithRelationInput;
-  assignee?: Prisma.FreelancerProfileOrderByWithRelationInput;
+  assignee?: Prisma.UserOrderByWithRelationInput;
 };
 
 export type TaskWhereUniqueInput = Prisma.AtLeast<
@@ -236,10 +233,7 @@ export type TaskWhereUniqueInput = Prisma.AtLeast<
     createdAt?: Prisma.DateTimeFilter<'Task'> | Date | string;
     updatedAt?: Prisma.DateTimeFilter<'Task'> | Date | string;
     project?: Prisma.XOR<Prisma.ProjectScalarRelationFilter, Prisma.ProjectWhereInput>;
-    assignee?: Prisma.XOR<
-      Prisma.FreelancerProfileScalarRelationFilter,
-      Prisma.FreelancerProfileWhereInput
-    >;
+    assignee?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>;
   },
   'id'
 >;
@@ -280,7 +274,7 @@ export type TaskCreateInput = {
   createdAt?: Date | string;
   updatedAt?: Date | string;
   project: Prisma.ProjectCreateNestedOneWithoutTasksInput;
-  assignee: Prisma.FreelancerProfileCreateNestedOneWithoutTasksInput;
+  assignee: Prisma.UserCreateNestedOneWithoutTasksInput;
 };
 
 export type TaskUncheckedCreateInput = {
@@ -302,7 +296,7 @@ export type TaskUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   project?: Prisma.ProjectUpdateOneRequiredWithoutTasksNestedInput;
-  assignee?: Prisma.FreelancerProfileUpdateOneRequiredWithoutTasksNestedInput;
+  assignee?: Prisma.UserUpdateOneRequiredWithoutTasksNestedInput;
 };
 
 export type TaskUncheckedUpdateInput = {
@@ -573,7 +567,7 @@ export type TaskCreateWithoutProjectInput = {
   status?: $Enums.TaskStatus;
   createdAt?: Date | string;
   updatedAt?: Date | string;
-  assignee: Prisma.FreelancerProfileCreateNestedOneWithoutTasksInput;
+  assignee: Prisma.UserCreateNestedOneWithoutTasksInput;
 };
 
 export type TaskUncheckedCreateWithoutProjectInput = {
@@ -719,7 +713,7 @@ export type TaskUpdateWithoutProjectInput = {
   status?: Prisma.EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-  assignee?: Prisma.FreelancerProfileUpdateOneRequiredWithoutTasksNestedInput;
+  assignee?: Prisma.UserUpdateOneRequiredWithoutTasksNestedInput;
 };
 
 export type TaskUncheckedUpdateWithoutProjectInput = {
@@ -795,7 +789,7 @@ export type TaskSelect<
     createdAt?: boolean;
     updatedAt?: boolean;
     project?: boolean | Prisma.ProjectDefaultArgs<ExtArgs>;
-    assignee?: boolean | Prisma.FreelancerProfileDefaultArgs<ExtArgs>;
+    assignee?: boolean | Prisma.UserDefaultArgs<ExtArgs>;
   },
   ExtArgs['result']['task']
 >;
@@ -813,7 +807,7 @@ export type TaskSelectCreateManyAndReturn<
     createdAt?: boolean;
     updatedAt?: boolean;
     project?: boolean | Prisma.ProjectDefaultArgs<ExtArgs>;
-    assignee?: boolean | Prisma.FreelancerProfileDefaultArgs<ExtArgs>;
+    assignee?: boolean | Prisma.UserDefaultArgs<ExtArgs>;
   },
   ExtArgs['result']['task']
 >;
@@ -831,7 +825,7 @@ export type TaskSelectUpdateManyAndReturn<
     createdAt?: boolean;
     updatedAt?: boolean;
     project?: boolean | Prisma.ProjectDefaultArgs<ExtArgs>;
-    assignee?: boolean | Prisma.FreelancerProfileDefaultArgs<ExtArgs>;
+    assignee?: boolean | Prisma.UserDefaultArgs<ExtArgs>;
   },
   ExtArgs['result']['task']
 >;
@@ -864,19 +858,19 @@ export type TaskInclude<
   ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
 > = {
   project?: boolean | Prisma.ProjectDefaultArgs<ExtArgs>;
-  assignee?: boolean | Prisma.FreelancerProfileDefaultArgs<ExtArgs>;
+  assignee?: boolean | Prisma.UserDefaultArgs<ExtArgs>;
 };
 export type TaskIncludeCreateManyAndReturn<
   ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
 > = {
   project?: boolean | Prisma.ProjectDefaultArgs<ExtArgs>;
-  assignee?: boolean | Prisma.FreelancerProfileDefaultArgs<ExtArgs>;
+  assignee?: boolean | Prisma.UserDefaultArgs<ExtArgs>;
 };
 export type TaskIncludeUpdateManyAndReturn<
   ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
 > = {
   project?: boolean | Prisma.ProjectDefaultArgs<ExtArgs>;
-  assignee?: boolean | Prisma.FreelancerProfileDefaultArgs<ExtArgs>;
+  assignee?: boolean | Prisma.UserDefaultArgs<ExtArgs>;
 };
 
 export type $TaskPayload<
@@ -885,7 +879,7 @@ export type $TaskPayload<
   name: 'Task';
   objects: {
     project: Prisma.$ProjectPayload<ExtArgs>;
-    assignee: Prisma.$FreelancerProfilePayload<ExtArgs>;
+    assignee: Prisma.$UserPayload<ExtArgs>;
   };
   scalars: runtime.Types.Extensions.GetPayloadResult<
     {
@@ -1421,11 +1415,11 @@ export interface Prisma__TaskClient<
     ExtArgs,
     GlobalOmitOptions
   >;
-  assignee<T extends Prisma.FreelancerProfileDefaultArgs<ExtArgs> = {}>(
-    args?: Prisma.Subset<T, Prisma.FreelancerProfileDefaultArgs<ExtArgs>>,
-  ): Prisma.Prisma__FreelancerProfileClient<
+  assignee<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(
+    args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>,
+  ): Prisma.Prisma__UserClient<
     | runtime.Types.Result.GetResult<
-        Prisma.$FreelancerProfilePayload<ExtArgs>,
+        Prisma.$UserPayload<ExtArgs>,
         T,
         'findUniqueOrThrow',
         GlobalOmitOptions

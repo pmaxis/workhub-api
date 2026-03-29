@@ -4,11 +4,8 @@ model Project {
   name                String
   description         String?
 
-  freelancerProfileId String            @map("freelancer_profile_id")
-  freelancer          FreelancerProfile @relation(fields: [freelancerProfileId], references: [id])
-
-  clientProfileId     String?           @map("client_profile_id")
-  clientProfile       ClientProfile?    @relation(fields: [clientProfileId], references: [id])
+  ownerId String      @map("owner_id")
+  owner               User @relation(fields: [ownerId], references: [id])
 
   tasks               Task[]
 

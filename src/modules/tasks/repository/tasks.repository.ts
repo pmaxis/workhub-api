@@ -16,19 +16,19 @@ export class TasksRepository {
     return this.database.task.create({ data });
   }
 
-  async findManyByFreelancer(freelancerProfileId: string, projectId?: string) {
+  async findManyByProjectOwner(ownerId: string, projectId?: string) {
     return this.database.task.findMany({
       where: {
-        project: { freelancerProfileId },
+        project: { ownerId },
         ...(projectId ? { projectId } : {}),
       },
       orderBy: { updatedAt: 'desc' },
     });
   }
 
-  async findByIdForFreelancer(id: string, freelancerProfileId: string) {
+  async findByIdForProjectOwner(id: string, ownerId: string) {
     return this.database.task.findFirst({
-      where: { id, project: { freelancerProfileId } },
+      where: { id, project: { ownerId } },
     });
   }
 

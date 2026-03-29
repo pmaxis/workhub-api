@@ -13,6 +13,8 @@ model User {
   sessions          Session[]
   roles             UserRole[]
   invitations       Invitation[]
+  projects          Project[]
+  tasks             Task[]
 
   freelancerProfile FreelancerProfile?
   clientProfile     ClientProfile?
@@ -41,8 +43,6 @@ model FreelancerProfile {
   user       User             @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   clients    ClientRelation[]
-  projects   Project[]
-  tasks      Task[]
 
   createdAt  DateTime         @default(now()) @map("created_at")
   updatedAt  DateTime         @updatedAt @map("updated_at")
@@ -58,7 +58,6 @@ model ClientProfile {
 
   companyMembers  CompanyMember[]
   clientRelations ClientRelation[]
-  projects        Project[]
 
   createdAt       DateTime         @default(now()) @map("created_at")
   updatedAt       DateTime         @updatedAt @map("updated_at")
