@@ -13,7 +13,9 @@ export class PermissionsService {
     if (createPermissionDto.key === MANAGE_ALL_PERMISSION_KEY) {
       throw new BadRequestException('Cannot create reserved permission');
     }
+
     const permission = await this.permissionsRepository.create(createPermissionDto);
+
     return new PermissionResponseDto(permission);
   }
 
@@ -23,7 +25,7 @@ export class PermissionsService {
   }
 
   async findOne(id: string): Promise<PermissionResponseDto> {
-    const permission = await this.permissionsRepository.findById(id);
+    const permission = await this.permissionsRepository.findOne(id);
 
     if (!permission) {
       throw new NotFoundException('Permission not found');
@@ -35,22 +37,21 @@ export class PermissionsService {
   async update(
     id: string,
     updatePermissionDto: UpdatePermissionDto,
-  ): Promise<PermissionResponseDto | null> {
-    const existing = await this.permissionsRepository.findByIdForCheck(id);
-    if (!existing) throw new NotFoundException('Permission not found');
-    if (existing.key === MANAGE_ALL_PERMISSION_KEY) {
-      throw new BadRequestException('Cannot modify reserved permission');
+  ): Promise<PermissionResponseDto> {
+    await this.findOne(id);
+
+    if (updatePermissionDto.key === MANAGE_ALL_PERMISSION_KEY) {
+      throw new BadRequestException('Cannot use reserved key');
     }
+
     const permission = await this.permissionsRepository.update(id, updatePermissionDto);
-    return permission ? new PermissionResponseDto(permission) : null;
+
+    return new PermissionResponseDto(permission);
   }
 
   async delete(id: string): Promise<void> {
-    const existing = await this.permissionsRepository.findByIdForCheck(id);
-    if (!existing) throw new NotFoundException('Permission not found');
-    if (existing.key === MANAGE_ALL_PERMISSION_KEY) {
-      throw new BadRequestException('Cannot delete reserved permission');
-    }
+    await this.findOne(id);
+
     await this.permissionsRepository.delete(id);
   }
 }

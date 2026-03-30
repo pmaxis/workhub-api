@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode } from '@nestjs/common';
 import { Action } from '@/common/ability/ability.types';
 import { CheckPolicies } from '@/common/decorators/policy.decorator';
 import { PermissionsService } from '@/modules/permissions/service/permissions.service';
@@ -12,34 +12,35 @@ export class PermissionsController {
 
   @Post()
   @CheckPolicies((ability) => ability.can(Action.Create, 'Permission'))
-  async create(@Body() createPermissionDto: CreatePermissionDto): Promise<PermissionResponseDto> {
+  create(@Body() createPermissionDto: CreatePermissionDto): Promise<PermissionResponseDto> {
     return this.permissionsService.create(createPermissionDto);
   }
 
   @Get()
   @CheckPolicies((ability) => ability.can(Action.Read, 'Permission'))
-  async findAll(): Promise<PermissionResponseDto[]> {
+  findAll(): Promise<PermissionResponseDto[]> {
     return this.permissionsService.findAll();
   }
 
   @Get(':id')
   @CheckPolicies((ability) => ability.can(Action.Read, 'Permission'))
-  async findOne(@Param('id') id: string): Promise<PermissionResponseDto | null> {
+  findOne(@Param('id') id: string): Promise<PermissionResponseDto> {
     return this.permissionsService.findOne(id);
   }
 
   @Patch(':id')
   @CheckPolicies((ability) => ability.can(Action.Update, 'Permission'))
-  async update(
+  update(
     @Param('id') id: string,
     @Body() updatePermissionDto: UpdatePermissionDto,
-  ): Promise<PermissionResponseDto | null> {
+  ): Promise<PermissionResponseDto> {
     return this.permissionsService.update(id, updatePermissionDto);
   }
 
   @Delete(':id')
+  @HttpCode(204)
   @CheckPolicies((ability) => ability.can(Action.Delete, 'Permission'))
-  async delete(@Param('id') id: string): Promise<void> {
-    await this.permissionsService.delete(id);
+  delete(@Param('id') id: string): Promise<void> {
+    return this.permissionsService.delete(id);
   }
 }
