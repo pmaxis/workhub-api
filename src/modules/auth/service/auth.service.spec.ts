@@ -4,11 +4,9 @@ import { UnauthorizedException, BadRequestException } from '@nestjs/common';
 import { AuthService } from '@/modules/auth/service/auth.service';
 import { UsersService } from '@/modules/users/service/users.service';
 import { UserPermissionsRepository } from '@/modules/users/repository/user-permissions.repository';
-import { UserRolesRepository } from '@/modules/users/repository/user-roles.repository';
+import { UserOnboardingService } from '@/modules/users/service/user-onboarding.service';
 import { SessionsService } from '@/modules/sessions/service/sessions.service';
 import { InvitationsService } from '@/modules/invitations/service/invitations.service';
-import { RolesRepository } from '@/modules/roles/repository/roles.repository';
-import { DatabaseService } from '@/infrastructure/database/database.service';
 import { TokensService } from '@/infrastructure/tokens/tokens.service';
 import { LoginDto } from '@/modules/auth/dto/login.dto';
 import { RegisterDto } from '@/modules/auth/dto/register.dto';
@@ -46,28 +44,14 @@ const mockTokensService = {
   hashToken: jest.fn().mockReturnValue('hashed-token'),
 };
 
-const mockUserRolesRepository = {
-  addRole: jest.fn(),
-  deleteRole: jest.fn(),
+const mockUserOnboardingService = {
+  ensureFreelancerProfile: jest.fn(),
+  registerClientFromInvitation: jest.fn(),
 };
 
 const mockInvitationsService = {
   accept: jest.fn(),
   getInvitationForRegistration: jest.fn(),
-};
-
-const mockRolesRepository = {
-  findBySlug: jest.fn(),
-};
-
-const mockDatabaseService = {
-  user: { findMany: jest.fn() },
-  clientProfile: { create: jest.fn() },
-  freelancerProfile: {
-    findUnique: jest.fn(),
-    create: jest.fn().mockResolvedValue({ id: 'freelancer-profile-1', userId: 'user-1' }),
-  },
-  clientRelation: { create: jest.fn() },
 };
 
 describe('AuthService', () => {
@@ -81,12 +65,10 @@ describe('AuthService', () => {
         { provide: ConfigService, useValue: mockConfigService },
         { provide: UsersService, useValue: mockUsersService },
         { provide: UserPermissionsRepository, useValue: mockUserPermissionsRepository },
-        { provide: UserRolesRepository, useValue: mockUserRolesRepository },
+        { provide: UserOnboardingService, useValue: mockUserOnboardingService },
         { provide: SessionsService, useValue: mockSessionsService },
         { provide: TokensService, useValue: mockTokensService },
         { provide: InvitationsService, useValue: mockInvitationsService },
-        { provide: RolesRepository, useValue: mockRolesRepository },
-        { provide: DatabaseService, useValue: mockDatabaseService },
       ],
     }).compile();
 
@@ -158,9 +140,10 @@ describe('AuthService', () => {
         ...registerDto,
         isActivated: false,
       });
-      expect(mockDatabaseService.freelancerProfile.create).toHaveBeenCalledWith({
-        data: { userId: createdUser.id },
-      });
+      expect(mockUserOnboardingService.ensureFreelancerProfile).toHaveBeenCalledWith(
+        createdUser.id,
+      );
+      expect(mockUserOnboardingService.registerClientFromInvitation).not.toHaveBeenCalled();
     });
 
     it('should throw BadRequestException when email already exists', async () => {

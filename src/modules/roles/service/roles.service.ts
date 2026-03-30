@@ -34,6 +34,11 @@ export class RolesService {
     return new RoleResponseDto(role);
   }
 
+  async findIdBySlug(slug: string): Promise<string | null> {
+    const role = await this.rolesRepository.findBySlug(slug);
+    return role?.id ?? null;
+  }
+
   async update(id: string, updateRoleDto: UpdateRoleDto): Promise<RoleResponseDto> {
     await this.findOne(id);
 

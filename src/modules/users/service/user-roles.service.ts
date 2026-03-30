@@ -35,4 +35,14 @@ export class UserRolesService {
 
     await this.userRolesRepository.deleteRole(userId, roleId);
   }
+
+  /** Assigns role when it exists; no-op if slug is unknown (same as previous register behaviour). */
+  async addRoleBySlug(userId: string, slug: string): Promise<void> {
+    const roleId = await this.rolesService.findIdBySlug(slug);
+    if (!roleId) {
+      return;
+    }
+
+    await this.addRole(userId, roleId);
+  }
 }

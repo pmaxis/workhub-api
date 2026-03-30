@@ -1,17 +1,14 @@
 import ms from 'ms';
 import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { ClientStatus } from '@/infrastructure/database/generated/enums';
 import { comparePassword } from '@/common/utils/hash.util';
 import { TokensService } from '@/infrastructure/tokens/tokens.service';
-import { DatabaseService } from '@/infrastructure/database/database.service';
-import { CLIENT_ROLE_SLUG } from '@/common/constants/reserved';
 import { UsersService } from '@/modules/users/service/users.service';
+import { UserResponseDto } from '@/modules/users/dto/user-response.dto';
 import { UserPermissionsRepository } from '@/modules/users/repository/user-permissions.repository';
-import { UserRolesRepository } from '@/modules/users/repository/user-roles.repository';
+import { UserOnboardingService } from '@/modules/users/service/user-onboarding.service';
 import { SessionsService } from '@/modules/sessions/service/sessions.service';
 import { InvitationsService } from '@/modules/invitations/service/invitations.service';
-import { RolesRepository } from '@/modules/roles/repository/roles.repository';
 import { LoginDto } from '@/modules/auth/dto/login.dto';
 import { RegisterDto } from '@/modules/auth/dto/register.dto';
 
@@ -22,12 +19,10 @@ export class AuthService {
     private readonly configService: ConfigService,
     private readonly usersService: UsersService,
     private readonly userPermissionsRepository: UserPermissionsRepository,
-    private readonly userRolesRepository: UserRolesRepository,
+    private readonly userOnboardingService: UserOnboardingService,
     private readonly sessionsService: SessionsService,
     private readonly tokensService: TokensService,
     private readonly invitationsService: InvitationsService,
-    private readonly rolesRepository: RolesRepository,
-    private readonly database: DatabaseService,
   ) {
     this.refreshTokenMaxAge = ms(
       this.configService.getOrThrow<ms.StringValue>('tokens.refreshToken.expiresIn'),
@@ -56,65 +51,44 @@ export class AuthService {
       throw new BadRequestException('Registration failed');
     }
 
-    let isActivated = false;
-    let invitationId: string | null = null;
-    let invitedById: string | null = null;
+    let invitationContext: { invitationId: string; invitedById: string } | null = null;
 
     if (registerDto.invitationToken) {
       const invitation = await this.invitationsService.getInvitationForRegistration(
         registerDto.invitationToken,
       );
+
       if (!invitation) {
         throw new BadRequestException('Invalid or expired invitation');
       }
+
       if (invitation.email.toLowerCase() !== registerDto.email.toLowerCase()) {
         throw new BadRequestException('Email must match the invited address');
       }
-      isActivated = true;
-      invitationId = invitation.id;
-      invitedById = invitation.invitedById;
+
+      invitationContext = { invitationId: invitation.id, invitedById: invitation.invitedById };
     }
 
     const { invitationToken: _, ...createUserDto } = registerDto;
-    const user = await this.usersService.create({
+
+    const user: UserResponseDto = await this.usersService.create({
       ...createUserDto,
-      isActivated,
+      isActivated: !!invitationContext,
     });
 
-    if (invitationId && invitedById) {
-      await this.invitationsService.accept(invitationId);
+    const userId = user.id;
 
-      const clientRole = await this.rolesRepository.findBySlug(CLIENT_ROLE_SLUG);
-      if (clientRole) {
-        await this.userRolesRepository.addRole({
-          userId: user.id,
-          roleId: clientRole.id,
-        });
-      }
-
-      const clientProfile = await this.database.clientProfile.create({
-        data: { userId: user.id },
-      });
-
-      const freelancerProfile = await this.database.freelancerProfile.findUnique({
-        where: { userId: invitedById },
-      });
-      if (freelancerProfile) {
-        await this.database.clientRelation.create({
-          data: {
-            freelancerProfileId: freelancerProfile.id,
-            clientProfileId: clientProfile.id,
-            status: ClientStatus.ACTIVE,
-          },
-        });
-      }
+    if (invitationContext) {
+      await this.invitationsService.accept(invitationContext.invitationId);
+      await this.userOnboardingService.registerClientFromInvitation(
+        userId,
+        invitationContext.invitedById,
+      );
     } else {
-      await this.database.freelancerProfile.create({
-        data: { userId: user.id },
-      });
+      await this.userOnboardingService.ensureFreelancerProfile(userId);
     }
 
-    return this.createAuthSession(user.id, ipAddress, userAgent);
+    return this.createAuthSession(userId, ipAddress, userAgent);
   }
 
   async refresh(token: string) {

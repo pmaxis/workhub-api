@@ -9,6 +9,8 @@ import { UserRolesController } from '@/modules/users/controller/user-roles.contr
 import { UsersRepository } from '@/modules/users/repository/users.repository';
 import { UserRolesRepository } from '@/modules/users/repository/user-roles.repository';
 import { UserPermissionsRepository } from '@/modules/users/repository/user-permissions.repository';
+import { UserOnboardingRepository } from '@/modules/users/repository/user-onboarding.repository';
+import { UserOnboardingService } from '@/modules/users/service/user-onboarding.service';
 import { usersAbilityDefinitions } from '@/modules/users/ability/users.ability';
 import { userRolesAbilityDefinitions } from '@/modules/users/ability/user-roles.ability';
 
@@ -22,14 +24,17 @@ import { userRolesAbilityDefinitions } from '@/modules/users/ability/user-roles.
   providers: [
     UsersService,
     UserRolesService,
+    UserOnboardingService,
     UsersRepository,
     UserRolesRepository,
     UserPermissionsRepository,
+    UserOnboardingRepository,
   ],
   exports: [
     UsersService,
     UsersRepository,
     UserRolesService,
+    UserOnboardingService,
     UserPermissionsRepository,
     UserRolesRepository,
   ],
