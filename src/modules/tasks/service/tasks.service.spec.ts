@@ -1,4 +1,4 @@
-import { BadRequestException, NotFoundException } from '@nestjs/common';
+import { NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { TaskStatus } from '@/infrastructure/database/generated/enums';
 import { ProjectsRepository } from '@/modules/projects/repository/projects.repository';
@@ -6,8 +6,10 @@ import { TasksRepository } from '@/modules/tasks/repository/tasks.repository';
 import { TasksService } from '@/modules/tasks/service/tasks.service';
 import { CreateTaskDto } from '@/modules/tasks/dto/create-task.dto';
 import { UpdateTaskDto } from '@/modules/tasks/dto/update-task.dto';
+import { TaskResponseDto } from '@/modules/tasks/dto/task-response.dto';
 
-const userId = 'user-1';
+/** Same as authenticated user; matches `Project.ownerId` for repository scoping. */
+const ownerId = 'user-1';
 const projectId = 'proj-1';
 const taskId = 'task-1';
 
@@ -18,14 +20,14 @@ const baseDates = {
 
 const mockTasksRepository = {
   create: jest.fn(),
-  findManyByProjectOwner: jest.fn(),
-  findByIdForProjectOwner: jest.fn(),
+  findAll: jest.fn(),
+  findOne: jest.fn(),
   update: jest.fn(),
   delete: jest.fn(),
 };
 
 const mockProjectsRepository = {
-  findByIdForOwner: jest.fn(),
+  findOne: jest.fn(),
 };
 
 describe('TasksService', () => {
@@ -54,51 +56,43 @@ describe('TasksService', () => {
       projectId,
     };
 
-    it('should create task when project exists and assignee is self', async () => {
-      mockProjectsRepository.findByIdForOwner.mockResolvedValue({ id: projectId });
+    it('should create task when project exists', async () => {
+      mockProjectsRepository.findOne.mockResolvedValue({ id: projectId });
       const row = {
         id: taskId,
         title: dto.title,
         description: null,
         status: TaskStatus.PENDING,
         projectId,
-        assigneeId: userId,
+        assigneeId: ownerId,
         ...baseDates,
       };
       mockTasksRepository.create.mockResolvedValue(row);
 
-      const result = await service.create(userId, dto);
+      const result = await service.create(ownerId, dto);
 
-      expect(mockProjectsRepository.findByIdForOwner).toHaveBeenCalledWith(projectId, userId);
+      expect(mockProjectsRepository.findOne).toHaveBeenCalledWith(projectId, ownerId);
       expect(mockTasksRepository.create).toHaveBeenCalledWith({
         title: dto.title,
         description: null,
         status: TaskStatus.PENDING,
         projectId,
-        assigneeId: userId,
+        assigneeId: ownerId,
       });
+      expect(result).toBeInstanceOf(TaskResponseDto);
       expect(result).toMatchObject({
         id: taskId,
         title: dto.title,
         projectId,
-        assigneeId: userId,
+        assigneeId: ownerId,
         status: TaskStatus.PENDING,
       });
     });
 
     it('should throw NotFoundException when project not found', async () => {
-      mockProjectsRepository.findByIdForOwner.mockResolvedValue(null);
+      mockProjectsRepository.findOne.mockResolvedValue(null);
 
-      await expect(service.create(userId, dto)).rejects.toThrow(NotFoundException);
-      expect(mockTasksRepository.create).not.toHaveBeenCalled();
-    });
-
-    it('should throw BadRequestException when assignee is not current user', async () => {
-      mockProjectsRepository.findByIdForOwner.mockResolvedValue({ id: projectId });
-
-      await expect(service.create(userId, { ...dto, assigneeId: 'other-user' })).rejects.toThrow(
-        BadRequestException,
-      );
+      await expect(service.create(ownerId, dto)).rejects.toThrow(NotFoundException);
       expect(mockTasksRepository.create).not.toHaveBeenCalled();
     });
   });
@@ -111,34 +105,34 @@ describe('TasksService', () => {
         description: null,
         status: TaskStatus.PENDING,
         projectId,
-        assigneeId: userId,
+        assigneeId: ownerId,
         ...baseDates,
       };
-      mockTasksRepository.findManyByProjectOwner.mockResolvedValue([row]);
+      mockTasksRepository.findAll.mockResolvedValue([row]);
 
-      const result = await service.findAll(userId);
+      const result = await service.findAll(ownerId);
 
-      expect(mockProjectsRepository.findByIdForOwner).not.toHaveBeenCalled();
-      expect(mockTasksRepository.findManyByProjectOwner).toHaveBeenCalledWith(userId, undefined);
+      expect(mockProjectsRepository.findOne).not.toHaveBeenCalled();
+      expect(mockTasksRepository.findAll).toHaveBeenCalledWith(ownerId, undefined);
       expect(result).toHaveLength(1);
       expect(result[0]).toMatchObject({ id: taskId });
     });
 
     it('should validate project when projectId filter is set', async () => {
-      mockProjectsRepository.findByIdForOwner.mockResolvedValue({ id: projectId });
-      mockTasksRepository.findManyByProjectOwner.mockResolvedValue([]);
+      mockProjectsRepository.findOne.mockResolvedValue({ id: projectId });
+      mockTasksRepository.findAll.mockResolvedValue([]);
 
-      await service.findAll(userId, projectId);
+      await service.findAll(ownerId, projectId);
 
-      expect(mockProjectsRepository.findByIdForOwner).toHaveBeenCalledWith(projectId, userId);
-      expect(mockTasksRepository.findManyByProjectOwner).toHaveBeenCalledWith(userId, projectId);
+      expect(mockProjectsRepository.findOne).toHaveBeenCalledWith(projectId, ownerId);
+      expect(mockTasksRepository.findAll).toHaveBeenCalledWith(ownerId, projectId);
     });
 
     it('should throw when filtered project not found', async () => {
-      mockProjectsRepository.findByIdForOwner.mockResolvedValue(null);
+      mockProjectsRepository.findOne.mockResolvedValue(null);
 
-      await expect(service.findAll(userId, projectId)).rejects.toThrow(NotFoundException);
-      expect(mockTasksRepository.findManyByProjectOwner).not.toHaveBeenCalled();
+      await expect(service.findAll(ownerId, projectId)).rejects.toThrow(NotFoundException);
+      expect(mockTasksRepository.findAll).not.toHaveBeenCalled();
     });
   });
 
@@ -150,21 +144,21 @@ describe('TasksService', () => {
         description: null,
         status: TaskStatus.COMPLETED,
         projectId,
-        assigneeId: userId,
+        assigneeId: ownerId,
         ...baseDates,
       };
-      mockTasksRepository.findByIdForProjectOwner.mockResolvedValue(row);
+      mockTasksRepository.findOne.mockResolvedValue(row);
 
-      const result = await service.findOne(userId, taskId);
+      const result = await service.findOne(ownerId, taskId);
 
-      expect(mockTasksRepository.findByIdForProjectOwner).toHaveBeenCalledWith(taskId, userId);
+      expect(mockTasksRepository.findOne).toHaveBeenCalledWith(taskId, ownerId);
       expect(result).toMatchObject({ id: taskId, status: TaskStatus.COMPLETED });
     });
 
     it('should throw when task not found', async () => {
-      mockTasksRepository.findByIdForProjectOwner.mockResolvedValue(null);
+      mockTasksRepository.findOne.mockResolvedValue(null);
 
-      await expect(service.findOne(userId, taskId)).rejects.toThrow(NotFoundException);
+      await expect(service.findOne(ownerId, taskId)).rejects.toThrow(NotFoundException);
     });
   });
 
@@ -175,53 +169,62 @@ describe('TasksService', () => {
       description: 'd',
       status: TaskStatus.PENDING,
       projectId,
-      assigneeId: userId,
+      assigneeId: ownerId,
       ...baseDates,
     };
 
-    it('should return existing when dto has no fields to apply', async () => {
-      mockTasksRepository.findByIdForProjectOwner.mockResolvedValue({ ...existing });
+    it('should return current task when dto has no fields to apply', async () => {
+      mockTasksRepository.findOne.mockResolvedValue({ ...existing });
 
-      const result = await service.update(userId, taskId, {} as UpdateTaskDto);
+      const result = await service.update(ownerId, taskId, {} as UpdateTaskDto);
 
       expect(mockTasksRepository.update).not.toHaveBeenCalled();
       expect(result).toMatchObject({ id: taskId, title: 'Old' });
     });
 
     it('should update when dto has changes', async () => {
-      mockTasksRepository.findByIdForProjectOwner.mockResolvedValue({ ...existing });
+      mockTasksRepository.findOne.mockResolvedValue({ ...existing });
       const updated = { ...existing, title: 'New', updatedAt: new Date('2026-01-03') };
       mockTasksRepository.update.mockResolvedValue(updated);
 
       const dto: UpdateTaskDto = { title: 'New' };
-      const result = await service.update(userId, taskId, dto);
+      const result = await service.update(ownerId, taskId, dto);
 
       expect(mockTasksRepository.update).toHaveBeenCalledWith(taskId, { title: 'New' });
       expect(result).toMatchObject({ title: 'New' });
     });
+
+    it('should throw when task not found', async () => {
+      mockTasksRepository.findOne.mockResolvedValue(null);
+
+      await expect(service.update(ownerId, taskId, { title: 'x' })).rejects.toThrow(
+        NotFoundException,
+      );
+      expect(mockTasksRepository.update).not.toHaveBeenCalled();
+    });
   });
 
-  describe('remove', () => {
+  describe('delete', () => {
     it('should throw when task not found', async () => {
-      mockTasksRepository.findByIdForProjectOwner.mockResolvedValue(null);
+      mockTasksRepository.findOne.mockResolvedValue(null);
 
-      await expect(service.remove(userId, taskId)).rejects.toThrow(NotFoundException);
+      await expect(service.delete(ownerId, taskId)).rejects.toThrow(NotFoundException);
       expect(mockTasksRepository.delete).not.toHaveBeenCalled();
     });
 
     it('should delete when task exists', async () => {
-      mockTasksRepository.findByIdForProjectOwner.mockResolvedValue({
+      mockTasksRepository.findOne.mockResolvedValue({
         id: taskId,
         title: 'T',
         description: null,
         status: TaskStatus.PENDING,
         projectId,
-        assigneeId: userId,
+        assigneeId: ownerId,
         ...baseDates,
       });
       mockTasksRepository.delete.mockResolvedValue(undefined);
 
-      await service.remove(userId, taskId);
+      await service.delete(ownerId, taskId);
 
       expect(mockTasksRepository.delete).toHaveBeenCalledWith(taskId);
     });

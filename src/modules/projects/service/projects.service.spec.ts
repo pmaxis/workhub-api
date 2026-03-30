@@ -1,12 +1,13 @@
 import { NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import { DatabaseService } from '@/infrastructure/database/database.service';
 import { ProjectsRepository } from '@/modules/projects/repository/projects.repository';
 import { ProjectsService } from '@/modules/projects/service/projects.service';
 import { CreateProjectDto } from '@/modules/projects/dto/create-project.dto';
 import { UpdateProjectDto } from '@/modules/projects/dto/update-project.dto';
+import { ProjectResponseDto } from '@/modules/projects/dto/project-response.dto';
 
-const userId = 'user-1';
+/** Authenticated user id; same value as `Project.ownerId` in these tests. */
+const ownerId = 'user-1';
 const projectId = 'proj-1';
 
 const baseDates = {
@@ -14,21 +15,21 @@ const baseDates = {
   updatedAt: new Date('2026-01-02'),
 };
 
+const mockProjectFromRepo = {
+  id: projectId,
+  name: 'P',
+  description: null as string | null,
+  ownerId,
+  tasksCount: 0,
+  ...baseDates,
+};
+
 const mockProjectsRepository = {
   create: jest.fn(),
-  findManyByOwner: jest.fn(),
-  findByIdForOwner: jest.fn(),
+  findAll: jest.fn(),
+  findOne: jest.fn(),
   update: jest.fn(),
   delete: jest.fn(),
-};
-
-const mockTx = {
-  task: { deleteMany: jest.fn().mockResolvedValue({ count: 0 }) },
-  project: { delete: jest.fn().mockResolvedValue({ id: projectId }) },
-};
-
-const mockDatabaseService = {
-  $transaction: jest.fn((fn: (tx: typeof mockTx) => Promise<unknown>) => fn(mockTx)),
 };
 
 describe('ProjectsService', () => {
@@ -40,7 +41,6 @@ describe('ProjectsService', () => {
       providers: [
         ProjectsService,
         { provide: ProjectsRepository, useValue: mockProjectsRepository },
-        { provide: DatabaseService, useValue: mockDatabaseService },
       ],
     }).compile();
 
@@ -54,27 +54,24 @@ describe('ProjectsService', () => {
   describe('create', () => {
     it('should create project for user', async () => {
       const dto: CreateProjectDto = { name: 'P', description: 'desc' };
-      const row = {
-        id: projectId,
+      mockProjectsRepository.create.mockResolvedValue({
+        ...mockProjectFromRepo,
         name: dto.name,
         description: dto.description ?? null,
-        ownerId: userId,
-        _count: { tasks: 0 },
-        ...baseDates,
-      };
-      mockProjectsRepository.create.mockResolvedValue(row);
+      });
 
-      const result = await service.create(userId, dto);
+      const result = await service.create(ownerId, dto);
 
       expect(mockProjectsRepository.create).toHaveBeenCalledWith({
         name: dto.name,
         description: dto.description,
-        ownerId: userId,
+        ownerId,
       });
+      expect(result).toBeInstanceOf(ProjectResponseDto);
       expect(result).toMatchObject({
         id: projectId,
         name: dto.name,
-        ownerId: userId,
+        ownerId,
         tasksCount: 0,
       });
     });
@@ -82,117 +79,92 @@ describe('ProjectsService', () => {
 
   describe('findAll', () => {
     it('should return projects for owner', async () => {
-      const row = {
-        id: projectId,
-        name: 'P',
-        description: null,
-        ownerId: userId,
-        _count: { tasks: 2 },
-        ...baseDates,
-      };
-      mockProjectsRepository.findManyByOwner.mockResolvedValue([row]);
+      const row = { ...mockProjectFromRepo, tasksCount: 2 };
+      mockProjectsRepository.findAll.mockResolvedValue([row]);
 
-      const result = await service.findAll(userId);
+      const result = await service.findAll(ownerId);
 
-      expect(mockProjectsRepository.findManyByOwner).toHaveBeenCalledWith(userId);
+      expect(mockProjectsRepository.findAll).toHaveBeenCalledWith(ownerId);
       expect(result).toHaveLength(1);
+      expect(result[0]).toBeInstanceOf(ProjectResponseDto);
       expect(result[0]).toMatchObject({ id: projectId, tasksCount: 2 });
     });
   });
 
   describe('findOne', () => {
     it('should return project when found', async () => {
-      const row = {
-        id: projectId,
-        name: 'P',
-        description: null,
-        ownerId: userId,
-        _count: { tasks: 0 },
-        ...baseDates,
-      };
-      mockProjectsRepository.findByIdForOwner.mockResolvedValue(row);
+      mockProjectsRepository.findOne.mockResolvedValue(mockProjectFromRepo);
 
-      const result = await service.findOne(userId, projectId);
+      const result = await service.findOne(ownerId, projectId);
 
-      expect(mockProjectsRepository.findByIdForOwner).toHaveBeenCalledWith(projectId, userId);
+      expect(mockProjectsRepository.findOne).toHaveBeenCalledWith(projectId, ownerId);
+      expect(result).toBeInstanceOf(ProjectResponseDto);
       expect(result).toMatchObject({ id: projectId });
     });
 
     it('should throw when project not found', async () => {
-      mockProjectsRepository.findByIdForOwner.mockResolvedValue(null);
+      mockProjectsRepository.findOne.mockResolvedValue(null);
 
-      await expect(service.findOne(userId, projectId)).rejects.toThrow(NotFoundException);
+      await expect(service.findOne(ownerId, projectId)).rejects.toThrow(NotFoundException);
     });
   });
 
   describe('update', () => {
-    const existing = {
-      id: projectId,
-      name: 'Old',
-      description: 'd',
-      ownerId: userId,
-      _count: { tasks: 0 },
-      ...baseDates,
-    };
+    const existing = { ...mockProjectFromRepo, name: 'Old', description: 'd' };
 
-    it('should return existing when dto has no changes', async () => {
-      mockProjectsRepository.findByIdForOwner.mockResolvedValue({ ...existing });
+    it('should return current project when dto has no fields to apply', async () => {
+      mockProjectsRepository.findOne.mockResolvedValue({ ...existing });
 
-      const result = await service.update(userId, projectId, {} as UpdateProjectDto);
+      const result = await service.update(ownerId, projectId, {} as UpdateProjectDto);
 
       expect(mockProjectsRepository.update).not.toHaveBeenCalled();
+      expect(result).toBeInstanceOf(ProjectResponseDto);
       expect(result).toMatchObject({ id: projectId, name: 'Old' });
     });
 
     it('should update when dto has changes', async () => {
-      mockProjectsRepository.findByIdForOwner.mockResolvedValue({ ...existing });
+      mockProjectsRepository.findOne.mockResolvedValue({ ...existing });
       const updated = {
         ...existing,
         name: 'New',
-        _count: { tasks: 0 },
         updatedAt: new Date('2026-01-03'),
       };
       mockProjectsRepository.update.mockResolvedValue(updated);
 
       const dto: UpdateProjectDto = { name: 'New' };
-      const result = await service.update(userId, projectId, dto);
+      const result = await service.update(ownerId, projectId, dto);
 
+      expect(mockProjectsRepository.findOne).toHaveBeenCalledWith(projectId, ownerId);
       expect(mockProjectsRepository.update).toHaveBeenCalledWith(projectId, { name: 'New' });
       expect(result).toMatchObject({ name: 'New' });
     });
 
     it('should throw when project not found', async () => {
-      mockProjectsRepository.findByIdForOwner.mockResolvedValue(null);
+      mockProjectsRepository.findOne.mockResolvedValue(null);
 
-      await expect(service.update(userId, projectId, { name: 'N' })).rejects.toThrow(
+      await expect(service.update(ownerId, projectId, { name: 'N' })).rejects.toThrow(
         NotFoundException,
       );
+      expect(mockProjectsRepository.update).not.toHaveBeenCalled();
     });
   });
 
-  describe('remove', () => {
+  describe('delete', () => {
     it('should throw when project not found', async () => {
-      mockProjectsRepository.findByIdForOwner.mockResolvedValue(null);
+      mockProjectsRepository.findOne.mockResolvedValue(null);
 
-      await expect(service.remove(userId, projectId)).rejects.toThrow(NotFoundException);
-      expect(mockDatabaseService.$transaction).not.toHaveBeenCalled();
+      await expect(service.delete(ownerId, projectId)).rejects.toThrow(NotFoundException);
+      expect(mockProjectsRepository.delete).not.toHaveBeenCalled();
     });
 
-    it('should delete tasks and project in transaction', async () => {
-      mockProjectsRepository.findByIdForOwner.mockResolvedValue({
-        id: projectId,
-        name: 'P',
-        description: null,
-        ownerId: userId,
-        _count: { tasks: 1 },
-        ...baseDates,
-      });
+    it('should delete project via repository', async () => {
+      mockProjectsRepository.findOne.mockResolvedValue(mockProjectFromRepo);
+      mockProjectsRepository.delete.mockResolvedValue(undefined);
 
-      await service.remove(userId, projectId);
+      await service.delete(ownerId, projectId);
 
-      expect(mockDatabaseService.$transaction).toHaveBeenCalled();
-      expect(mockTx.task.deleteMany).toHaveBeenCalledWith({ where: { projectId } });
-      expect(mockTx.project.delete).toHaveBeenCalledWith({ where: { id: projectId } });
+      expect(mockProjectsRepository.findOne).toHaveBeenCalledWith(projectId, ownerId);
+      expect(mockProjectsRepository.delete).toHaveBeenCalledWith(projectId);
     });
   });
 });

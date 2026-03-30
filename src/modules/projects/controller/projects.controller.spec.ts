@@ -3,13 +3,14 @@ import { ProjectsController } from '@/modules/projects/controller/projects.contr
 import { ProjectsService } from '@/modules/projects/service/projects.service';
 import { CreateProjectDto } from '@/modules/projects/dto/create-project.dto';
 import { UpdateProjectDto } from '@/modules/projects/dto/update-project.dto';
+import { ProjectResponseDto } from '@/modules/projects/dto/project-response.dto';
 
 const mockProjectsService = {
   create: jest.fn(),
   findAll: jest.fn(),
   findOne: jest.fn(),
   update: jest.fn(),
-  remove: jest.fn(),
+  delete: jest.fn(),
 };
 
 describe('ProjectsController', () => {
@@ -33,7 +34,15 @@ describe('ProjectsController', () => {
     it('should delegate to service', async () => {
       const userId = 'u1';
       const dto: CreateProjectDto = { name: 'P' };
-      const created = { id: '1', ...dto };
+      const created = new ProjectResponseDto({
+        id: '1',
+        name: 'P',
+        description: null,
+        ownerId: userId,
+        tasksCount: 0,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      });
       mockProjectsService.create.mockResolvedValue(created);
 
       const result = await controller.create(dto, userId);
@@ -45,7 +54,17 @@ describe('ProjectsController', () => {
 
   describe('findAll', () => {
     it('should return projects', async () => {
-      const projects = [{ id: '1', name: 'P' }];
+      const projects = [
+        new ProjectResponseDto({
+          id: '1',
+          name: 'P',
+          description: null,
+          ownerId: 'u1',
+          tasksCount: 0,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        }),
+      ];
       mockProjectsService.findAll.mockResolvedValue(projects);
 
       const result = await controller.findAll('u1');
@@ -57,7 +76,15 @@ describe('ProjectsController', () => {
 
   describe('findOne', () => {
     it('should return project by id', async () => {
-      const project = { id: '1', name: 'P' };
+      const project = new ProjectResponseDto({
+        id: '1',
+        name: 'P',
+        description: null,
+        ownerId: 'u1',
+        tasksCount: 0,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      });
       mockProjectsService.findOne.mockResolvedValue(project);
 
       const result = await controller.findOne('1', 'u1');
@@ -70,7 +97,15 @@ describe('ProjectsController', () => {
   describe('update', () => {
     it('should update project', async () => {
       const dto: UpdateProjectDto = { name: 'New' };
-      const updated = { id: '1', name: 'New' };
+      const updated = new ProjectResponseDto({
+        id: '1',
+        name: 'New',
+        description: null,
+        ownerId: 'u1',
+        tasksCount: 0,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      });
       mockProjectsService.update.mockResolvedValue(updated);
 
       const result = await controller.update('1', dto, 'u1');
@@ -80,14 +115,14 @@ describe('ProjectsController', () => {
     });
   });
 
-  describe('remove', () => {
-    it('should remove project', async () => {
-      mockProjectsService.remove.mockResolvedValue(undefined);
+  describe('delete', () => {
+    it('should delete project', async () => {
+      mockProjectsService.delete.mockResolvedValue(undefined);
 
-      const result = await controller.remove('1', 'u1');
+      const result = await controller.delete('1', 'u1');
 
       expect(result).toBeUndefined();
-      expect(mockProjectsService.remove).toHaveBeenCalledWith('u1', '1');
+      expect(mockProjectsService.delete).toHaveBeenCalledWith('u1', '1');
     });
   });
 });
