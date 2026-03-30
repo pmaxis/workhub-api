@@ -1,6 +1,23 @@
-import { DatabaseService } from '@/infrastructure/database/database.service';
-import { InvitationStatus } from '@/infrastructure/database/generated/enums';
 import { Injectable } from '@nestjs/common';
+import { DatabaseService } from '@/infrastructure/database/database.service';
+import { Invitation } from '@/infrastructure/database/generated/client';
+import { InvitationStatus } from '@/infrastructure/database/generated/enums';
+
+const invitationInclude = {
+  invitedBy: { select: { id: true, email: true, firstName: true, lastName: true } },
+  company: { select: { id: true, slug: true, name: true } },
+} as const;
+
+export type MappedInvitation = {
+  id: string;
+  email: string;
+  token: string;
+  status: InvitationStatus;
+  companyId: string | null;
+  expiresAt: Date;
+  createdAt: Date;
+  invitedById: string;
+};
 
 @Injectable()
 export class InvitationsRepository {
@@ -14,13 +31,12 @@ export class InvitationsRepository {
     companyId?: string;
     expiresAt: Date;
   }) {
-    return this.database.invitation.create({
+    const invitation = await this.database.invitation.create({
       data,
-      include: {
-        invitedBy: { select: { id: true, email: true, firstName: true, lastName: true } },
-        company: { select: { id: true, slug: true, name: true } },
-      },
+      include: invitationInclude,
     });
+
+    return this.mapInvitation(invitation);
   }
 
   async findAll(opts?: { companyId?: string; status?: InvitationStatus }) {
@@ -28,34 +44,39 @@ export class InvitationsRepository {
     if (opts?.companyId) where.companyId = opts.companyId;
     if (opts?.status) where.status = opts.status;
 
-    return this.database.invitation.findMany({
+    const invitations = await this.database.invitation.findMany({
       where,
-      include: {
-        invitedBy: { select: { id: true, email: true, firstName: true, lastName: true } },
-        company: { select: { id: true, slug: true, name: true } },
-      },
+      include: invitationInclude,
       orderBy: { createdAt: 'desc' },
     });
+
+    return invitations.map((inv) => this.mapInvitation(inv));
   }
 
-  async findById(id: string) {
-    return this.database.invitation.findUnique({
+  async findOne(id: string): Promise<MappedInvitation | null> {
+    const invitation = await this.database.invitation.findUnique({
       where: { id },
-      include: {
-        invitedBy: { select: { id: true, email: true, firstName: true, lastName: true } },
-        company: { select: { id: true, slug: true, name: true } },
-      },
+      include: invitationInclude,
     });
+
+    if (!invitation) {
+      return null;
+    }
+
+    return this.mapInvitation(invitation);
   }
 
-  async findByToken(token: string) {
-    return this.database.invitation.findUnique({
+  async findByToken(token: string): Promise<MappedInvitation | null> {
+    const invitation = await this.database.invitation.findUnique({
       where: { token },
-      include: {
-        invitedBy: { select: { id: true, email: true, firstName: true, lastName: true } },
-        company: { select: { id: true, slug: true, name: true } },
-      },
+      include: invitationInclude,
     });
+
+    if (!invitation) {
+      return null;
+    }
+
+    return this.mapInvitation(invitation);
   }
 
   async findByEmailAndCompany(
@@ -69,17 +90,34 @@ export class InvitationsRepository {
   }
 
   async update(id: string, data: { status?: InvitationStatus; token?: string; expiresAt?: Date }) {
-    return this.database.invitation.update({
+    const invitation = await this.database.invitation.update({
       where: { id },
       data,
-      include: {
-        invitedBy: { select: { id: true, email: true, firstName: true, lastName: true } },
-        company: { select: { id: true, slug: true, name: true } },
-      },
+      include: invitationInclude,
     });
+
+    return this.mapInvitation(invitation);
   }
 
-  async delete(id: string) {
-    return this.database.invitation.delete({ where: { id } });
+  async delete(id: string): Promise<void> {
+    await this.database.invitation.delete({ where: { id } });
+  }
+
+  private mapInvitation(
+    inv: Invitation & {
+      invitedBy?: { id: string; email: string; firstName: string; lastName: string };
+      company?: { id: string; slug: string; name: string } | null;
+    },
+  ): MappedInvitation {
+    return {
+      id: inv.id,
+      email: inv.email,
+      token: inv.token,
+      status: inv.status,
+      companyId: inv.companyId,
+      expiresAt: inv.expiresAt,
+      createdAt: inv.createdAt,
+      invitedById: inv.invitedById,
+    };
   }
 }

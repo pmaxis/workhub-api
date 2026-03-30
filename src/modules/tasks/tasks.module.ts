@@ -11,6 +11,6 @@ import { tasksAbilityDefinitions } from '@/modules/tasks/ability/tasks.ability';
   imports: [DatabaseModule, ProjectsModule, AbilityModule.forModule(tasksAbilityDefinitions)],
   controllers: [TasksController],
   providers: [TasksService, TasksRepository],
-  exports: [TasksService, TasksRepository],
+  exports: [TasksService],
 })
 export class TasksModule {}

@@ -5,8 +5,8 @@ import {
   BadRequestException,
 } from '@nestjs/common';
 import { InvitationStatus } from '@/infrastructure/database/generated/enums';
-import { DatabaseService } from '@/infrastructure/database/database.service';
 import { InvitationsRepository } from '@/modules/invitations/repository/invitations.repository';
+import { UsersRepository } from '@/modules/users/repository/users.repository';
 import { CreateInvitationDto } from '@/modules/invitations/dto/create-invitation.dto';
 import { UpdateInvitationDto } from '@/modules/invitations/dto/update-invitation.dto';
 import { InvitationResponseDto } from '@/modules/invitations/dto/invitation-response.dto';
@@ -19,7 +19,7 @@ const TOKEN_BYTES = 32;
 export class InvitationsService {
   constructor(
     private readonly invitationsRepository: InvitationsRepository,
-    private readonly database: DatabaseService,
+    private readonly usersRepository: UsersRepository,
   ) {}
 
   async create(
@@ -49,15 +49,7 @@ export class InvitationsService {
       expiresAt,
     });
 
-    return new InvitationResponseDto({
-      id: invitation.id,
-      email: invitation.email,
-      status: invitation.status,
-      companyId: invitation.companyId,
-      expiresAt: invitation.expiresAt,
-      createdAt: invitation.createdAt,
-      token, // One-time, for building invite link
-    });
+    return new InvitationResponseDto(invitation);
   }
 
   async findClientsWithUserInfo(
@@ -70,10 +62,7 @@ export class InvitationsService {
     if (invitations.length === 0) return [];
 
     const emails = [...new Set(invitations.map((i) => i.email))];
-    const users = await this.database.user.findMany({
-      where: { email: { in: emails } },
-      select: { email: true, firstName: true, lastName: true, thirdName: true, createdAt: true },
-    });
+    const users = await this.usersRepository.findByEmailsForInvitationLookup(emails);
     const userByEmail = new Map(users.map((u) => [u.email.toLowerCase(), u]));
 
     return invitations.map((inv) => {
@@ -105,35 +94,17 @@ export class InvitationsService {
       companyId,
       status: effectiveStatus,
     });
-    return invitations.map(
-      (inv) =>
-        new InvitationResponseDto({
-          id: inv.id,
-          email: inv.email,
-          status: inv.status,
-          companyId: inv.companyId,
-          expiresAt: inv.expiresAt,
-          createdAt: inv.createdAt,
-          token: inv.token,
-        }),
-    );
+    return invitations.map((inv) => new InvitationResponseDto(inv));
   }
 
-  async findOne(id: string): Promise<InvitationResponseDto | null> {
-    const invitation = await this.invitationsRepository.findById(id);
-    if (!invitation) return null;
-    return new InvitationResponseDto({
-      id: invitation.id,
-      email: invitation.email,
-      status: invitation.status,
-      companyId: invitation.companyId,
-      expiresAt: invitation.expiresAt,
-      createdAt: invitation.createdAt,
-      token: invitation.token,
-    });
+  async findOne(id: string): Promise<InvitationResponseDto> {
+    const invitation = await this.invitationsRepository.findOne(id);
+    if (!invitation) {
+      throw new NotFoundException('Invitation not found');
+    }
+    return new InvitationResponseDto(invitation);
   }
 
-  /** Returns invitation data for registration flow. Email must match register payload. */
   async getInvitationForRegistration(
     token: string,
   ): Promise<{ id: string; email: string; invitedById: string } | null> {
@@ -161,37 +132,20 @@ export class InvitationsService {
       });
       return null;
     }
-    return new InvitationResponseDto({
-      id: invitation.id,
-      email: invitation.email,
-      status: invitation.status,
-      companyId: invitation.companyId,
-      expiresAt: invitation.expiresAt,
-      createdAt: invitation.createdAt,
-      token: invitation.token,
-    });
+    return new InvitationResponseDto(invitation);
   }
 
   async update(
     id: string,
     updateInvitationDto: UpdateInvitationDto,
   ): Promise<InvitationResponseDto> {
-    const existing = await this.findOne(id);
-    if (!existing) throw new NotFoundException('Invitation not found');
+    await this.findOne(id);
 
     const invitation = await this.invitationsRepository.update(id, {
       status: updateInvitationDto.status,
     });
 
-    return new InvitationResponseDto({
-      id: invitation.id,
-      email: invitation.email,
-      status: invitation.status,
-      companyId: invitation.companyId,
-      expiresAt: invitation.expiresAt,
-      createdAt: invitation.createdAt,
-      token: invitation.token,
-    });
+    return new InvitationResponseDto(invitation);
   }
 
   async accept(id: string): Promise<InvitationResponseDto> {
@@ -199,7 +153,7 @@ export class InvitationsService {
   }
 
   async resend(id: string): Promise<InvitationResponseDto> {
-    const invitation = await this.invitationsRepository.findById(id);
+    const invitation = await this.invitationsRepository.findOne(id);
     if (!invitation) throw new NotFoundException('Invitation not found');
     if (invitation.status !== InvitationStatus.PENDING) {
       throw new BadRequestException('Only pending invitations can be resent');
@@ -214,20 +168,11 @@ export class InvitationsService {
       expiresAt,
     });
 
-    return new InvitationResponseDto({
-      id: updated.id,
-      email: updated.email,
-      status: updated.status,
-      companyId: updated.companyId,
-      expiresAt: updated.expiresAt,
-      createdAt: updated.createdAt,
-      token: updated.token,
-    });
+    return new InvitationResponseDto(updated);
   }
 
-  async remove(id: string): Promise<void> {
-    const existing = await this.findOne(id);
-    if (!existing) throw new NotFoundException('Invitation not found');
+  async delete(id: string): Promise<void> {
+    await this.findOne(id);
     await this.invitationsRepository.delete(id);
   }
 }

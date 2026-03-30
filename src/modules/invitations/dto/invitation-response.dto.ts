@@ -1,17 +1,34 @@
 import { Exclude, Expose } from 'class-transformer';
+import { InvitationStatus } from '@/infrastructure/database/generated/enums';
 
 @Exclude()
 export class InvitationResponseDto {
   @Expose() id: string;
   @Expose() email: string;
-  @Expose() status: string;
+  @Expose() status: InvitationStatus;
   @Expose() companyId: string | null;
   @Expose() expiresAt: Date;
   @Expose() createdAt: Date;
-  /** One-time, only in create response for building invite link */
+  /** One-time, only in create / resend responses for building invite link */
   @Expose() token?: string;
 
-  constructor(partial: Partial<InvitationResponseDto>) {
-    Object.assign(this, partial);
+  constructor(invitation: {
+    id: string;
+    email: string;
+    status: InvitationStatus;
+    companyId: string | null;
+    expiresAt: Date;
+    createdAt: Date;
+    token?: string;
+  }) {
+    this.id = invitation.id;
+    this.email = invitation.email;
+    this.status = invitation.status;
+    this.companyId = invitation.companyId;
+    this.expiresAt = invitation.expiresAt;
+    this.createdAt = invitation.createdAt;
+    if (invitation.token !== undefined) {
+      this.token = invitation.token;
+    }
   }
 }

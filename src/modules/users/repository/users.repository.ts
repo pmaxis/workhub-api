@@ -74,6 +74,17 @@ export class UsersRepository {
     return this.database.user.findUnique({ where: { email } });
   }
 
+  async findByEmailsForInvitationLookup(emails: string[]) {
+    if (emails.length === 0) {
+      return [];
+    }
+
+    return this.database.user.findMany({
+      where: { email: { in: emails } },
+      select: { email: true, firstName: true, lastName: true, thirdName: true, createdAt: true },
+    });
+  }
+
   async update(
     id: string,
     data: {

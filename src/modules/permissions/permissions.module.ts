@@ -10,6 +10,6 @@ import { permissionsAbilityDefinitions } from '@/modules/permissions/ability/per
   imports: [DatabaseModule, AbilityModule.forModule(permissionsAbilityDefinitions)],
   controllers: [PermissionsController],
   providers: [PermissionsService, PermissionsRepository],
-  exports: [PermissionsService, PermissionsRepository],
+  exports: [PermissionsService],
 })
 export class PermissionsModule {}
