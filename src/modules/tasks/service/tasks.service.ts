@@ -1,4 +1,6 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
+import { subject } from '@casl/ability';
+import { AppAbility, Action } from '@/common/ability/ability.types';
 import { TaskStatus } from '@/infrastructure/database/generated/enums';
 import { ProjectsRepository } from '@/modules/projects/repository/projects.repository';
 import { TasksRepository } from '@/modules/tasks/repository/tasks.repository';
@@ -13,8 +15,8 @@ export class TasksService {
     private readonly projectsRepository: ProjectsRepository,
   ) {}
 
-  async create(userId: string, dto: CreateTaskDto): Promise<TaskResponseDto> {
-    const project = await this.projectsRepository.findOne(dto.projectId, userId);
+  async create(userId: string, ability: AppAbility, dto: CreateTaskDto): Promise<TaskResponseDto> {
+    const project = await this.projectsRepository.findOne(dto.projectId, ability);
 
     if (!project) {
       throw new NotFoundException('Project not found');
@@ -25,27 +27,29 @@ export class TasksService {
       description: dto.description ?? null,
       status: dto.status ?? TaskStatus.PENDING,
       projectId: dto.projectId,
+      projectOwnerId: project.ownerId,
+      projectCompanyId: project.companyId,
       assigneeId: userId,
     });
 
     return new TaskResponseDto(task);
   }
 
-  async findAll(userId: string, projectId?: string): Promise<TaskResponseDto[]> {
+  async findAll(ability: AppAbility, projectId?: string): Promise<TaskResponseDto[]> {
     if (projectId) {
-      const project = await this.projectsRepository.findOne(projectId, userId);
+      const project = await this.projectsRepository.findOne(projectId, ability);
 
       if (!project) {
         throw new NotFoundException('Project not found');
       }
     }
 
-    const tasks = await this.tasksRepository.findAll(userId, projectId);
+    const tasks = await this.tasksRepository.findAll({ ability, projectId });
     return tasks.map((task) => new TaskResponseDto(task));
   }
 
-  async findOne(userId: string, id: string): Promise<TaskResponseDto> {
-    const task = await this.tasksRepository.findOne(id, userId);
+  async findOne(id: string, ability: AppAbility): Promise<TaskResponseDto> {
+    const task = await this.tasksRepository.findOne(id, ability);
 
     if (!task) {
       throw new NotFoundException('Task not found');
@@ -54,18 +58,37 @@ export class TasksService {
     return new TaskResponseDto(task);
   }
 
-  async update(userId: string, id: string, dto: UpdateTaskDto): Promise<TaskResponseDto> {
-    const current = await this.findOne(userId, id);
+  async update(id: string, ability: AppAbility, dto: UpdateTaskDto): Promise<TaskResponseDto> {
+    const task = await this.tasksRepository.findOne(id, ability);
 
-    if (Object.keys(dto).length === 0) return current;
+    if (!task) {
+      throw new NotFoundException('Task not found');
+    }
 
-    const task = await this.tasksRepository.update(id, dto);
+    if (!ability.can(Action.Update, subject('Task', task))) {
+      throw new ForbiddenException();
+    }
 
-    return new TaskResponseDto(task);
+    if (Object.keys(dto).length === 0) {
+      return new TaskResponseDto(task);
+    }
+
+    const updated = await this.tasksRepository.update(id, dto);
+
+    return new TaskResponseDto(updated);
   }
 
-  async delete(userId: string, id: string): Promise<void> {
-    await this.findOne(userId, id);
+  async delete(id: string, ability: AppAbility): Promise<void> {
+    const task = await this.tasksRepository.findOne(id, ability);
+
+    if (!task) {
+      throw new NotFoundException('Task not found');
+    }
+
+    if (!ability.can(Action.Delete, subject('Task', task))) {
+      throw new ForbiddenException();
+    }
+
     await this.tasksRepository.delete(id);
   }
 }

@@ -31,20 +31,32 @@ export class PoliciesGuard implements CanActivate {
       context.getClass(),
     ]);
 
-    if (!policies?.length) return true;
-
-    const request = context.switchToHttp().getRequest<{ user?: RequestUser }>();
+    const request = context.switchToHttp().getRequest<{ user?: RequestUser; ability?: unknown }>();
     const user = request.user;
 
-    if (!user) throw new UnauthorizedException();
+    if (!user) {
+      if (!policies?.length) return true;
+      throw new UnauthorizedException();
+    }
 
     const ability = this.abilityFactory.createForUser(user);
+    request.ability = ability;
+
+    if (!policies?.length) return true;
 
     const allowed = policies.every((policy) =>
       typeof policy === 'function' ? policy(ability) : policy.handle(ability),
     );
 
-    if (!allowed) throw new ForbiddenException('Policy check failed');
+    if (!allowed) {
+      console.log(
+        '[PoliciesGuard] DENIED — permissions:',
+        user.permissions,
+        'rules:',
+        JSON.stringify(ability.rules),
+      );
+      throw new ForbiddenException('Policy check failed');
+    }
 
     return true;
   }

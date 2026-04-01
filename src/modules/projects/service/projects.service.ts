@@ -1,7 +1,13 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { ProjectsRepository } from '@/modules/projects/repository/projects.repository';
+import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
+import { subject } from '@casl/ability';
+import { AppAbility, Action } from '@/common/ability/ability.types';
+import {
+  ProjectsRepository,
+  PaginatedResult,
+} from '@/modules/projects/repository/projects.repository';
 import { CreateProjectDto } from '@/modules/projects/dto/create-project.dto';
 import { UpdateProjectDto } from '@/modules/projects/dto/update-project.dto';
+import { QueryProjectsDto } from '@/modules/projects/dto/query-projects.dto';
 import { ProjectResponseDto } from '@/modules/projects/dto/project-response.dto';
 
 @Injectable()
@@ -13,18 +19,32 @@ export class ProjectsService {
       name: dto.name,
       description: dto.description,
       ownerId: userId,
+      companyId: dto.companyId,
     });
 
     return new ProjectResponseDto(project);
   }
 
-  async findAll(userId: string): Promise<ProjectResponseDto[]> {
-    const projects = await this.projectsRepository.findAll(userId);
-    return projects.map((project) => new ProjectResponseDto(project));
+  async findAll(
+    ability: AppAbility,
+    query: QueryProjectsDto,
+  ): Promise<PaginatedResult<ProjectResponseDto>> {
+    const result = await this.projectsRepository.findAll({
+      ability,
+      search: query.search,
+      companyId: query.companyId,
+      page: query.page ?? 1,
+      limit: query.limit ?? 20,
+    });
+
+    return {
+      ...result,
+      data: result.data.map((p) => new ProjectResponseDto(p)),
+    };
   }
 
-  async findOne(userId: string, id: string): Promise<ProjectResponseDto> {
-    const project = await this.projectsRepository.findOne(id, userId);
+  async findOne(id: string, ability: AppAbility): Promise<ProjectResponseDto> {
+    const project = await this.projectsRepository.findOne(id, ability);
 
     if (!project) {
       throw new NotFoundException('Project not found');
@@ -33,18 +53,38 @@ export class ProjectsService {
     return new ProjectResponseDto(project);
   }
 
-  async update(userId: string, id: string, dto: UpdateProjectDto): Promise<ProjectResponseDto> {
-    const current = await this.findOne(userId, id);
+  async update(
+    id: string,
+    ability: AppAbility,
+    dto: UpdateProjectDto,
+  ): Promise<ProjectResponseDto> {
+    const project = await this.projectsRepository.findOne(id, ability);
 
-    if (Object.keys(dto).length === 0) return current;
+    if (!project) {
+      throw new NotFoundException('Project not found');
+    }
 
-    const project = await this.projectsRepository.update(id, dto);
+    if (!ability.can(Action.Update, subject('Project', project))) {
+      throw new ForbiddenException();
+    }
 
-    return new ProjectResponseDto(project);
+    if (Object.keys(dto).length === 0) return new ProjectResponseDto(project);
+
+    const updated = await this.projectsRepository.update(id, dto);
+
+    return new ProjectResponseDto(updated);
   }
 
-  async delete(userId: string, id: string): Promise<void> {
-    await this.findOne(userId, id);
+  async delete(id: string, ability: AppAbility): Promise<void> {
+    const project = await this.projectsRepository.findOne(id, ability);
+
+    if (!project) {
+      throw new NotFoundException('Project not found');
+    }
+
+    if (!ability.can(Action.Delete, subject('Project', project))) {
+      throw new ForbiddenException();
+    }
 
     await this.projectsRepository.delete(id);
   }

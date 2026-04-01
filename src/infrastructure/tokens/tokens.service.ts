@@ -23,9 +23,9 @@ export class TokensService {
     this.refreshExpiresIn = this.config.getOrThrow<StringValue>('tokens.refreshToken.expiresIn');
   }
 
-  generateAccessToken(userId: string, sessionId: string, permissions: string[]): string {
+  generateAccessToken(userId: string, sessionId: string): string {
     return this.jwtService.sign(
-      { userId, sessionId, permissions },
+      { userId, sessionId },
       {
         secret: this.accessSecret,
         expiresIn: this.accessExpiresIn,

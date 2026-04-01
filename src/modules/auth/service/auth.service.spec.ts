@@ -3,7 +3,6 @@ import { ConfigService } from '@nestjs/config';
 import { UnauthorizedException, BadRequestException } from '@nestjs/common';
 import { AuthService } from '@/modules/auth/service/auth.service';
 import { UsersService } from '@/modules/users/service/users.service';
-import { UserPermissionsRepository } from '@/modules/users/repository/user-permissions.repository';
 import { UserOnboardingService } from '@/modules/users/service/user-onboarding.service';
 import { SessionsService } from '@/modules/sessions/service/sessions.service';
 import { InvitationsService } from '@/modules/invitations/service/invitations.service';
@@ -23,10 +22,6 @@ const mockConfigService = {
 const mockUsersService = {
   findForAuth: jest.fn(),
   create: jest.fn(),
-};
-
-const mockUserPermissionsRepository = {
-  getPermissionKeysByUserId: jest.fn().mockResolvedValue([]),
 };
 
 const mockSessionsService = {
@@ -64,7 +59,6 @@ describe('AuthService', () => {
         AuthService,
         { provide: ConfigService, useValue: mockConfigService },
         { provide: UsersService, useValue: mockUsersService },
-        { provide: UserPermissionsRepository, useValue: mockUserPermissionsRepository },
         { provide: UserOnboardingService, useValue: mockUserOnboardingService },
         { provide: SessionsService, useValue: mockSessionsService },
         { provide: TokensService, useValue: mockTokensService },

@@ -1,15 +1,16 @@
 model Company {
-  id             String          @id @default(cuid())
+  id              String          @id @default(cuid())
 
-  slug           String          @unique
-  name           String
+  slug            String          @unique
+  name            String
 
-  companyMembers CompanyMember[]
-  invitations    Invitation[]
+  companyMembers  CompanyMember[]
+  invitations     Invitation[]
   clientRelations ClientRelation[]
+  projects        Project[]
 
-  createdAt      DateTime        @default(now()) @map("created_at")
-  updatedAt      DateTime        @updatedAt @map("updated_at")
+  createdAt       DateTime        @default(now()) @map("created_at")
+  updatedAt       DateTime        @updatedAt @map("updated_at")
 
   @@map("companies")
 }

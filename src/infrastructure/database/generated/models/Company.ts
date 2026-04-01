@@ -181,6 +181,7 @@ export type CompanyWhereInput = {
   companyMembers?: Prisma.CompanyMemberListRelationFilter;
   invitations?: Prisma.InvitationListRelationFilter;
   clientRelations?: Prisma.ClientRelationListRelationFilter;
+  projects?: Prisma.ProjectListRelationFilter;
 };
 
 export type CompanyOrderByWithRelationInput = {
@@ -192,6 +193,7 @@ export type CompanyOrderByWithRelationInput = {
   companyMembers?: Prisma.CompanyMemberOrderByRelationAggregateInput;
   invitations?: Prisma.InvitationOrderByRelationAggregateInput;
   clientRelations?: Prisma.ClientRelationOrderByRelationAggregateInput;
+  projects?: Prisma.ProjectOrderByRelationAggregateInput;
 };
 
 export type CompanyWhereUniqueInput = Prisma.AtLeast<
@@ -207,6 +209,7 @@ export type CompanyWhereUniqueInput = Prisma.AtLeast<
     companyMembers?: Prisma.CompanyMemberListRelationFilter;
     invitations?: Prisma.InvitationListRelationFilter;
     clientRelations?: Prisma.ClientRelationListRelationFilter;
+    projects?: Prisma.ProjectListRelationFilter;
   },
   'id' | 'slug'
 >;
@@ -246,6 +249,7 @@ export type CompanyCreateInput = {
   companyMembers?: Prisma.CompanyMemberCreateNestedManyWithoutCompanyInput;
   invitations?: Prisma.InvitationCreateNestedManyWithoutCompanyInput;
   clientRelations?: Prisma.ClientRelationCreateNestedManyWithoutCompanyInput;
+  projects?: Prisma.ProjectCreateNestedManyWithoutCompanyInput;
 };
 
 export type CompanyUncheckedCreateInput = {
@@ -257,6 +261,7 @@ export type CompanyUncheckedCreateInput = {
   companyMembers?: Prisma.CompanyMemberUncheckedCreateNestedManyWithoutCompanyInput;
   invitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutCompanyInput;
   clientRelations?: Prisma.ClientRelationUncheckedCreateNestedManyWithoutCompanyInput;
+  projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutCompanyInput;
 };
 
 export type CompanyUpdateInput = {
@@ -268,6 +273,7 @@ export type CompanyUpdateInput = {
   companyMembers?: Prisma.CompanyMemberUpdateManyWithoutCompanyNestedInput;
   invitations?: Prisma.InvitationUpdateManyWithoutCompanyNestedInput;
   clientRelations?: Prisma.ClientRelationUpdateManyWithoutCompanyNestedInput;
+  projects?: Prisma.ProjectUpdateManyWithoutCompanyNestedInput;
 };
 
 export type CompanyUncheckedUpdateInput = {
@@ -279,6 +285,7 @@ export type CompanyUncheckedUpdateInput = {
   companyMembers?: Prisma.CompanyMemberUncheckedUpdateManyWithoutCompanyNestedInput;
   invitations?: Prisma.InvitationUncheckedUpdateManyWithoutCompanyNestedInput;
   clientRelations?: Prisma.ClientRelationUncheckedUpdateManyWithoutCompanyNestedInput;
+  projects?: Prisma.ProjectUncheckedUpdateManyWithoutCompanyNestedInput;
 };
 
 export type CompanyCreateManyInput = {
@@ -401,6 +408,34 @@ export type CompanyUpdateOneWithoutInvitationsNestedInput = {
   >;
 };
 
+export type CompanyCreateNestedOneWithoutProjectsInput = {
+  create?: Prisma.XOR<
+    Prisma.CompanyCreateWithoutProjectsInput,
+    Prisma.CompanyUncheckedCreateWithoutProjectsInput
+  >;
+  connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutProjectsInput;
+  connect?: Prisma.CompanyWhereUniqueInput;
+};
+
+export type CompanyUpdateOneWithoutProjectsNestedInput = {
+  create?: Prisma.XOR<
+    Prisma.CompanyCreateWithoutProjectsInput,
+    Prisma.CompanyUncheckedCreateWithoutProjectsInput
+  >;
+  connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutProjectsInput;
+  upsert?: Prisma.CompanyUpsertWithoutProjectsInput;
+  disconnect?: Prisma.CompanyWhereInput | boolean;
+  delete?: Prisma.CompanyWhereInput | boolean;
+  connect?: Prisma.CompanyWhereUniqueInput;
+  update?: Prisma.XOR<
+    Prisma.XOR<
+      Prisma.CompanyUpdateToOneWithWhereWithoutProjectsInput,
+      Prisma.CompanyUpdateWithoutProjectsInput
+    >,
+    Prisma.CompanyUncheckedUpdateWithoutProjectsInput
+  >;
+};
+
 export type CompanyCreateNestedOneWithoutClientRelationsInput = {
   create?: Prisma.XOR<
     Prisma.CompanyCreateWithoutClientRelationsInput,
@@ -437,6 +472,7 @@ export type CompanyCreateWithoutCompanyMembersInput = {
   updatedAt?: Date | string;
   invitations?: Prisma.InvitationCreateNestedManyWithoutCompanyInput;
   clientRelations?: Prisma.ClientRelationCreateNestedManyWithoutCompanyInput;
+  projects?: Prisma.ProjectCreateNestedManyWithoutCompanyInput;
 };
 
 export type CompanyUncheckedCreateWithoutCompanyMembersInput = {
@@ -447,6 +483,7 @@ export type CompanyUncheckedCreateWithoutCompanyMembersInput = {
   updatedAt?: Date | string;
   invitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutCompanyInput;
   clientRelations?: Prisma.ClientRelationUncheckedCreateNestedManyWithoutCompanyInput;
+  projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutCompanyInput;
 };
 
 export type CompanyCreateOrConnectWithoutCompanyMembersInput = {
@@ -485,6 +522,7 @@ export type CompanyUpdateWithoutCompanyMembersInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   invitations?: Prisma.InvitationUpdateManyWithoutCompanyNestedInput;
   clientRelations?: Prisma.ClientRelationUpdateManyWithoutCompanyNestedInput;
+  projects?: Prisma.ProjectUpdateManyWithoutCompanyNestedInput;
 };
 
 export type CompanyUncheckedUpdateWithoutCompanyMembersInput = {
@@ -495,6 +533,7 @@ export type CompanyUncheckedUpdateWithoutCompanyMembersInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   invitations?: Prisma.InvitationUncheckedUpdateManyWithoutCompanyNestedInput;
   clientRelations?: Prisma.ClientRelationUncheckedUpdateManyWithoutCompanyNestedInput;
+  projects?: Prisma.ProjectUncheckedUpdateManyWithoutCompanyNestedInput;
 };
 
 export type CompanyCreateWithoutInvitationsInput = {
@@ -505,6 +544,7 @@ export type CompanyCreateWithoutInvitationsInput = {
   updatedAt?: Date | string;
   companyMembers?: Prisma.CompanyMemberCreateNestedManyWithoutCompanyInput;
   clientRelations?: Prisma.ClientRelationCreateNestedManyWithoutCompanyInput;
+  projects?: Prisma.ProjectCreateNestedManyWithoutCompanyInput;
 };
 
 export type CompanyUncheckedCreateWithoutInvitationsInput = {
@@ -515,6 +555,7 @@ export type CompanyUncheckedCreateWithoutInvitationsInput = {
   updatedAt?: Date | string;
   companyMembers?: Prisma.CompanyMemberUncheckedCreateNestedManyWithoutCompanyInput;
   clientRelations?: Prisma.ClientRelationUncheckedCreateNestedManyWithoutCompanyInput;
+  projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutCompanyInput;
 };
 
 export type CompanyCreateOrConnectWithoutInvitationsInput = {
@@ -553,6 +594,7 @@ export type CompanyUpdateWithoutInvitationsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   companyMembers?: Prisma.CompanyMemberUpdateManyWithoutCompanyNestedInput;
   clientRelations?: Prisma.ClientRelationUpdateManyWithoutCompanyNestedInput;
+  projects?: Prisma.ProjectUpdateManyWithoutCompanyNestedInput;
 };
 
 export type CompanyUncheckedUpdateWithoutInvitationsInput = {
@@ -562,6 +604,79 @@ export type CompanyUncheckedUpdateWithoutInvitationsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   companyMembers?: Prisma.CompanyMemberUncheckedUpdateManyWithoutCompanyNestedInput;
+  clientRelations?: Prisma.ClientRelationUncheckedUpdateManyWithoutCompanyNestedInput;
+  projects?: Prisma.ProjectUncheckedUpdateManyWithoutCompanyNestedInput;
+};
+
+export type CompanyCreateWithoutProjectsInput = {
+  id?: string;
+  slug: string;
+  name: string;
+  createdAt?: Date | string;
+  updatedAt?: Date | string;
+  companyMembers?: Prisma.CompanyMemberCreateNestedManyWithoutCompanyInput;
+  invitations?: Prisma.InvitationCreateNestedManyWithoutCompanyInput;
+  clientRelations?: Prisma.ClientRelationCreateNestedManyWithoutCompanyInput;
+};
+
+export type CompanyUncheckedCreateWithoutProjectsInput = {
+  id?: string;
+  slug: string;
+  name: string;
+  createdAt?: Date | string;
+  updatedAt?: Date | string;
+  companyMembers?: Prisma.CompanyMemberUncheckedCreateNestedManyWithoutCompanyInput;
+  invitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutCompanyInput;
+  clientRelations?: Prisma.ClientRelationUncheckedCreateNestedManyWithoutCompanyInput;
+};
+
+export type CompanyCreateOrConnectWithoutProjectsInput = {
+  where: Prisma.CompanyWhereUniqueInput;
+  create: Prisma.XOR<
+    Prisma.CompanyCreateWithoutProjectsInput,
+    Prisma.CompanyUncheckedCreateWithoutProjectsInput
+  >;
+};
+
+export type CompanyUpsertWithoutProjectsInput = {
+  update: Prisma.XOR<
+    Prisma.CompanyUpdateWithoutProjectsInput,
+    Prisma.CompanyUncheckedUpdateWithoutProjectsInput
+  >;
+  create: Prisma.XOR<
+    Prisma.CompanyCreateWithoutProjectsInput,
+    Prisma.CompanyUncheckedCreateWithoutProjectsInput
+  >;
+  where?: Prisma.CompanyWhereInput;
+};
+
+export type CompanyUpdateToOneWithWhereWithoutProjectsInput = {
+  where?: Prisma.CompanyWhereInput;
+  data: Prisma.XOR<
+    Prisma.CompanyUpdateWithoutProjectsInput,
+    Prisma.CompanyUncheckedUpdateWithoutProjectsInput
+  >;
+};
+
+export type CompanyUpdateWithoutProjectsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string;
+  slug?: Prisma.StringFieldUpdateOperationsInput | string;
+  name?: Prisma.StringFieldUpdateOperationsInput | string;
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+  companyMembers?: Prisma.CompanyMemberUpdateManyWithoutCompanyNestedInput;
+  invitations?: Prisma.InvitationUpdateManyWithoutCompanyNestedInput;
+  clientRelations?: Prisma.ClientRelationUpdateManyWithoutCompanyNestedInput;
+};
+
+export type CompanyUncheckedUpdateWithoutProjectsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string;
+  slug?: Prisma.StringFieldUpdateOperationsInput | string;
+  name?: Prisma.StringFieldUpdateOperationsInput | string;
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+  companyMembers?: Prisma.CompanyMemberUncheckedUpdateManyWithoutCompanyNestedInput;
+  invitations?: Prisma.InvitationUncheckedUpdateManyWithoutCompanyNestedInput;
   clientRelations?: Prisma.ClientRelationUncheckedUpdateManyWithoutCompanyNestedInput;
 };
 
@@ -573,6 +688,7 @@ export type CompanyCreateWithoutClientRelationsInput = {
   updatedAt?: Date | string;
   companyMembers?: Prisma.CompanyMemberCreateNestedManyWithoutCompanyInput;
   invitations?: Prisma.InvitationCreateNestedManyWithoutCompanyInput;
+  projects?: Prisma.ProjectCreateNestedManyWithoutCompanyInput;
 };
 
 export type CompanyUncheckedCreateWithoutClientRelationsInput = {
@@ -583,6 +699,7 @@ export type CompanyUncheckedCreateWithoutClientRelationsInput = {
   updatedAt?: Date | string;
   companyMembers?: Prisma.CompanyMemberUncheckedCreateNestedManyWithoutCompanyInput;
   invitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutCompanyInput;
+  projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutCompanyInput;
 };
 
 export type CompanyCreateOrConnectWithoutClientRelationsInput = {
@@ -621,6 +738,7 @@ export type CompanyUpdateWithoutClientRelationsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   companyMembers?: Prisma.CompanyMemberUpdateManyWithoutCompanyNestedInput;
   invitations?: Prisma.InvitationUpdateManyWithoutCompanyNestedInput;
+  projects?: Prisma.ProjectUpdateManyWithoutCompanyNestedInput;
 };
 
 export type CompanyUncheckedUpdateWithoutClientRelationsInput = {
@@ -631,6 +749,7 @@ export type CompanyUncheckedUpdateWithoutClientRelationsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   companyMembers?: Prisma.CompanyMemberUncheckedUpdateManyWithoutCompanyNestedInput;
   invitations?: Prisma.InvitationUncheckedUpdateManyWithoutCompanyNestedInput;
+  projects?: Prisma.ProjectUncheckedUpdateManyWithoutCompanyNestedInput;
 };
 
 /**
@@ -641,6 +760,7 @@ export type CompanyCountOutputType = {
   companyMembers: number;
   invitations: number;
   clientRelations: number;
+  projects: number;
 };
 
 export type CompanyCountOutputTypeSelect<
@@ -649,6 +769,7 @@ export type CompanyCountOutputTypeSelect<
   companyMembers?: boolean | CompanyCountOutputTypeCountCompanyMembersArgs;
   invitations?: boolean | CompanyCountOutputTypeCountInvitationsArgs;
   clientRelations?: boolean | CompanyCountOutputTypeCountClientRelationsArgs;
+  projects?: boolean | CompanyCountOutputTypeCountProjectsArgs;
 };
 
 /**
@@ -690,6 +811,15 @@ export type CompanyCountOutputTypeCountClientRelationsArgs<
   where?: Prisma.ClientRelationWhereInput;
 };
 
+/**
+ * CompanyCountOutputType without action
+ */
+export type CompanyCountOutputTypeCountProjectsArgs<
+  ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
+> = {
+  where?: Prisma.ProjectWhereInput;
+};
+
 export type CompanySelect<
   ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
 > = runtime.Types.Extensions.GetSelect<
@@ -702,6 +832,7 @@ export type CompanySelect<
     companyMembers?: boolean | Prisma.Company$companyMembersArgs<ExtArgs>;
     invitations?: boolean | Prisma.Company$invitationsArgs<ExtArgs>;
     clientRelations?: boolean | Prisma.Company$clientRelationsArgs<ExtArgs>;
+    projects?: boolean | Prisma.Company$projectsArgs<ExtArgs>;
     _count?: boolean | Prisma.CompanyCountOutputTypeDefaultArgs<ExtArgs>;
   },
   ExtArgs['result']['company']
@@ -753,6 +884,7 @@ export type CompanyInclude<
   companyMembers?: boolean | Prisma.Company$companyMembersArgs<ExtArgs>;
   invitations?: boolean | Prisma.Company$invitationsArgs<ExtArgs>;
   clientRelations?: boolean | Prisma.Company$clientRelationsArgs<ExtArgs>;
+  projects?: boolean | Prisma.Company$projectsArgs<ExtArgs>;
   _count?: boolean | Prisma.CompanyCountOutputTypeDefaultArgs<ExtArgs>;
 };
 export type CompanyIncludeCreateManyAndReturn<
@@ -770,6 +902,7 @@ export type $CompanyPayload<
     companyMembers: Prisma.$CompanyMemberPayload<ExtArgs>[];
     invitations: Prisma.$InvitationPayload<ExtArgs>[];
     clientRelations: Prisma.$ClientRelationPayload<ExtArgs>[];
+    projects: Prisma.$ProjectPayload<ExtArgs>[];
   };
   scalars: runtime.Types.Extensions.GetPayloadResult<
     {
@@ -1326,6 +1459,17 @@ export interface Prisma__CompanyClient<
       >
     | Null
   >;
+  projects<T extends Prisma.Company$projectsArgs<ExtArgs> = {}>(
+    args?: Prisma.Subset<T, Prisma.Company$projectsArgs<ExtArgs>>,
+  ): Prisma.PrismaPromise<
+    | runtime.Types.Result.GetResult<
+        Prisma.$ProjectPayload<ExtArgs>,
+        T,
+        'findMany',
+        GlobalOmitOptions
+      >
+    | Null
+  >;
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1856,6 +2000,32 @@ export type Company$clientRelationsArgs<
   take?: number;
   skip?: number;
   distinct?: Prisma.ClientRelationScalarFieldEnum | Prisma.ClientRelationScalarFieldEnum[];
+};
+
+/**
+ * Company.projects
+ */
+export type Company$projectsArgs<
+  ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
+> = {
+  /**
+   * Select specific fields to fetch from the Project
+   */
+  select?: Prisma.ProjectSelect<ExtArgs> | null;
+  /**
+   * Omit specific fields from the Project
+   */
+  omit?: Prisma.ProjectOmit<ExtArgs> | null;
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ProjectInclude<ExtArgs> | null;
+  where?: Prisma.ProjectWhereInput;
+  orderBy?: Prisma.ProjectOrderByWithRelationInput | Prisma.ProjectOrderByWithRelationInput[];
+  cursor?: Prisma.ProjectWhereUniqueInput;
+  take?: number;
+  skip?: number;
+  distinct?: Prisma.ProjectScalarFieldEnum | Prisma.ProjectScalarFieldEnum[];
 };
 
 /**

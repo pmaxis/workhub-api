@@ -130,6 +130,7 @@ export const ProjectScalarFieldEnum = {
   name: 'name',
   description: 'description',
   ownerId: 'ownerId',
+  companyId: 'companyId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
 } as const;
@@ -175,6 +176,8 @@ export const TaskScalarFieldEnum = {
   description: 'description',
   status: 'status',
   projectId: 'projectId',
+  projectOwnerId: 'projectOwnerId',
+  projectCompanyId: 'projectCompanyId',
   assigneeId: 'assigneeId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',

@@ -5,7 +5,6 @@ import { comparePassword } from '@/common/utils/hash.util';
 import { TokensService } from '@/infrastructure/tokens/tokens.service';
 import { UsersService } from '@/modules/users/service/users.service';
 import { UserResponseDto } from '@/modules/users/dto/user-response.dto';
-import { UserPermissionsRepository } from '@/modules/users/repository/user-permissions.repository';
 import { UserOnboardingService } from '@/modules/users/service/user-onboarding.service';
 import { SessionsService } from '@/modules/sessions/service/sessions.service';
 import { InvitationsService } from '@/modules/invitations/service/invitations.service';
@@ -15,10 +14,10 @@ import { RegisterDto } from '@/modules/auth/dto/register.dto';
 @Injectable()
 export class AuthService {
   private readonly refreshTokenMaxAge: number;
+
   constructor(
     private readonly configService: ConfigService,
     private readonly usersService: UsersService,
-    private readonly userPermissionsRepository: UserPermissionsRepository,
     private readonly userOnboardingService: UserOnboardingService,
     private readonly sessionsService: SessionsService,
     private readonly tokensService: TokensService,
@@ -108,9 +107,7 @@ export class AuthService {
     const userId = String(session.userId);
     const sessionId = String(session.id);
 
-    const permissions = await this.userPermissionsRepository.getPermissionKeysByUserId(userId);
-
-    const accessToken = this.tokensService.generateAccessToken(userId, sessionId, permissions);
+    const accessToken = this.tokensService.generateAccessToken(userId, sessionId);
 
     const refreshToken = this.tokensService.generateRefreshToken(userId);
     const refreshTokenHash = this.tokensService.hashToken(refreshToken);
@@ -141,9 +138,7 @@ export class AuthService {
     });
 
     const sessionId = String(session.id);
-
-    const permissions = await this.userPermissionsRepository.getPermissionKeysByUserId(userId);
-    const accessToken = this.tokensService.generateAccessToken(userId, sessionId, permissions);
+    const accessToken = this.tokensService.generateAccessToken(userId, sessionId);
 
     return { accessToken, refreshToken };
   }

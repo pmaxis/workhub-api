@@ -1,0 +1,47 @@
+import { Injectable } from '@nestjs/common';
+import { DatabaseService } from '@/infrastructure/database/database.service';
+import { RequestUser } from '@/common/ability/ability.types';
+
+@Injectable()
+export class UserContextRepository {
+  constructor(private readonly database: DatabaseService) {}
+
+  async loadContext(userId: string, sessionId: string): Promise<RequestUser | null> {
+    const user = await this.database.user.findUnique({
+      where: { id: userId },
+      select: {
+        id: true,
+        roles: {
+          select: {
+            role: {
+              select: {
+                permissions: {
+                  select: {
+                    permission: { select: { key: true } },
+                  },
+                },
+              },
+            },
+          },
+        },
+        clientProfile: {
+          select: {
+            companyMembers: {
+              select: { companyId: true },
+            },
+          },
+        },
+      },
+    });
+
+    if (!user) return null;
+
+    const permissions = [
+      ...new Set(user.roles.flatMap((ur) => ur.role.permissions.map((rp) => rp.permission.key))),
+    ];
+
+    const companyIds = user.clientProfile?.companyMembers.map((m) => m.companyId) ?? [];
+
+    return { userId, sessionId, permissions, companyIds };
+  }
+}

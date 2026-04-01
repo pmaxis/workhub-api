@@ -1,5 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { AbilityBuilder } from '@casl/ability';
+import { createPrismaAbility } from '@casl/prisma';
 import { TaskStatus } from '@/infrastructure/database/generated/enums';
+import { Action, AppAbility } from '@/common/ability/ability.types';
 import { TasksController } from '@/modules/tasks/controller/tasks.controller';
 import { TasksService } from '@/modules/tasks/service/tasks.service';
 import { CreateTaskDto } from '@/modules/tasks/dto/create-task.dto';
@@ -14,11 +17,23 @@ const mockTasksService = {
   delete: jest.fn(),
 };
 
+function buildAbility(userId: string): AppAbility {
+  const { can, build } = new AbilityBuilder<AppAbility>(createPrismaAbility);
+  can(Action.Read, 'Task', { projectOwnerId: userId });
+  can(Action.Create, 'Task');
+  can(Action.Update, 'Task', { projectOwnerId: userId });
+  can(Action.Delete, 'Task', { projectOwnerId: userId });
+  return build();
+}
+
 describe('TasksController', () => {
   let controller: TasksController;
+  let ability: AppAbility;
 
   beforeEach(async () => {
     jest.clearAllMocks();
+    ability = buildAbility('u1');
+
     const module: TestingModule = await Test.createTestingModule({
       controllers: [TasksController],
       providers: [{ provide: TasksService, useValue: mockTasksService }],
@@ -47,10 +62,10 @@ describe('TasksController', () => {
       });
       mockTasksService.create.mockResolvedValue(created);
 
-      const result = await controller.create(dto, ownerId);
+      const result = await controller.create(dto, ownerId, ability);
 
       expect(result).toEqual(created);
-      expect(mockTasksService.create).toHaveBeenCalledWith(ownerId, dto);
+      expect(mockTasksService.create).toHaveBeenCalledWith(ownerId, ability, dto);
     });
   });
 
@@ -71,19 +86,18 @@ describe('TasksController', () => {
       ];
       mockTasksService.findAll.mockResolvedValue(tasks);
 
-      const result = await controller.findAll(ownerId);
+      const result = await controller.findAll(undefined, ability);
 
       expect(result).toEqual(tasks);
-      expect(mockTasksService.findAll).toHaveBeenCalledWith(ownerId, undefined);
+      expect(mockTasksService.findAll).toHaveBeenCalledWith(ability, undefined);
     });
 
     it('should pass projectId query when provided', async () => {
-      const ownerId = 'u1';
       mockTasksService.findAll.mockResolvedValue([]);
 
-      await controller.findAll(ownerId, 'p1');
+      await controller.findAll('p1', ability);
 
-      expect(mockTasksService.findAll).toHaveBeenCalledWith(ownerId, 'p1');
+      expect(mockTasksService.findAll).toHaveBeenCalledWith(ability, 'p1');
     });
   });
 
@@ -101,10 +115,10 @@ describe('TasksController', () => {
       });
       mockTasksService.findOne.mockResolvedValue(task);
 
-      const result = await controller.findOne('1', 'u1');
+      const result = await controller.findOne('1', ability);
 
       expect(result).toEqual(task);
-      expect(mockTasksService.findOne).toHaveBeenCalledWith('u1', '1');
+      expect(mockTasksService.findOne).toHaveBeenCalledWith('1', ability);
     });
   });
 
@@ -123,10 +137,10 @@ describe('TasksController', () => {
       });
       mockTasksService.update.mockResolvedValue(updated);
 
-      const result = await controller.update('1', dto, 'u1');
+      const result = await controller.update('1', dto, ability);
 
       expect(result).toEqual(updated);
-      expect(mockTasksService.update).toHaveBeenCalledWith('u1', '1', dto);
+      expect(mockTasksService.update).toHaveBeenCalledWith('1', ability, dto);
     });
   });
 
@@ -134,10 +148,10 @@ describe('TasksController', () => {
     it('should delete task', async () => {
       mockTasksService.delete.mockResolvedValue(undefined);
 
-      const result = await controller.delete('1', 'u1');
+      const result = await controller.delete('1', ability);
 
       expect(result).toBeUndefined();
-      expect(mockTasksService.delete).toHaveBeenCalledWith('u1', '1');
+      expect(mockTasksService.delete).toHaveBeenCalledWith('1', ability);
     });
   });
 });

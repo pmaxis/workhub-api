@@ -11,6 +11,7 @@ import { UserRolesRepository } from '@/modules/users/repository/user-roles.repos
 import { UserPermissionsRepository } from '@/modules/users/repository/user-permissions.repository';
 import { UserOnboardingRepository } from '@/modules/users/repository/user-onboarding.repository';
 import { UserOnboardingService } from '@/modules/users/service/user-onboarding.service';
+import { UserContextRepository } from '@/modules/users/repository/user-context.repository';
 import { usersAbilityDefinitions } from '@/modules/users/ability/users.ability';
 import { userRolesAbilityDefinitions } from '@/modules/users/ability/user-roles.ability';
 
@@ -29,6 +30,7 @@ import { userRolesAbilityDefinitions } from '@/modules/users/ability/user-roles.
     UserRolesRepository,
     UserPermissionsRepository,
     UserOnboardingRepository,
+    UserContextRepository,
   ],
   exports: [
     UsersService,
@@ -37,6 +39,7 @@ import { userRolesAbilityDefinitions } from '@/modules/users/ability/user-roles.
     UserOnboardingService,
     UserPermissionsRepository,
     UserRolesRepository,
+    UserContextRepository,
   ],
 })
 export class UsersModule {}

@@ -5,16 +5,24 @@ import { DatabaseService } from '@/infrastructure/database/database.service';
 export class ProfileRepository {
   constructor(private readonly database: DatabaseService) {}
 
-  async findById(id: string) {
-    return this.database.user.findUnique({
-      where: { id },
+  private readonly rolesInclude = {
+    roles: {
       include: {
-        roles: {
+        role: {
           include: {
-            role: true,
+            permissions: {
+              include: { permission: { select: { key: true } } },
+            },
           },
         },
       },
+    },
+  } as const;
+
+  async findById(id: string) {
+    return this.database.user.findUnique({
+      where: { id },
+      include: this.rolesInclude,
     });
   }
 
@@ -31,13 +39,7 @@ export class ProfileRepository {
     return this.database.user.update({
       where: { id },
       data,
-      include: {
-        roles: {
-          include: {
-            role: true,
-          },
-        },
-      },
+      include: this.rolesInclude,
     });
   }
 }

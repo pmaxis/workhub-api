@@ -12,16 +12,7 @@ export class ProfileService {
   async getProfile(userId: string): Promise<UserResponseDto | null> {
     const user = await this.profileRepository.findById(userId);
     if (!user) return null;
-    return new UserResponseDto({
-      ...user,
-      roles: user.roles.map(
-        (ur) =>
-          new RoleResponseDto({
-            ...ur.role,
-            permissions: [],
-          }),
-      ),
-    });
+    return this.toDto(user);
   }
 
   async updateProfile(userId: string, dto: UpdateProfileDto): Promise<UserResponseDto> {
@@ -34,9 +25,19 @@ export class ProfileService {
       ...rest,
       password: hashedPassword,
     });
+    return this.toDto(updated);
+  }
+
+  private toDto(
+    user: Awaited<ReturnType<ProfileRepository['findById']>> & object,
+  ): UserResponseDto {
+    const permissions = [
+      ...new Set(user.roles.flatMap((ur) => ur.role.permissions.map((rp) => rp.permission.key))),
+    ];
     return new UserResponseDto({
-      ...updated,
-      roles: updated.roles.map(
+      ...user,
+      permissions,
+      roles: user.roles.map(
         (ur) =>
           new RoleResponseDto({
             ...ur.role,

@@ -1,9 +1,11 @@
-import { MongoAbility } from '@casl/ability';
+import { PureAbility } from '@casl/ability';
+import { PrismaQuery } from '@casl/prisma';
 
 export type RequestUser = {
   userId: string;
   sessionId: string;
-  permissions?: string[];
+  permissions: string[];
+  companyIds: string[];
 };
 
 export enum Action {
@@ -14,7 +16,7 @@ export enum Action {
   Delete = 'delete',
 }
 
-export type AppAbility = MongoAbility<[Action, any]>;
+export type AppAbility = PureAbility<[Action, any], PrismaQuery>;
 
 export interface PolicyHandler {
   handle(ability: AppAbility, subject?: any): boolean;

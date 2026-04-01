@@ -14,7 +14,7 @@ const mockUser = {
   firstName: 'John',
   lastName: 'Doe',
   thirdName: null,
-  roles: [{ role: { id: 'role-1', slug: 'editor', name: 'Editor' } }],
+  roles: [{ role: { id: 'role-1', slug: 'editor', name: 'Editor', permissions: [] } }],
 };
 
 const mockProfileRepository = {

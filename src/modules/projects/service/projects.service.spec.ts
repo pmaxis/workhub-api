@@ -1,12 +1,15 @@
-import { NotFoundException } from '@nestjs/common';
+import { ForbiddenException, NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
+import { AbilityBuilder } from '@casl/ability';
+import { createPrismaAbility } from '@casl/prisma';
 import { ProjectsRepository } from '@/modules/projects/repository/projects.repository';
 import { ProjectsService } from '@/modules/projects/service/projects.service';
+import { Action, AppAbility } from '@/common/ability/ability.types';
 import { CreateProjectDto } from '@/modules/projects/dto/create-project.dto';
 import { UpdateProjectDto } from '@/modules/projects/dto/update-project.dto';
+import { QueryProjectsDto } from '@/modules/projects/dto/query-projects.dto';
 import { ProjectResponseDto } from '@/modules/projects/dto/project-response.dto';
 
-/** Authenticated user id; same value as `Project.ownerId` in these tests. */
 const ownerId = 'user-1';
 const projectId = 'proj-1';
 
@@ -20,9 +23,19 @@ const mockProjectFromRepo = {
   name: 'P',
   description: null as string | null,
   ownerId,
+  companyId: null as string | null,
   tasksCount: 0,
   ...baseDates,
 };
+
+function buildAbility(userId: string): AppAbility {
+  const { can, build } = new AbilityBuilder<AppAbility>(createPrismaAbility);
+  can(Action.Read, 'Project', { ownerId: userId });
+  can(Action.Create, 'Project');
+  can(Action.Update, 'Project', { ownerId: userId });
+  can(Action.Delete, 'Project', { ownerId: userId });
+  return build();
+}
 
 const mockProjectsRepository = {
   create: jest.fn(),
@@ -34,9 +47,12 @@ const mockProjectsRepository = {
 
 describe('ProjectsService', () => {
   let service: ProjectsService;
+  let ability: AppAbility;
 
   beforeEach(async () => {
     jest.clearAllMocks();
+    ability = buildAbility(ownerId);
+
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         ProjectsService,
@@ -66,28 +82,36 @@ describe('ProjectsService', () => {
         name: dto.name,
         description: dto.description,
         ownerId,
+        companyId: undefined,
       });
       expect(result).toBeInstanceOf(ProjectResponseDto);
-      expect(result).toMatchObject({
-        id: projectId,
-        name: dto.name,
-        ownerId,
-        tasksCount: 0,
-      });
+      expect(result).toMatchObject({ id: projectId, name: dto.name, ownerId, tasksCount: 0 });
     });
   });
 
   describe('findAll', () => {
-    it('should return projects for owner', async () => {
-      const row = { ...mockProjectFromRepo, tasksCount: 2 };
-      mockProjectsRepository.findAll.mockResolvedValue([row]);
+    it('should return paginated projects for owner', async () => {
+      const paginatedResult = {
+        data: [{ ...mockProjectFromRepo, tasksCount: 2 }],
+        total: 1,
+        page: 1,
+        limit: 20,
+      };
+      mockProjectsRepository.findAll.mockResolvedValue(paginatedResult);
 
-      const result = await service.findAll(ownerId);
+      const query: QueryProjectsDto = { page: 1, limit: 20 };
+      const result = await service.findAll(ability, query);
 
-      expect(mockProjectsRepository.findAll).toHaveBeenCalledWith(ownerId);
-      expect(result).toHaveLength(1);
-      expect(result[0]).toBeInstanceOf(ProjectResponseDto);
-      expect(result[0]).toMatchObject({ id: projectId, tasksCount: 2 });
+      expect(mockProjectsRepository.findAll).toHaveBeenCalledWith({
+        ability,
+        search: undefined,
+        companyId: undefined,
+        page: 1,
+        limit: 20,
+      });
+      expect(result.data).toHaveLength(1);
+      expect(result.data[0]).toBeInstanceOf(ProjectResponseDto);
+      expect(result.total).toBe(1);
     });
   });
 
@@ -95,9 +119,9 @@ describe('ProjectsService', () => {
     it('should return project when found', async () => {
       mockProjectsRepository.findOne.mockResolvedValue(mockProjectFromRepo);
 
-      const result = await service.findOne(ownerId, projectId);
+      const result = await service.findOne(projectId, ability);
 
-      expect(mockProjectsRepository.findOne).toHaveBeenCalledWith(projectId, ownerId);
+      expect(mockProjectsRepository.findOne).toHaveBeenCalledWith(projectId, ability);
       expect(result).toBeInstanceOf(ProjectResponseDto);
       expect(result).toMatchObject({ id: projectId });
     });
@@ -105,47 +129,47 @@ describe('ProjectsService', () => {
     it('should throw when project not found', async () => {
       mockProjectsRepository.findOne.mockResolvedValue(null);
 
-      await expect(service.findOne(ownerId, projectId)).rejects.toThrow(NotFoundException);
+      await expect(service.findOne(projectId, ability)).rejects.toThrow(NotFoundException);
     });
   });
 
   describe('update', () => {
-    const existing = { ...mockProjectFromRepo, name: 'Old', description: 'd' };
+    it('should return current project when dto has no fields', async () => {
+      mockProjectsRepository.findOne.mockResolvedValue({ ...mockProjectFromRepo });
 
-    it('should return current project when dto has no fields to apply', async () => {
-      mockProjectsRepository.findOne.mockResolvedValue({ ...existing });
-
-      const result = await service.update(ownerId, projectId, {} as UpdateProjectDto);
+      const result = await service.update(projectId, ability, {} as UpdateProjectDto);
 
       expect(mockProjectsRepository.update).not.toHaveBeenCalled();
       expect(result).toBeInstanceOf(ProjectResponseDto);
-      expect(result).toMatchObject({ id: projectId, name: 'Old' });
+      expect(result).toMatchObject({ id: projectId });
     });
 
     it('should update when dto has changes', async () => {
-      mockProjectsRepository.findOne.mockResolvedValue({ ...existing });
-      const updated = {
-        ...existing,
-        name: 'New',
-        updatedAt: new Date('2026-01-03'),
-      };
+      mockProjectsRepository.findOne.mockResolvedValue({ ...mockProjectFromRepo });
+      const updated = { ...mockProjectFromRepo, name: 'New', updatedAt: new Date('2026-01-03') };
       mockProjectsRepository.update.mockResolvedValue(updated);
 
-      const dto: UpdateProjectDto = { name: 'New' };
-      const result = await service.update(ownerId, projectId, dto);
+      const result = await service.update(projectId, ability, { name: 'New' });
 
-      expect(mockProjectsRepository.findOne).toHaveBeenCalledWith(projectId, ownerId);
       expect(mockProjectsRepository.update).toHaveBeenCalledWith(projectId, { name: 'New' });
       expect(result).toMatchObject({ name: 'New' });
     });
 
-    it('should throw when project not found', async () => {
+    it('should throw NotFoundException when project not found', async () => {
       mockProjectsRepository.findOne.mockResolvedValue(null);
 
-      await expect(service.update(ownerId, projectId, { name: 'N' })).rejects.toThrow(
+      await expect(service.update(projectId, ability, { name: 'N' })).rejects.toThrow(
         NotFoundException,
       );
-      expect(mockProjectsRepository.update).not.toHaveBeenCalled();
+    });
+
+    it('should throw ForbiddenException when user does not own project', async () => {
+      const foreignProject = { ...mockProjectFromRepo, ownerId: 'other-user' };
+      mockProjectsRepository.findOne.mockResolvedValue(foreignProject);
+
+      await expect(service.update(projectId, ability, { name: 'N' })).rejects.toThrow(
+        ForbiddenException,
+      );
     });
   });
 
@@ -153,7 +177,7 @@ describe('ProjectsService', () => {
     it('should throw when project not found', async () => {
       mockProjectsRepository.findOne.mockResolvedValue(null);
 
-      await expect(service.delete(ownerId, projectId)).rejects.toThrow(NotFoundException);
+      await expect(service.delete(projectId, ability)).rejects.toThrow(NotFoundException);
       expect(mockProjectsRepository.delete).not.toHaveBeenCalled();
     });
 
@@ -161,10 +185,16 @@ describe('ProjectsService', () => {
       mockProjectsRepository.findOne.mockResolvedValue(mockProjectFromRepo);
       mockProjectsRepository.delete.mockResolvedValue(undefined);
 
-      await service.delete(ownerId, projectId);
+      await service.delete(projectId, ability);
 
-      expect(mockProjectsRepository.findOne).toHaveBeenCalledWith(projectId, ownerId);
       expect(mockProjectsRepository.delete).toHaveBeenCalledWith(projectId);
+    });
+
+    it('should throw ForbiddenException when user does not own project', async () => {
+      const foreignProject = { ...mockProjectFromRepo, ownerId: 'other-user' };
+      mockProjectsRepository.findOne.mockResolvedValue(foreignProject);
+
+      await expect(service.delete(projectId, ability)).rejects.toThrow(ForbiddenException);
     });
   });
 });

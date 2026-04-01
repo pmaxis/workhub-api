@@ -1,7 +1,9 @@
 import { Body, Controller, Delete, Get, HttpCode, Param, Patch, Post, Query } from '@nestjs/common';
 import { Action } from '@/common/ability/ability.types';
+import type { AppAbility } from '@/common/ability/ability.types';
 import { CheckPolicies } from '@/common/decorators/policy.decorator';
 import { CurrentUserId } from '@/common/decorators/current-user.decorator';
+import { CurrentAbility } from '@/common/decorators/current-ability.decorator';
 import { TasksService } from '@/modules/tasks/service/tasks.service';
 import { CreateTaskDto } from '@/modules/tasks/dto/create-task.dto';
 import { UpdateTaskDto } from '@/modules/tasks/dto/update-task.dto';
@@ -13,23 +15,30 @@ export class TasksController {
 
   @Post()
   @CheckPolicies((ability) => ability.can(Action.Create, 'Task'))
-  create(@Body() dto: CreateTaskDto, @CurrentUserId() userId: string): Promise<TaskResponseDto> {
-    return this.tasksService.create(userId, dto);
+  create(
+    @Body() dto: CreateTaskDto,
+    @CurrentUserId() userId: string,
+    @CurrentAbility() ability: AppAbility,
+  ): Promise<TaskResponseDto> {
+    return this.tasksService.create(userId, ability, dto);
   }
 
   @Get()
   @CheckPolicies((ability) => ability.can(Action.Read, 'Task'))
   findAll(
-    @CurrentUserId() userId: string,
-    @Query('projectId') projectId?: string,
+    @Query('projectId') projectId: string | undefined,
+    @CurrentAbility() ability: AppAbility,
   ): Promise<TaskResponseDto[]> {
-    return this.tasksService.findAll(userId, projectId);
+    return this.tasksService.findAll(ability, projectId);
   }
 
   @Get(':id')
   @CheckPolicies((ability) => ability.can(Action.Read, 'Task'))
-  findOne(@Param('id') id: string, @CurrentUserId() userId: string): Promise<TaskResponseDto> {
-    return this.tasksService.findOne(userId, id);
+  findOne(
+    @Param('id') id: string,
+    @CurrentAbility() ability: AppAbility,
+  ): Promise<TaskResponseDto> {
+    return this.tasksService.findOne(id, ability);
   }
 
   @Patch(':id')
@@ -37,15 +46,15 @@ export class TasksController {
   update(
     @Param('id') id: string,
     @Body() dto: UpdateTaskDto,
-    @CurrentUserId() userId: string,
+    @CurrentAbility() ability: AppAbility,
   ): Promise<TaskResponseDto> {
-    return this.tasksService.update(userId, id, dto);
+    return this.tasksService.update(id, ability, dto);
   }
 
   @Delete(':id')
   @HttpCode(204)
   @CheckPolicies((ability) => ability.can(Action.Delete, 'Task'))
-  delete(@Param('id') id: string, @CurrentUserId() userId: string): Promise<void> {
-    return this.tasksService.delete(userId, id);
+  delete(@Param('id') id: string, @CurrentAbility() ability: AppAbility): Promise<void> {
+    return this.tasksService.delete(id, ability);
   }
 }

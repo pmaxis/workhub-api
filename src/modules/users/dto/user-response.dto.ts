@@ -10,6 +10,7 @@ export class UserResponseDto {
   @Expose() lastName: string;
   @Expose() thirdName?: string | null;
   @Expose() roles: RoleResponseDto[];
+  @Expose() permissions: string[];
   @Expose() createdAt: Date;
   @Expose() updatedAt: Date;
 
@@ -20,6 +21,7 @@ export class UserResponseDto {
     lastName: string;
     thirdName?: string | null;
     roles: Role[];
+    permissions?: string[];
     createdAt: Date;
     updatedAt: Date;
   }) {
@@ -28,6 +30,7 @@ export class UserResponseDto {
     this.firstName = user.firstName;
     this.lastName = user.lastName;
     this.thirdName = user.thirdName;
+    this.permissions = user.permissions ?? [];
     this.roles = user.roles.map(
       (r) =>
         new RoleResponseDto({
