@@ -15,8 +15,11 @@ export class SessionsRepository {
     return this.database.session.create({ data });
   }
 
-  async findAll() {
-    return this.database.session.findMany();
+  async findAllForUser(userId: string) {
+    return this.database.session.findMany({
+      where: { userId },
+      orderBy: { createdAt: 'desc' },
+    });
   }
 
   async findOne(id: string) {
@@ -31,7 +34,7 @@ export class SessionsRepository {
     return this.database.session.update({ where: { id }, data: { refreshToken, expiresAt } });
   }
 
-  async delete(id: string): Promise<void> {
-    await this.database.session.delete({ where: { id } });
+  async deleteForUser(id: string, userId: string): Promise<{ count: number }> {
+    return this.database.session.deleteMany({ where: { id, userId } });
   }
 }

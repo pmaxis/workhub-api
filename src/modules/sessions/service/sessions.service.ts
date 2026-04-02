@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { SessionsRepository } from '@/modules/sessions/repository/sessions.repository';
 import { CreateSessionDto } from '@/modules/sessions/dto/create-session.dto';
 
@@ -10,8 +10,8 @@ export class SessionsService {
     return this.sessionsRepository.create(createSessionDto);
   }
 
-  findAll() {
-    return this.sessionsRepository.findAll();
+  findAllForUser(userId: string) {
+    return this.sessionsRepository.findAllForUser(userId);
   }
 
   findOne(id: string) {
@@ -26,7 +26,10 @@ export class SessionsService {
     return this.sessionsRepository.updateRefreshToken(id, refreshToken, expiresAt);
   }
 
-  delete(id: string) {
-    return this.sessionsRepository.delete(id);
+  async deleteForUser(id: string, userId: string): Promise<void> {
+    const { count } = await this.sessionsRepository.deleteForUser(id, userId);
+    if (count === 0) {
+      throw new NotFoundException('Session not found');
+    }
   }
 }

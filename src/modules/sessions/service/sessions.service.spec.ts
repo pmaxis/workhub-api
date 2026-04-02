@@ -5,11 +5,11 @@ import { CreateSessionDto } from '@/modules/sessions/dto/create-session.dto';
 
 const mockSessionsRepository = {
   create: jest.fn(),
-  findAll: jest.fn(),
+  findAllForUser: jest.fn(),
   findOne: jest.fn(),
   findOneByToken: jest.fn(),
   updateRefreshToken: jest.fn(),
-  delete: jest.fn(),
+  deleteForUser: jest.fn(),
 };
 
 describe('SessionsService', () => {
@@ -50,15 +50,15 @@ describe('SessionsService', () => {
     });
   });
 
-  describe('findAll', () => {
-    it('should return all sessions', async () => {
+  describe('findAllForUser', () => {
+    it('should return sessions for user', async () => {
       const sessions = [{ id: '1', userId: 'user-1' }];
-      mockSessionsRepository.findAll.mockResolvedValue(sessions);
+      mockSessionsRepository.findAllForUser.mockResolvedValue(sessions);
 
-      const result = await service.findAll();
+      const result = await service.findAllForUser('user-1');
 
       expect(result).toEqual(sessions);
-      expect(mockSessionsRepository.findAll).toHaveBeenCalled();
+      expect(mockSessionsRepository.findAllForUser).toHaveBeenCalledWith('user-1');
     });
   });
 
@@ -101,13 +101,13 @@ describe('SessionsService', () => {
     });
   });
 
-  describe('delete', () => {
-    it('should delete session by id', async () => {
-      mockSessionsRepository.delete.mockResolvedValue(undefined);
+  describe('deleteForUser', () => {
+    it('should delete session when it belongs to user', async () => {
+      mockSessionsRepository.deleteForUser.mockResolvedValue({ count: 1 });
 
-      await service.delete('session-1');
+      await service.deleteForUser('session-1', 'user-1');
 
-      expect(mockSessionsRepository.delete).toHaveBeenCalledWith('session-1');
+      expect(mockSessionsRepository.deleteForUser).toHaveBeenCalledWith('session-1', 'user-1');
     });
   });
 });

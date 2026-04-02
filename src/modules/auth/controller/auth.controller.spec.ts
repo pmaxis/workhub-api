@@ -115,13 +115,15 @@ describe('AuthController', () => {
 
   describe('logout', () => {
     it('should call logout and clear cookies', async () => {
-      const req = { user: { sessionId: 'session-1' } };
+      const req = {
+        user: { sessionId: 'session-1', userId: 'user-1', permissions: [], companyIds: [] },
+      };
       mockAuthService.logout.mockResolvedValue(undefined);
 
       const result = await controller.logout(req, res);
 
       expect(result).toEqual({ message: 'Logged out successfully' });
-      expect(mockAuthService.logout).toHaveBeenCalledWith('session-1');
+      expect(mockAuthService.logout).toHaveBeenCalledWith('session-1', 'user-1');
       expect(mockCookieService.clearAuthCookies).toHaveBeenCalledWith(res);
     });
   });

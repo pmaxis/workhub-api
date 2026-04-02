@@ -29,7 +29,7 @@ const mockSessionsService = {
   findOneByToken: jest.fn(),
   findOne: jest.fn(),
   updateRefreshToken: jest.fn(),
-  delete: jest.fn(),
+  deleteForUser: jest.fn(),
 };
 
 const mockTokensService = {
@@ -201,12 +201,12 @@ describe('AuthService', () => {
   });
 
   describe('logout', () => {
-    it('should call sessionsService.delete with sessionId', async () => {
-      mockSessionsService.delete.mockResolvedValue(undefined);
+    it('should call sessionsService.deleteForUser with session and user id', async () => {
+      mockSessionsService.deleteForUser.mockResolvedValue(undefined);
 
-      await service.logout('session-1');
+      await service.logout('session-1', 'user-1');
 
-      expect(mockSessionsService.delete).toHaveBeenCalledWith('session-1');
+      expect(mockSessionsService.deleteForUser).toHaveBeenCalledWith('session-1', 'user-1');
     });
   });
 });

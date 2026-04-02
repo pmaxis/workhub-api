@@ -104,8 +104,8 @@ export class AuthService {
       throw new UnauthorizedException('Invalid session');
     }
 
-    const userId = String(session.userId);
-    const sessionId = String(session.id);
+    const userId = session.userId;
+    const sessionId = session.id;
 
     const accessToken = this.tokensService.generateAccessToken(userId, sessionId);
 
@@ -121,8 +121,8 @@ export class AuthService {
     return { accessToken, refreshToken };
   }
 
-  async logout(sessionId: string) {
-    await this.sessionsService.delete(sessionId);
+  async logout(sessionId: string, userId: string) {
+    await this.sessionsService.deleteForUser(sessionId, userId);
   }
 
   private async createAuthSession(userId: string, ipAddress: string, userAgent: string) {
@@ -137,7 +137,7 @@ export class AuthService {
       userAgent,
     });
 
-    const sessionId = String(session.id);
+    const sessionId = session.id;
     const accessToken = this.tokensService.generateAccessToken(userId, sessionId);
 
     return { accessToken, refreshToken };

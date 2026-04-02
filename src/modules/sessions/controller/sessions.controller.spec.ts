@@ -3,8 +3,8 @@ import { SessionsController } from '@/modules/sessions/controller/sessions.contr
 import { SessionsService } from '@/modules/sessions/service/sessions.service';
 
 const mockSessionsService = {
-  findAll: jest.fn(),
-  delete: jest.fn(),
+  findAllForUser: jest.fn(),
+  deleteForUser: jest.fn(),
 };
 
 describe('SessionsController', () => {
@@ -25,25 +25,25 @@ describe('SessionsController', () => {
   });
 
   describe('findAll', () => {
-    it('should return list of sessions', async () => {
+    it('should return list of sessions for current user', async () => {
       const sessions = [{ id: '1', userId: 'user-1' }];
-      mockSessionsService.findAll.mockResolvedValue(sessions);
+      mockSessionsService.findAllForUser.mockResolvedValue(sessions);
 
-      const result = await controller.findAll();
+      const result = await controller.findAll('user-1');
 
       expect(result).toEqual(sessions);
-      expect(mockSessionsService.findAll).toHaveBeenCalled();
+      expect(mockSessionsService.findAllForUser).toHaveBeenCalledWith('user-1');
     });
   });
 
   describe('delete', () => {
-    it('should delete session by id', async () => {
-      mockSessionsService.delete.mockResolvedValue(undefined);
+    it('should delete session by id for current user', async () => {
+      mockSessionsService.deleteForUser.mockResolvedValue(undefined);
 
-      const result = await controller.delete('1');
+      const result = await controller.delete('1', 'user-1');
 
       expect(result).toBeUndefined();
-      expect(mockSessionsService.delete).toHaveBeenCalledWith('1');
+      expect(mockSessionsService.deleteForUser).toHaveBeenCalledWith('1', 'user-1');
     });
   });
 });

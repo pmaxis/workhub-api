@@ -1,6 +1,7 @@
 import { Controller, Post, Req, Res, Body, UnauthorizedException } from '@nestjs/common';
 import { CookieService } from '@/infrastructure/cookie/cookie.service';
 import type { Request, Response } from 'express';
+import { RequestUser } from '@/common/ability/ability.types';
 import { AuthService } from '@/modules/auth/service/auth.service';
 import { LoginDto } from '@/modules/auth/dto/login.dto';
 import { RegisterDto } from '@/modules/auth/dto/register.dto';
@@ -76,11 +77,8 @@ export class AuthController {
   }
 
   @Post('logout')
-  async logout(
-    @Req() req: { user: { sessionId: string } },
-    @Res({ passthrough: true }) res: Response,
-  ) {
-    await this.authService.logout(req.user.sessionId);
+  async logout(@Req() req: { user: RequestUser }, @Res({ passthrough: true }) res: Response) {
+    await this.authService.logout(req.user.sessionId, req.user.userId);
     this.cookieService.clearAuthCookies(res);
 
     return { message: 'Logged out successfully' };
