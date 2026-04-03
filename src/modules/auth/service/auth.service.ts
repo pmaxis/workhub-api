@@ -78,7 +78,7 @@ export class AuthService {
     const userId = user.id;
 
     if (invitationContext) {
-      await this.invitationsService.accept(invitationContext.invitationId);
+      await this.invitationsService.acceptForRegisteredUser(invitationContext.invitationId, userId);
       await this.userOnboardingService.registerClientFromInvitation(
         userId,
         invitationContext.invitedById,

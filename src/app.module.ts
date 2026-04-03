@@ -17,6 +17,8 @@ import { ProfileModule } from '@/modules/profile/profile.module';
 import { InvitationsModule } from './modules/invitations/invitations.module';
 import { ProjectsModule } from '@/modules/projects/projects.module';
 import { TasksModule } from '@/modules/tasks/tasks.module';
+import { WorkspaceModule } from '@/modules/workspace/workspace.module';
+import { CompaniesModule } from '@/modules/companies/companies.module';
 
 @Module({
   imports: [
@@ -37,6 +39,8 @@ import { TasksModule } from '@/modules/tasks/tasks.module';
     InvitationsModule,
     ProjectsModule,
     TasksModule,
+    WorkspaceModule,
+    CompaniesModule,
   ],
   controllers: [],
   providers: [

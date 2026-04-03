@@ -9,7 +9,6 @@ export class InvitationResponseDto {
   @Expose() companyId: string | null;
   @Expose() expiresAt: Date;
   @Expose() createdAt: Date;
-  /** One-time, only in create / resend responses for building invite link */
   @Expose() token?: string;
 
   constructor(invitation: {

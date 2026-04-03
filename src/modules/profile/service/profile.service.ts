@@ -5,6 +5,8 @@ import { UpdateProfileDto } from '@/modules/profile/dto/update-profile.dto';
 import { UserResponseDto } from '@/modules/users/dto/user-response.dto';
 import { RoleResponseDto } from '@/modules/roles/dto/role-response.dto';
 
+type ProfileUser = NonNullable<Awaited<ReturnType<ProfileRepository['findById']>>>;
+
 @Injectable()
 export class ProfileService {
   constructor(private readonly profileRepository: ProfileRepository) {}
@@ -28,12 +30,14 @@ export class ProfileService {
     return this.toDto(updated);
   }
 
-  private toDto(
-    user: Awaited<ReturnType<ProfileRepository['findById']>> & object,
-  ): UserResponseDto {
+  private toDto(user: ProfileUser): UserResponseDto {
     const permissions = [
       ...new Set(user.roles.flatMap((ur) => ur.role.permissions.map((rp) => rp.permission.key))),
     ];
+    const { freelancerProfile, clientProfile } = user;
+    const hasFreelancerProfile = freelancerProfile != null;
+    const hasClientProfile = clientProfile != null;
+    const hasCompanyMembership = clientProfile != null && clientProfile.companyMembers.length > 0;
     return new UserResponseDto({
       ...user,
       permissions,
@@ -44,6 +48,9 @@ export class ProfileService {
             permissions: [],
           }),
       ),
+      hasFreelancerProfile,
+      hasClientProfile,
+      hasCompanyMembership,
     });
   }
 }

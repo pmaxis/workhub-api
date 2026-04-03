@@ -19,10 +19,20 @@ export class ProfileRepository {
     },
   } as const;
 
+  private readonly profileInclude = {
+    ...this.rolesInclude,
+    freelancerProfile: { select: { id: true } },
+    clientProfile: {
+      select: {
+        companyMembers: { select: { companyId: true } },
+      },
+    },
+  } as const;
+
   async findById(id: string) {
     return this.database.user.findUnique({
       where: { id },
-      include: this.rolesInclude,
+      include: this.profileInclude,
     });
   }
 
@@ -39,7 +49,7 @@ export class ProfileRepository {
     return this.database.user.update({
       where: { id },
       data,
-      include: this.rolesInclude,
+      include: this.profileInclude,
     });
   }
 }

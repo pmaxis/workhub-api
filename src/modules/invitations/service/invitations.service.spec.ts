@@ -1,15 +1,33 @@
-import { BadRequestException, ConflictException, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  ForbiddenException,
+  NotFoundException,
+} from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { InvitationStatus } from '@/infrastructure/database/generated/enums';
-import { InvitationsRepository } from '@/modules/invitations/repository/invitations.repository';
+import {
+  InvitationsRepository,
+  type InvitationScopeContext,
+} from '@/modules/invitations/repository/invitations.repository';
 import { InvitationsService } from '@/modules/invitations/service/invitations.service';
 import { UsersRepository } from '@/modules/users/repository/users.repository';
 import { CreateInvitationDto } from '@/modules/invitations/dto/create-invitation.dto';
 import { InvitationResponseDto } from '@/modules/invitations/dto/invitation-response.dto';
+import type { RequestUser } from '@/common/ability/ability.types';
 
 const invitedById = 'user-inviter';
 const invitationId = 'inv-1';
 const companyId = 'comp-1';
+
+const baseCtx = (over: Partial<RequestUser> = {}): RequestUser => ({
+  userId: invitedById,
+  sessionId: 'sess',
+  permissions: [],
+  companyIds: [],
+  managedCompanyIds: [],
+  ...over,
+});
 
 const baseInvitation = {
   id: invitationId,
@@ -34,6 +52,7 @@ const mockInvitationsRepository = {
 
 const mockUsersRepository = {
   findByEmailsForInvitationLookup: jest.fn(),
+  findColleaguesInCompanies: jest.fn(),
 };
 
 type InvitationCreatePayload = {
@@ -46,6 +65,21 @@ type InvitationCreatePayload = {
 };
 
 type ResendUpdatePayload = { token: string; expiresAt: Date };
+
+type FindAllRepositoryArgs = {
+  companyId?: string;
+  status?: InvitationStatus;
+  scope: InvitationScopeContext;
+};
+
+function firstFindAllArgs(findAllMock: { mock: { calls: unknown } }): FindAllRepositoryArgs {
+  const calls = findAllMock.mock.calls as [FindAllRepositoryArgs][];
+  const first = calls[0];
+  if (!first?.[0]) {
+    throw new Error('expected findAll to have been called');
+  }
+  return first[0];
+}
 
 describe('InvitationsService', () => {
   let service: InvitationsService;
@@ -83,7 +117,7 @@ describe('InvitationsService', () => {
         invitedById,
       });
 
-      const result = await service.create(dto, invitedById);
+      const result = await service.create(dto, baseCtx({ managedCompanyIds: [companyId] }));
 
       expect(mockInvitationsRepository.findByEmailAndCompany).toHaveBeenCalledWith(
         dto.email,
@@ -127,7 +161,7 @@ describe('InvitationsService', () => {
         invitedById,
       });
 
-      await service.create(dtoNoCompany, invitedById);
+      await service.create(dtoNoCompany, baseCtx());
 
       expect(mockInvitationsRepository.findByEmailAndCompany).toHaveBeenCalledWith(
         dtoNoCompany.email,
@@ -136,25 +170,36 @@ describe('InvitationsService', () => {
       );
     });
 
+    it('should throw ForbiddenException when companyId not in scope', async () => {
+      await expect(service.create(dto, baseCtx())).rejects.toThrow(ForbiddenException);
+      expect(mockInvitationsRepository.create).not.toHaveBeenCalled();
+    });
+
     it('should throw ConflictException when pending invitation already exists', async () => {
       mockInvitationsRepository.findByEmailAndCompany.mockResolvedValue({ id: 'existing' });
 
-      await expect(service.create(dto, invitedById)).rejects.toThrow(ConflictException);
+      await expect(
+        service.create(dto, baseCtx({ managedCompanyIds: [companyId] })),
+      ).rejects.toThrow(ConflictException);
       expect(mockInvitationsRepository.create).not.toHaveBeenCalled();
     });
   });
 
-  describe('findClientsWithUserInfo', () => {
-    it('should return empty array when no accepted invitations', async () => {
+  describe('findWorkspaceMembers', () => {
+    it('should return empty array when no accepted invitations and no colleagues', async () => {
       mockInvitationsRepository.findAll.mockResolvedValue([]);
+      mockUsersRepository.findColleaguesInCompanies.mockResolvedValue([]);
 
-      const result = await service.findClientsWithUserInfo(companyId);
+      const result = await service.findWorkspaceMembers(
+        baseCtx({ companyIds: [companyId] }),
+        companyId,
+      );
 
       expect(result).toEqual([]);
       expect(mockUsersRepository.findByEmailsForInvitationLookup).not.toHaveBeenCalled();
     });
 
-    it('should merge user names and use invitation createdAt when user missing', async () => {
+    it('should merge user names and include colleagues', async () => {
       const inv = {
         ...baseInvitation,
         id: 'i1',
@@ -163,21 +208,31 @@ describe('InvitationsService', () => {
       };
       mockInvitationsRepository.findAll.mockResolvedValue([inv]);
       mockUsersRepository.findByEmailsForInvitationLookup.mockResolvedValue([]);
-
-      const result = await service.findClientsWithUserInfo(companyId);
-
-      expect(mockInvitationsRepository.findAll).toHaveBeenCalledWith({
-        companyId,
-        status: InvitationStatus.ACCEPTED,
-      });
-      expect(result).toEqual([
+      mockUsersRepository.findColleaguesInCompanies.mockResolvedValue([
         {
-          id: 'i1',
-          email: 'a@x.com',
-          fullName: 'a@x.com',
-          confirmedAt: inv.createdAt,
+          id: 'u2',
+          email: 'colleague@x.com',
+          fullName: 'Colleague Name',
+          confirmedAt: new Date('2026-03-01'),
         },
       ]);
+
+      const result = await service.findWorkspaceMembers(
+        baseCtx({ companyIds: [companyId] }),
+        companyId,
+      );
+
+      expect(mockInvitationsRepository.findAll).toHaveBeenCalledTimes(1);
+      const findWorkspaceCall = firstFindAllArgs(mockInvitationsRepository.findAll);
+      expect(findWorkspaceCall.companyId).toBe(companyId);
+      expect(findWorkspaceCall.status).toBe(InvitationStatus.ACCEPTED);
+      expect(findWorkspaceCall.scope).toEqual({
+        userId: invitedById,
+        companyIds: [companyId],
+        managedCompanyIds: [],
+      });
+      expect(result.map((r) => r.email)).toContain('a@x.com');
+      expect(result.map((r) => r.email)).toContain('colleague@x.com');
     });
 
     it('should build fullName from user and prefer user createdAt', async () => {
@@ -198,8 +253,9 @@ describe('InvitationsService', () => {
           createdAt: userCreated,
         },
       ]);
+      mockUsersRepository.findColleaguesInCompanies.mockResolvedValue([]);
 
-      const result = await service.findClientsWithUserInfo();
+      const result = await service.findWorkspaceMembers(baseCtx());
 
       expect(result[0].fullName).toBe('Doe Jane');
       expect(result[0].confirmedAt).toEqual(userCreated);
@@ -210,22 +266,32 @@ describe('InvitationsService', () => {
     it('should default to PENDING when status omitted', async () => {
       mockInvitationsRepository.findAll.mockResolvedValue([]);
 
-      await service.findAll(companyId);
+      await service.findAll(baseCtx({ managedCompanyIds: [companyId] }), companyId);
 
-      expect(mockInvitationsRepository.findAll).toHaveBeenCalledWith({
-        companyId,
-        status: InvitationStatus.PENDING,
+      expect(mockInvitationsRepository.findAll).toHaveBeenCalledTimes(1);
+      const findAllPendingCall = firstFindAllArgs(mockInvitationsRepository.findAll);
+      expect(findAllPendingCall.companyId).toBe(companyId);
+      expect(findAllPendingCall.status).toBe(InvitationStatus.PENDING);
+      expect(findAllPendingCall.scope).toEqual({
+        userId: invitedById,
+        companyIds: [],
+        managedCompanyIds: [companyId],
       });
     });
 
     it('should map query status and return DTOs', async () => {
       mockInvitationsRepository.findAll.mockResolvedValue([baseInvitation]);
 
-      const result = await service.findAll(undefined, 'ACCEPTED');
+      const result = await service.findAll(baseCtx(), undefined, 'ACCEPTED');
 
-      expect(mockInvitationsRepository.findAll).toHaveBeenCalledWith({
-        companyId: undefined,
-        status: InvitationStatus.ACCEPTED,
+      expect(mockInvitationsRepository.findAll).toHaveBeenCalledTimes(1);
+      const findAllAcceptedCall = firstFindAllArgs(mockInvitationsRepository.findAll);
+      expect(findAllAcceptedCall.companyId).toBeUndefined();
+      expect(findAllAcceptedCall.status).toBe(InvitationStatus.ACCEPTED);
+      expect(findAllAcceptedCall.scope).toEqual({
+        userId: invitedById,
+        companyIds: [],
+        managedCompanyIds: [],
       });
       expect(result).toHaveLength(1);
       expect(result[0]).toBeInstanceOf(InvitationResponseDto);
@@ -233,10 +299,13 @@ describe('InvitationsService', () => {
   });
 
   describe('findOne', () => {
-    it('should return invitation', async () => {
+    it('should return invitation when in scope', async () => {
       mockInvitationsRepository.findOne.mockResolvedValue(baseInvitation);
 
-      const result = await service.findOne(invitationId);
+      const result = await service.findOne(
+        invitationId,
+        baseCtx({ managedCompanyIds: [companyId] }),
+      );
 
       expect(result).toBeInstanceOf(InvitationResponseDto);
       expect(result.id).toBe(invitationId);
@@ -245,7 +314,15 @@ describe('InvitationsService', () => {
     it('should throw NotFoundException when missing', async () => {
       mockInvitationsRepository.findOne.mockResolvedValue(null);
 
-      await expect(service.findOne(invitationId)).rejects.toThrow(NotFoundException);
+      await expect(service.findOne(invitationId, baseCtx())).rejects.toThrow(NotFoundException);
+    });
+
+    it('should throw NotFoundException when out of scope', async () => {
+      mockInvitationsRepository.findOne.mockResolvedValue(baseInvitation);
+
+      await expect(
+        service.findOne(invitationId, baseCtx({ userId: 'other-user' })),
+      ).rejects.toThrow(NotFoundException);
     });
   });
 
@@ -344,7 +421,11 @@ describe('InvitationsService', () => {
       const updated = { ...baseInvitation, status: InvitationStatus.EXPIRED };
       mockInvitationsRepository.update.mockResolvedValue(updated);
 
-      const result = await service.update(invitationId, { status: InvitationStatus.EXPIRED });
+      const result = await service.update(
+        invitationId,
+        baseCtx({ managedCompanyIds: [companyId] }),
+        { status: InvitationStatus.EXPIRED },
+      );
 
       expect(mockInvitationsRepository.update).toHaveBeenCalledWith(invitationId, {
         status: InvitationStatus.EXPIRED,
@@ -359,7 +440,10 @@ describe('InvitationsService', () => {
       const accepted = { ...baseInvitation, status: InvitationStatus.ACCEPTED };
       mockInvitationsRepository.update.mockResolvedValue(accepted);
 
-      const result = await service.accept(invitationId);
+      const result = await service.accept(
+        invitationId,
+        baseCtx({ managedCompanyIds: [companyId] }),
+      );
 
       expect(mockInvitationsRepository.update).toHaveBeenCalledWith(invitationId, {
         status: InvitationStatus.ACCEPTED,
@@ -372,7 +456,7 @@ describe('InvitationsService', () => {
     it('should throw NotFoundException when invitation missing', async () => {
       mockInvitationsRepository.findOne.mockResolvedValue(null);
 
-      await expect(service.resend(invitationId)).rejects.toThrow(NotFoundException);
+      await expect(service.resend(invitationId, baseCtx())).rejects.toThrow(NotFoundException);
     });
 
     it('should throw BadRequestException when not PENDING', async () => {
@@ -381,7 +465,9 @@ describe('InvitationsService', () => {
         status: InvitationStatus.ACCEPTED,
       });
 
-      await expect(service.resend(invitationId)).rejects.toThrow(BadRequestException);
+      await expect(
+        service.resend(invitationId, baseCtx({ managedCompanyIds: [companyId] })),
+      ).rejects.toThrow(BadRequestException);
       expect(mockInvitationsRepository.update).not.toHaveBeenCalled();
     });
 
@@ -394,7 +480,10 @@ describe('InvitationsService', () => {
       };
       mockInvitationsRepository.update.mockResolvedValue(refreshed);
 
-      const result = await service.resend(invitationId);
+      const result = await service.resend(
+        invitationId,
+        baseCtx({ managedCompanyIds: [companyId] }),
+      );
 
       expect(mockInvitationsRepository.update).toHaveBeenCalledTimes(1);
       const updateCalls = mockInvitationsRepository.update.mock.calls as unknown as [
@@ -413,7 +502,7 @@ describe('InvitationsService', () => {
       mockInvitationsRepository.findOne.mockResolvedValue(baseInvitation);
       mockInvitationsRepository.delete.mockResolvedValue(undefined);
 
-      await service.delete(invitationId);
+      await service.delete(invitationId, baseCtx({ managedCompanyIds: [companyId] }));
 
       expect(mockInvitationsRepository.delete).toHaveBeenCalledWith(invitationId);
     });
@@ -421,7 +510,7 @@ describe('InvitationsService', () => {
     it('should propagate NotFoundException from findOne', async () => {
       mockInvitationsRepository.findOne.mockResolvedValue(null);
 
-      await expect(service.delete(invitationId)).rejects.toThrow(NotFoundException);
+      await expect(service.delete(invitationId, baseCtx())).rejects.toThrow(NotFoundException);
       expect(mockInvitationsRepository.delete).not.toHaveBeenCalled();
     });
   });

@@ -45,7 +45,7 @@ const mockUserOnboardingService = {
 };
 
 const mockInvitationsService = {
-  accept: jest.fn(),
+  acceptForRegisteredUser: jest.fn(),
   getInvitationForRegistration: jest.fn(),
 };
 

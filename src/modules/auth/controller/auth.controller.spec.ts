@@ -116,7 +116,13 @@ describe('AuthController', () => {
   describe('logout', () => {
     it('should call logout and clear cookies', async () => {
       const req = {
-        user: { sessionId: 'session-1', userId: 'user-1', permissions: [], companyIds: [] },
+        user: {
+          sessionId: 'session-1',
+          userId: 'user-1',
+          permissions: [],
+          companyIds: [],
+          managedCompanyIds: [],
+        },
       };
       mockAuthService.logout.mockResolvedValue(undefined);
 

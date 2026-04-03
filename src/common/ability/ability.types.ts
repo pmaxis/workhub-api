@@ -6,6 +6,7 @@ export type RequestUser = {
   sessionId: string;
   permissions: string[];
   companyIds: string[];
+  managedCompanyIds: string[];
 };
 
 export enum Action {

@@ -85,6 +85,69 @@ export class UsersRepository {
     });
   }
 
+  async findColleaguesInCompanies(
+    userId: string,
+    companyIds: string[],
+    companyIdFilter?: string,
+  ): Promise<Array<{ id: string; email: string; fullName: string; confirmedAt: Date }>> {
+    if (companyIds.length === 0) {
+      return [];
+    }
+
+    const effectiveIds =
+      companyIdFilter != null
+        ? companyIds.includes(companyIdFilter)
+          ? [companyIdFilter]
+          : []
+        : companyIds;
+
+    if (effectiveIds.length === 0) {
+      return [];
+    }
+
+    const members = await this.database.companyMember.findMany({
+      where: {
+        companyId: { in: effectiveIds },
+        clientProfile: {
+          userId: { not: userId },
+        },
+      },
+      select: {
+        clientProfile: {
+          select: {
+            user: {
+              select: {
+                id: true,
+                email: true,
+                firstName: true,
+                lastName: true,
+                thirdName: true,
+                createdAt: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    const seen = new Set<string>();
+    const rows: Array<{ id: string; email: string; fullName: string; confirmedAt: Date }> = [];
+
+    for (const m of members) {
+      const u = m.clientProfile.user;
+      if (seen.has(u.id)) continue;
+      seen.add(u.id);
+      rows.push({
+        id: u.id,
+        email: u.email,
+        fullName: [u.lastName, u.firstName, u.thirdName].filter(Boolean).join(' '),
+        confirmedAt: u.createdAt,
+      });
+    }
+
+    return rows;
+  }
+
   async update(
     id: string,
     data: {

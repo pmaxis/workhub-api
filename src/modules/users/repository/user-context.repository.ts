@@ -31,6 +31,13 @@ export class UserContextRepository {
             },
           },
         },
+        freelancerProfile: {
+          select: {
+            clients: {
+              select: { companyId: true },
+            },
+          },
+        },
       },
     });
 
@@ -42,6 +49,14 @@ export class UserContextRepository {
 
     const companyIds = user.clientProfile?.companyMembers.map((m) => m.companyId) ?? [];
 
-    return { userId, sessionId, permissions, companyIds };
+    const managedCompanyIds = [
+      ...new Set(
+        (user.freelancerProfile?.clients ?? [])
+          .map((c) => c.companyId)
+          .filter((id): id is string => id != null),
+      ),
+    ];
+
+    return { userId, sessionId, permissions, companyIds, managedCompanyIds };
   }
 }

@@ -1,7 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { DatabaseService } from '@/infrastructure/database/database.service';
-import { Invitation } from '@/infrastructure/database/generated/client';
+import type { Invitation, Prisma } from '@/infrastructure/database/generated/client';
 import { InvitationStatus } from '@/infrastructure/database/generated/enums';
+
+export type InvitationScopeContext = {
+  userId: string;
+  companyIds: string[];
+  managedCompanyIds: string[];
+};
 
 const invitationInclude = {
   invitedBy: { select: { id: true, email: true, firstName: true, lastName: true } },
@@ -39,10 +45,18 @@ export class InvitationsRepository {
     return this.mapInvitation(invitation);
   }
 
-  async findAll(opts?: { companyId?: string; status?: InvitationStatus }) {
-    const where: { companyId?: string; status?: InvitationStatus } = {};
-    if (opts?.companyId) where.companyId = opts.companyId;
-    if (opts?.status) where.status = opts.status;
+  async findAll(opts: {
+    companyId?: string;
+    status?: InvitationStatus;
+    scope: InvitationScopeContext;
+  }) {
+    const where: Prisma.InvitationWhereInput = {
+      AND: [
+        this.buildScopeWhere(opts.scope),
+        ...(opts.companyId ? [{ companyId: opts.companyId }] : []),
+        ...(opts.status ? [{ status: opts.status }] : []),
+      ],
+    };
 
     const invitations = await this.database.invitation.findMany({
       where,
@@ -51,6 +65,17 @@ export class InvitationsRepository {
     });
 
     return invitations.map((inv) => this.mapInvitation(inv));
+  }
+
+  private buildScopeWhere(scope: InvitationScopeContext): Prisma.InvitationWhereInput {
+    const or: Prisma.InvitationWhereInput[] = [{ invitedById: scope.userId }];
+    if (scope.companyIds.length > 0) {
+      or.push({ companyId: { in: scope.companyIds } });
+    }
+    if (scope.managedCompanyIds.length > 0) {
+      or.push({ companyId: { in: scope.managedCompanyIds } });
+    }
+    return { OR: or };
   }
 
   async findOne(id: string): Promise<MappedInvitation | null> {

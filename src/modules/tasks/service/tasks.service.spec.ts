@@ -11,7 +11,6 @@ import { CreateTaskDto } from '@/modules/tasks/dto/create-task.dto';
 import { UpdateTaskDto } from '@/modules/tasks/dto/update-task.dto';
 import { TaskResponseDto } from '@/modules/tasks/dto/task-response.dto';
 
-/** Same as authenticated user; matches `Project.ownerId` for repository scoping. */
 const ownerId = 'user-1';
 const projectId = 'proj-1';
 const taskId = 'task-1';

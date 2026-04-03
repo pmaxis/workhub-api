@@ -17,15 +17,54 @@ async function seed() {
     update: {},
   });
 
+  const workspaceMembersRead = await prisma.permission.upsert({
+    where: { key: 'workspace.members.read' },
+    create: {
+      key: 'workspace.members.read',
+      description: 'Перегляд пов’язаних контактів (клієнти / колеги за зв’язками)',
+    },
+    update: {},
+  });
+
+  const invitationsCreate = await prisma.permission.upsert({
+    where: { key: 'invitations.create' },
+    create: { key: 'invitations.create', description: 'Надсилання запрошень' },
+    update: {},
+  });
+
+  const invitationsRead = await prisma.permission.upsert({
+    where: { key: 'invitations.read' },
+    create: { key: 'invitations.read', description: 'Перегляд запрошень у своїй області' },
+    update: {},
+  });
+
+  const invitationsUpdate = await prisma.permission.upsert({
+    where: { key: 'invitations.update' },
+    create: { key: 'invitations.update', description: 'Оновлення запрошень у своїй області' },
+    update: {},
+  });
+
+  const invitationsDelete = await prisma.permission.upsert({
+    where: { key: 'invitations.delete' },
+    create: { key: 'invitations.delete', description: 'Видалення запрошень у своїй області' },
+    update: {},
+  });
+
   const adminRole = await prisma.role.upsert({
     where: { slug: 'admin' },
     create: { slug: 'admin', name: 'Адміністратор' },
     update: {},
   });
 
-  await prisma.role.upsert({
+  const clientRole = await prisma.role.upsert({
     where: { slug: 'client' },
     create: { slug: 'client', name: 'Клієнт' },
+    update: {},
+  });
+
+  const freelancerRole = await prisma.role.upsert({
+    where: { slug: 'freelancer' },
+    create: { slug: 'freelancer', name: 'Фрілансер' },
     update: {},
   });
 
@@ -42,6 +81,32 @@ async function seed() {
     },
     update: {},
   });
+
+  const collaborationPermissions = [
+    workspaceMembersRead,
+    invitationsCreate,
+    invitationsRead,
+    invitationsUpdate,
+    invitationsDelete,
+  ];
+
+  for (const role of [clientRole, freelancerRole]) {
+    for (const p of collaborationPermissions) {
+      await prisma.rolePermission.upsert({
+        where: {
+          roleId_permissionId: {
+            roleId: role.id,
+            permissionId: p.id,
+          },
+        },
+        create: {
+          roleId: role.id,
+          permissionId: p.id,
+        },
+        update: {},
+      });
+    }
+  }
 
   const hashedPassword = await bcrypt.hash('password', SALT_ROUNDS);
 
@@ -76,7 +141,42 @@ async function seed() {
     update: {},
   });
 
-  console.log('Seed completed: admin@test.com / password');
+  const clientUser = await prisma.user.upsert({
+    where: { email: 'client@test.com' },
+    create: {
+      email: 'client@test.com',
+      password: hashedPassword,
+      firstName: 'Петро',
+      lastName: 'Петренко',
+      thirdName: 'Петрович',
+      isActivated: true,
+    },
+    update: {},
+  });
+
+  await prisma.userRole.upsert({
+    where: {
+      userId_roleId: {
+        userId: clientUser.id,
+        roleId: clientRole.id,
+      },
+    },
+    create: {
+      userId: clientUser.id,
+      roleId: clientRole.id,
+    },
+    update: {},
+  });
+
+  await prisma.clientProfile.upsert({
+    where: { userId: clientUser.id },
+    create: { userId: clientUser.id },
+    update: {},
+  });
+
+  console.log(
+    'Seed completed: admin@test.com / password, client@test.com / password (клієнт без компанії — створює сам)',
+  );
   await prisma.$disconnect();
 }
 

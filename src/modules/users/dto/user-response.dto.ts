@@ -13,6 +13,9 @@ export class UserResponseDto {
   @Expose() permissions: string[];
   @Expose() createdAt: Date;
   @Expose() updatedAt: Date;
+  @Expose() hasFreelancerProfile: boolean;
+  @Expose() hasClientProfile: boolean;
+  @Expose() hasCompanyMembership: boolean;
 
   constructor(user: {
     id: string;
@@ -24,6 +27,9 @@ export class UserResponseDto {
     permissions?: string[];
     createdAt: Date;
     updatedAt: Date;
+    hasFreelancerProfile?: boolean;
+    hasClientProfile?: boolean;
+    hasCompanyMembership?: boolean;
   }) {
     this.id = user.id;
     this.email = user.email;
@@ -40,5 +46,8 @@ export class UserResponseDto {
     );
     this.createdAt = user.createdAt;
     this.updatedAt = user.updatedAt;
+    this.hasFreelancerProfile = user.hasFreelancerProfile ?? false;
+    this.hasClientProfile = user.hasClientProfile ?? false;
+    this.hasCompanyMembership = user.hasCompanyMembership ?? false;
   }
 }
