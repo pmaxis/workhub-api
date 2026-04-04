@@ -7,41 +7,48 @@ export class UserContextRepository {
   constructor(private readonly database: DatabaseService) {}
 
   async loadContext(userId: string, sessionId: string): Promise<RequestUser | null> {
-    const user = await this.database.user.findUnique({
-      where: { id: userId },
-      select: {
-        id: true,
-        roles: {
-          select: {
-            role: {
-              select: {
-                permissions: {
-                  select: {
-                    permission: { select: { key: true } },
+    const now = new Date();
+    const [user, session] = await Promise.all([
+      this.database.user.findUnique({
+        where: { id: userId },
+        select: {
+          id: true,
+          roles: {
+            select: {
+              role: {
+                select: {
+                  permissions: {
+                    select: {
+                      permission: { select: { key: true } },
+                    },
                   },
                 },
               },
             },
           },
-        },
-        clientProfile: {
-          select: {
-            companyMembers: {
-              select: { companyId: true },
+          clientProfile: {
+            select: {
+              companyMembers: {
+                select: { companyId: true },
+              },
+            },
+          },
+          freelancerProfile: {
+            select: {
+              clients: {
+                select: { companyId: true },
+              },
             },
           },
         },
-        freelancerProfile: {
-          select: {
-            clients: {
-              select: { companyId: true },
-            },
-          },
-        },
-      },
-    });
+      }),
+      this.database.session.findUnique({
+        where: { id: sessionId, userId },
+        select: { expiresAt: true },
+      }),
+    ]);
 
-    if (!user) return null;
+    if (!user || !session || session.expiresAt < now) return null;
 
     const permissions = [
       ...new Set(user.roles.flatMap((ur) => ur.role.permissions.map((rp) => rp.permission.key))),

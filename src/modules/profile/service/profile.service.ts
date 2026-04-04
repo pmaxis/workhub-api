@@ -2,8 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { hashPassword } from '@/common/utils/hash.util';
 import { ProfileRepository } from '@/modules/profile/repository/profile.repository';
 import { UpdateProfileDto } from '@/modules/profile/dto/update-profile.dto';
-import { UserResponseDto } from '@/modules/users/dto/user-response.dto';
-import { RoleResponseDto } from '@/modules/roles/dto/role-response.dto';
+import { ProfileResponseDto } from '@/modules/profile/dto/profile-response.dto';
 
 type ProfileUser = NonNullable<Awaited<ReturnType<ProfileRepository['findById']>>>;
 
@@ -11,13 +10,13 @@ type ProfileUser = NonNullable<Awaited<ReturnType<ProfileRepository['findById']>
 export class ProfileService {
   constructor(private readonly profileRepository: ProfileRepository) {}
 
-  async getProfile(userId: string): Promise<UserResponseDto | null> {
+  async getProfile(userId: string): Promise<ProfileResponseDto | null> {
     const user = await this.profileRepository.findById(userId);
     if (!user) return null;
     return this.toDto(user);
   }
 
-  async updateProfile(userId: string, dto: UpdateProfileDto): Promise<UserResponseDto> {
+  async updateProfile(userId: string, dto: UpdateProfileDto): Promise<ProfileResponseDto> {
     const user = await this.profileRepository.findById(userId);
     if (!user) throw new NotFoundException('User not found');
 
@@ -30,27 +29,17 @@ export class ProfileService {
     return this.toDto(updated);
   }
 
-  private toDto(user: ProfileUser): UserResponseDto {
+  private toDto(user: ProfileUser): ProfileResponseDto {
     const permissions = [
       ...new Set(user.roles.flatMap((ur) => ur.role.permissions.map((rp) => rp.permission.key))),
     ];
-    const { freelancerProfile, clientProfile } = user;
-    const hasFreelancerProfile = freelancerProfile != null;
-    const hasClientProfile = clientProfile != null;
-    const hasCompanyMembership = clientProfile != null && clientProfile.companyMembers.length > 0;
-    return new UserResponseDto({
+
+    return new ProfileResponseDto({
       ...user,
       permissions,
-      roles: user.roles.map(
-        (ur) =>
-          new RoleResponseDto({
-            ...ur.role,
-            permissions: [],
-          }),
-      ),
-      hasFreelancerProfile,
-      hasClientProfile,
-      hasCompanyMembership,
+      accountType: user.freelancerProfile != null ? 'freelancer' : 'client',
+      hasCompanyMembership:
+        user.clientProfile != null && user.clientProfile.companyMembers.length > 0,
     });
   }
 }

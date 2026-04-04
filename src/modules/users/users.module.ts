@@ -8,7 +8,6 @@ import { UsersController } from '@/modules/users/controller/users.controller';
 import { UserRolesController } from '@/modules/users/controller/user-roles.controller';
 import { UsersRepository } from '@/modules/users/repository/users.repository';
 import { UserRolesRepository } from '@/modules/users/repository/user-roles.repository';
-import { UserPermissionsRepository } from '@/modules/users/repository/user-permissions.repository';
 import { UserOnboardingRepository } from '@/modules/users/repository/user-onboarding.repository';
 import { UserOnboardingService } from '@/modules/users/service/user-onboarding.service';
 import { UserContextRepository } from '@/modules/users/repository/user-context.repository';
@@ -28,7 +27,6 @@ import { userRolesAbilityDefinitions } from '@/modules/users/ability/user-roles.
     UserOnboardingService,
     UsersRepository,
     UserRolesRepository,
-    UserPermissionsRepository,
     UserOnboardingRepository,
     UserContextRepository,
   ],
@@ -37,7 +35,6 @@ import { userRolesAbilityDefinitions } from '@/modules/users/ability/user-roles.
     UsersRepository,
     UserRolesService,
     UserOnboardingService,
-    UserPermissionsRepository,
     UserRolesRepository,
     UserContextRepository,
   ],

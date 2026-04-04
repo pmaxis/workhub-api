@@ -5,22 +5,18 @@ import { DatabaseService } from '@/infrastructure/database/database.service';
 export class ProfileRepository {
   constructor(private readonly database: DatabaseService) {}
 
-  private readonly rolesInclude = {
+  private readonly profileInclude = {
     roles: {
-      include: {
+      select: {
         role: {
-          include: {
+          select: {
             permissions: {
-              include: { permission: { select: { key: true } } },
+              select: { permission: { select: { key: true } } },
             },
           },
         },
       },
     },
-  } as const;
-
-  private readonly profileInclude = {
-    ...this.rolesInclude,
     freelancerProfile: { select: { id: true } },
     clientProfile: {
       select: {
