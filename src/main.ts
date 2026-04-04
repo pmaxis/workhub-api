@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { ConfigService } from '@nestjs/config';
-import { ValidationPipe } from '@nestjs/common';
+import { ValidationPipe, VersioningType } from '@nestjs/common';
 import { AppModule } from '@/app.module';
 import cookieParser from 'cookie-parser';
 import helmet from 'helmet';
@@ -12,6 +12,12 @@ import { PrismaExceptionFilter } from '@/common/filters/prisma-exception.filter'
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   const config = app.get(ConfigService);
+
+  app.enableVersioning({
+    type: VersioningType.URI,
+    defaultVersion: '1',
+    prefix: 'v',
+  });
 
   const port = config.getOrThrow<number>('app.port');
   const cookieSecret = config.getOrThrow<string>('cookie.secret');
@@ -34,7 +40,11 @@ async function bootstrap() {
     credentials: true,
   });
 
-  app.use(helmet());
+  app.use(
+    helmet({
+      crossOriginResourcePolicy: { policy: 'cross-origin' },
+    }),
+  );
 
   app.useGlobalFilters(
     new AllExceptionsFilter(),

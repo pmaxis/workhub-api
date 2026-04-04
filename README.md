@@ -1,153 +1,52 @@
 # WorkHub API
 
-REST API for the WorkHub application. Built with NestJS, Prisma, and PostgreSQL. Provides authentication (JWT + refresh tokens in HTTP-only cookies), user management, roles, permissions, and session management.
+HTTP API for the WorkHub apps (auth, users, workspace data).
 
-## Tech Stack
+## Architecture
 
-- **Runtime:** Node.js 20+
-- **Framework:** [NestJS](https://nestjs.com/) 11
-- **ORM:** [Prisma](https://www.prisma.io/) 7 (PostgreSQL)
-- **Auth:** JWT (access tokens) + signed HTTP-only cookies (refresh tokens), Passport, bcrypt
-- **Validation:** class-validator, class-transformer
-- **Security:** Helmet, Throttler, CORS
-- **Config:** @nestjs/config, Joi
+- **NestJS** — feature modules under `src/modules/*`, global guards (JWT, CASL/policies), throttling, DTO validation.
+- **API versioning** — URI prefix `v1` (e.g. `/v1/auth/login`).
+- **PostgreSQL** via **Prisma** (`prisma/schema/`).
+- **`src/common/`** — config, decorators, guards, filters, utilities.
+- **`src/infrastructure/`** — database, JWT/cookies, tokens.
 
-## Prerequisites
+## Environment variables
 
-- Node.js 20+
-- pnpm 10+
-- PostgreSQL
+Validated with Joi (`src/common/config/validation.ts`). Example **`.env`** (test / local — replace secrets in production):
 
-## Setup
+| Key | Example value | Notes |
+|-----|----------------|--------|
+| `PORT` | `3000` | HTTP port |
+| `NODE_ENV` | `development` | Use `production` in real deploys |
+| `CORS_ORIGINS` | `http://localhost:5173,http://localhost:5174,http://localhost:8081,http://localhost` | Comma-separated |
+| `DATABASE_URL` | `postgresql://workhub:postgres@localhost:5432/workhub_db?schema=public` | Local dev; Docker Compose overrides this for the API service |
+| `POSTGRES_USER` | `workhub` | Postgres container + compose interpolation |
+| `POSTGRES_PASSWORD` | `postgres` | |
+| `POSTGRES_DB` | `workhub_db` | |
+| `COOKIE_SECRET` | `dev-cookie-secret-min-32-chars-long!!` | Signs cookies |
+| `COOKIE_PATH` | `/api` | Must prefix browser paths to auth (e.g. `/api/v1/...`) |
+| `COOKIE_SECURE` | `false` | `true` only with HTTPS |
+| `ACCESS_TOKEN_SECRET` | `dev-access-token-secret-min-32-ch!!` | JWT access |
+| `REFRESH_TOKEN_SECRET` | `dev-refresh-token-secret-min-32-ch!!` | JWT refresh |
+| `ACCESS_TOKEN_TTL` | `15m` | Parsed with `ms` |
+| `REFRESH_TOKEN_TTL` | `7d` | Parsed with `ms` |
 
-### 1. Install dependencies
+## Run with Docker
 
-```bash
-pnpm install
-```
-
-### 2. Environment variables
-
-Create a `.env` file in the project root. Required variables:
-
-| Variable | Description | Example |
-|----------|-------------|---------|
-| `PORT` | Server port | `3000` |
-| `NODE_ENV` | Environment | `development` or `production` |
-| `CORS_ORIGINS` | Comma-separated allowed origins | `http://localhost:5173,http://localhost:5174` |
-| `DATABASE_URL` | PostgreSQL connection string | `postgresql://user:pass@localhost:5432/db_name?schema=public` |
-| `POSTGRES_USER` | PostgreSQL user (for Docker) | `username` |
-| `POSTGRES_PASSWORD` | PostgreSQL password (for Docker) | `password` |
-| `POSTGRES_DB` | PostgreSQL database name (for Docker) | `db_name` |
-| `COOKIE_SECRET` | Secret for signing cookies | `your-secret` |
-| `COOKIE_PATH` | Path for auth cookies. Use `/api/auth/refresh` when frontend proxies via `/api` | `/auth/refresh` or `/api/auth/refresh` |
-| `COOKIE_SECURE` | Set to `true` only over HTTPS | `false` |
-| `ACCESS_TOKEN_SECRET` | Secret for JWT access tokens | `your-secret` |
-| `REFRESH_TOKEN_SECRET` | Secret for JWT refresh tokens | `your-secret` |
-| `ACCESS_TOKEN_TTL` | Access token lifetime | `15m` |
-| `REFRESH_TOKEN_TTL` | Refresh token lifetime | `7d` |
-
-### 3. Database
-
-Generate Prisma client and run migrations:
+From this directory:
 
 ```bash
-pnpm prisma generate
-pnpm prisma migrate deploy
+docker compose up -d --build
 ```
 
-For local development with migration creation:
+- **API:** `http://localhost:3000` (or `PORT` from `.env`)
+- **PostgreSQL:** `localhost:5432`
+- **Adminer:** `http://localhost:8080` — server `postgres`, user/password/db from `.env`
+
+The API service overrides `DATABASE_URL` to use the `postgres` container. Defaults include `COOKIE_PATH=/api` and `CORS_ORIGINS` with common local frontends.
+
+Stop:
 
 ```bash
-pnpm prisma migrate dev
+docker compose down
 ```
-
-### 4. Seed (optional)
-
-Creates admin user (`admin@test.com` / `password`), admin role, and `manage.all` permission:
-
-```bash
-pnpm build
-pnpm seed
-```
-
-## Running the app
-
-```bash
-# Development (watch mode)
-pnpm start:dev
-
-# Production
-pnpm build
-pnpm start:prod
-```
-
-The API listens on `http://localhost:PORT` (default 3000).
-
-## Docker
-
-The project includes a separate `docker-compose.yml` for API + PostgreSQL + Adminer.
-
-```bash
-docker compose up -d
-```
-
-- **API:** http://localhost:3000
-- **PostgreSQL:** localhost:5432
-- **Adminer** (DB admin UI): http://localhost:8080 — System: PostgreSQL, Server: postgres, credentials from `.env`
-
-For Docker with nginx proxy (frontend at `/api`), set `COOKIE_PATH=/api/auth/refresh` and `COOKIE_SECURE=false` in `.env`.
-
-Run seed manually in Docker:
-
-```bash
-docker compose exec workhub-api node dist/prisma/seeds/seed.js
-```
-
-## Security
-
-- **Rate limiting:** 100 requests per 60 seconds per IP; auth routes (login, register, refresh) are limited to 10 per 60 seconds.
-- **CORS:** Only origins listed in `CORS_ORIGINS` are allowed; credentials are enabled.
-- **Guards:** JWT auth is applied globally; use `@Public()` on routes that must stay unauthenticated.
-
-## Testing
-
-```bash
-# Unit tests
-pnpm test
-
-# Watch mode
-pnpm test:watch
-
-# Coverage
-pnpm test:cov
-
-# E2E tests
-pnpm test:e2e
-```
-
-## Scripts
-
-| Script | Description |
-|--------|-------------|
-| `pnpm build` | Build for production (includes seed compilation). |
-| `pnpm seed` | Run database seed (requires build first). |
-| `pnpm start` | Start (no watch). |
-| `pnpm start:dev` | Start in watch mode. |
-| `pnpm start:prod` | Run production build. |
-| `pnpm lint` | Run ESLint. |
-| `pnpm format` | Format with Prettier. |
-
-## Project structure
-
-- `src/app.module.ts` — Root module (throttling, config, global JWT guard).
-- `src/main.ts` — Bootstrap (validation pipe, cookie parser, CORS, Helmet).
-- `src/common/` — Config, guards, decorators, utilities.
-- `src/infrastructure/` — Database (Prisma), tokens, cookies.
-- `src/modules/` — Feature modules: `auth`, `users`, `roles`, `permissions`, `sessions`.
-- `prisma/schema/` — Prisma schema (multi-file).
-- `prisma/seeds/` — Database seed scripts.
-
-## License
-
-UNLICENSED (private).

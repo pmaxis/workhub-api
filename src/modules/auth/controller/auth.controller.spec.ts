@@ -17,6 +17,10 @@ const mockAuthService = {
 const mockCookieService = {
   setAuthCookies: jest.fn(),
   clearAuthCookies: jest.fn(),
+  getRefreshTokenFromRequest: (req: Request) =>
+    typeof req.signedCookies?.refresh_token === 'string'
+      ? req.signedCookies.refresh_token
+      : undefined,
 };
 
 describe('AuthController', () => {

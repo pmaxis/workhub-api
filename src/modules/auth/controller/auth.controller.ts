@@ -63,7 +63,7 @@ export class AuthController {
   @Throttle({ default: { ttl: 60_000, limit: 10 } })
   @Post('refresh')
   async refresh(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
-    const refreshToken = req.signedCookies?.refresh_token as string;
+    const refreshToken = this.cookieService.getRefreshTokenFromRequest(req);
 
     if (!refreshToken) {
       throw new UnauthorizedException('Refresh token required');

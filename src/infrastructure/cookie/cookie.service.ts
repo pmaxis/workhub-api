@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import type { Response } from 'express';
+import cookieParser from 'cookie-parser';
+import type { Request, Response } from 'express';
+import { requestWithAuthCookies } from '@/common/types/express-auth-cookies.types';
 
 @Injectable()
 export class CookieService {
@@ -35,6 +37,19 @@ export class CookieService {
       secure: this.secure,
       sameSite: 'lax',
       path: this.path,
+      signed: true,
     });
+  }
+
+  /** Signed cookie is usually in `signedCookies`; fall back if parsing moved it only to `cookies`. */
+  getRefreshTokenFromRequest(req: Request): string | undefined {
+    const { signedCookies, cookies } = requestWithAuthCookies(req);
+    const fromSigned = signedCookies?.refresh_token;
+    if (fromSigned !== undefined) return fromSigned;
+    const raw = cookies?.refresh_token;
+    if (raw === undefined) return undefined;
+    const secret = this.config.getOrThrow<string>('cookie.secret');
+    const decoded = cookieParser.signedCookie(raw, secret);
+    return typeof decoded === 'string' ? decoded : undefined;
   }
 }
