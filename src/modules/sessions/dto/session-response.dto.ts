@@ -1,6 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-/** Shape of session records returned by GET /sessions (matches persisted session fields). */
 export class SessionResponseDto {
   @ApiProperty()
   id: string;

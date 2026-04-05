@@ -13,83 +13,85 @@ async function seed() {
 
   const permission = await prisma.permission.upsert({
     where: { key: 'manage.all' },
-    create: { key: 'manage.all', description: 'Повний доступ до адмін-панелі' },
-    update: {},
+    create: { key: 'manage.all', description: 'Full access to the admin panel' },
+    update: { description: 'Full access to the admin panel' },
   });
 
   const workspaceMembersRead = await prisma.permission.upsert({
     where: { key: 'workspace.members.read' },
     create: {
       key: 'workspace.members.read',
-      description: 'Перегляд пов’язаних контактів (клієнти / колеги за зв’язками)',
+      description: 'View related workspace contacts (clients and colleagues via relationships)',
     },
-    update: {},
+    update: {
+      description: 'View related workspace contacts (clients and colleagues via relationships)',
+    },
   });
 
   const invitationsCreate = await prisma.permission.upsert({
     where: { key: 'invitations.create' },
-    create: { key: 'invitations.create', description: 'Надсилання запрошень' },
-    update: {},
+    create: { key: 'invitations.create', description: 'Send invitations' },
+    update: { description: 'Send invitations' },
   });
 
   const invitationsRead = await prisma.permission.upsert({
     where: { key: 'invitations.read' },
-    create: { key: 'invitations.read', description: 'Перегляд запрошень у своїй області' },
-    update: {},
+    create: { key: 'invitations.read', description: 'View invitations within your scope' },
+    update: { description: 'View invitations within your scope' },
   });
 
   const invitationsUpdate = await prisma.permission.upsert({
     where: { key: 'invitations.update' },
-    create: { key: 'invitations.update', description: 'Оновлення запрошень у своїй області' },
-    update: {},
+    create: { key: 'invitations.update', description: 'Update invitations within your scope' },
+    update: { description: 'Update invitations within your scope' },
   });
 
   const invitationsDelete = await prisma.permission.upsert({
     where: { key: 'invitations.delete' },
-    create: { key: 'invitations.delete', description: 'Видалення запрошень у своїй області' },
-    update: {},
+    create: { key: 'invitations.delete', description: 'Delete invitations within your scope' },
+    update: { description: 'Delete invitations within your scope' },
   });
 
   const companiesCreate = await prisma.permission.upsert({
     where: { key: 'companies.create' },
-    create: { key: 'companies.create', description: 'Створення компанії (клієнт)' },
-    update: {},
+    create: { key: 'companies.create', description: 'Create a company (client)' },
+    update: { description: 'Create a company (client)' },
   });
 
   const companiesRead = await prisma.permission.upsert({
     where: { key: 'companies.read' },
-    create: { key: 'companies.read', description: 'Перегляд своїх компаній' },
-    update: {},
+    create: { key: 'companies.read', description: 'View your companies' },
+    update: { description: 'View your companies' },
   });
 
   const companiesUpdate = await prisma.permission.upsert({
     where: { key: 'companies.update' },
-    create: { key: 'companies.update', description: 'Оновлення своїх компаній' },
-    update: {},
+    create: { key: 'companies.update', description: 'Update your companies' },
+    update: { description: 'Update your companies' },
   });
 
   const companiesDelete = await prisma.permission.upsert({
     where: { key: 'companies.delete' },
-    create: { key: 'companies.delete', description: 'Видалення своїх компаній' },
-    update: {},
+    create: { key: 'companies.delete', description: 'Delete your companies' },
+    update: { description: 'Delete your companies' },
   });
 
   const adminRole = await prisma.role.upsert({
     where: { slug: 'admin' },
-    create: { slug: 'admin', name: 'Адміністратор' },
-    update: {},
+    create: { slug: 'admin', name: 'Administrator' },
+    update: { name: 'Administrator' },
   });
 
   const clientRole = await prisma.role.upsert({
     where: { slug: 'client' },
-    create: { slug: 'client', name: 'Клієнт' },
-    update: {},
+    create: { slug: 'client', name: 'Client' },
+    update: { name: 'Client' },
   });
 
   const freelancerRole = await prisma.role.upsert({
     where: { slug: 'freelancer' },
-    create: { slug: 'freelancer', name: 'Фрілансер' },
-    update: {},
+    create: { slug: 'freelancer', name: 'Freelancer' },
+    update: { name: 'Freelancer' },
   });
 
   await prisma.rolePermission.upsert({
@@ -213,12 +215,17 @@ async function seed() {
     create: {
       email: 'client@test.com',
       password: hashedPassword,
-      firstName: 'Петро',
-      lastName: 'Петренко',
-      thirdName: 'Петрович',
+      firstName: 'John',
+      lastName: 'Client',
+      thirdName: 'M.',
       isActivated: true,
     },
-    update: {},
+    update: {
+      firstName: 'John',
+      lastName: 'Client',
+      thirdName: 'M.',
+      isActivated: true,
+    },
   });
 
   await prisma.userRole.upsert({
@@ -242,7 +249,7 @@ async function seed() {
   });
 
   console.log(
-    'Seed completed: admin@test.com / password, client@test.com / password (клієнт без компанії — створює сам)',
+    'Seed completed: admin@test.com / password, client@test.com / password (client has no company yet—creates their own)',
   );
   await prisma.$disconnect();
 }

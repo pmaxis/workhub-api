@@ -41,7 +41,6 @@ export class CookieService {
     });
   }
 
-  /** Signed cookie is usually in `signedCookies`; fall back if parsing moved it only to `cookies`. */
   getRefreshTokenFromRequest(req: Request): string | undefined {
     const { signedCookies, cookies } = requestWithAuthCookies(req);
     const fromSigned = signedCookies?.refresh_token;
