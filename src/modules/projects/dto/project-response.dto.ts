@@ -1,15 +1,32 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { Exclude, Expose } from 'class-transformer';
 
 @Exclude()
 export class ProjectResponseDto {
-  @Expose() id: string;
-  @Expose() name: string;
-  @Expose() description: string | null;
-  @Expose() ownerId: string;
-  @Expose() companyId: string | null;
-  @Expose() createdAt: Date;
-  @Expose() updatedAt: Date;
-  @Expose() tasksCount: number;
+  @ApiProperty()
+  @Expose()
+  id: string;
+  @ApiProperty()
+  @Expose()
+  name: string;
+  @ApiProperty({ nullable: true })
+  @Expose()
+  description: string | null;
+  @ApiProperty()
+  @Expose()
+  ownerId: string;
+  @ApiProperty({ nullable: true })
+  @Expose()
+  companyId: string | null;
+  @ApiProperty({ type: String, format: 'date-time' })
+  @Expose()
+  createdAt: Date;
+  @ApiProperty({ type: String, format: 'date-time' })
+  @Expose()
+  updatedAt: Date;
+  @ApiProperty()
+  @Expose()
+  tasksCount: number;
 
   constructor(project: {
     id: string;

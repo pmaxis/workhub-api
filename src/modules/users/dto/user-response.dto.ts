@@ -1,21 +1,49 @@
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Exclude, Expose } from 'class-transformer';
 import { RoleResponseDto } from '@/modules/roles/dto/role-response.dto';
 import { Role } from '@/infrastructure/database/generated/client';
 
 @Exclude()
 export class UserResponseDto {
-  @Expose() id: string;
-  @Expose() email: string;
-  @Expose() firstName: string;
-  @Expose() lastName: string;
-  @Expose() thirdName?: string | null;
-  @Expose() roles: RoleResponseDto[];
-  @Expose() permissions: string[];
-  @Expose() createdAt: Date;
-  @Expose() updatedAt: Date;
-  @Expose() hasFreelancerProfile: boolean;
-  @Expose() hasClientProfile: boolean;
-  @Expose() hasCompanyMembership: boolean;
+  @ApiProperty()
+  @Expose()
+  id: string;
+  @ApiProperty()
+  @Expose()
+  email: string;
+  @ApiProperty()
+  @Expose()
+  firstName: string;
+  @ApiProperty()
+  @Expose()
+  lastName: string;
+  @ApiPropertyOptional({ nullable: true })
+  @Expose()
+  thirdName?: string | null;
+  @ApiProperty({
+    type: () => [RoleResponseDto],
+    description: 'User roles (role permissions may be empty in this response)',
+  })
+  @Expose()
+  roles: RoleResponseDto[];
+  @ApiProperty({ type: [String], description: 'Flat list of permission keys for the user' })
+  @Expose()
+  permissions: string[];
+  @ApiProperty({ type: String, format: 'date-time' })
+  @Expose()
+  createdAt: Date;
+  @ApiProperty({ type: String, format: 'date-time' })
+  @Expose()
+  updatedAt: Date;
+  @ApiProperty()
+  @Expose()
+  hasFreelancerProfile: boolean;
+  @ApiProperty()
+  @Expose()
+  hasClientProfile: boolean;
+  @ApiProperty()
+  @Expose()
+  hasCompanyMembership: boolean;
 
   constructor(user: {
     id: string;

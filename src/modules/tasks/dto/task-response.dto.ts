@@ -1,16 +1,33 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { Exclude, Expose } from 'class-transformer';
 import { TaskStatus } from '@/infrastructure/database/generated/enums';
 
 @Exclude()
 export class TaskResponseDto {
-  @Expose() id: string;
-  @Expose() title: string;
-  @Expose() description: string | null;
-  @Expose() status: TaskStatus;
-  @Expose() projectId: string;
-  @Expose() assigneeId: string;
-  @Expose() createdAt: Date;
-  @Expose() updatedAt: Date;
+  @ApiProperty()
+  @Expose()
+  id: string;
+  @ApiProperty()
+  @Expose()
+  title: string;
+  @ApiProperty({ nullable: true })
+  @Expose()
+  description: string | null;
+  @ApiProperty({ enum: TaskStatus })
+  @Expose()
+  status: TaskStatus;
+  @ApiProperty()
+  @Expose()
+  projectId: string;
+  @ApiProperty()
+  @Expose()
+  assigneeId: string;
+  @ApiProperty({ type: String, format: 'date-time' })
+  @Expose()
+  createdAt: Date;
+  @ApiProperty({ type: String, format: 'date-time' })
+  @Expose()
+  updatedAt: Date;
 
   constructor(task: {
     id: string;

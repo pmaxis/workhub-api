@@ -1,19 +1,40 @@
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Exclude, Expose } from 'class-transformer';
 
 export type AccountType = 'freelancer' | 'client';
 
 @Exclude()
 export class ProfileResponseDto {
-  @Expose() id: string;
-  @Expose() email: string;
-  @Expose() firstName: string;
-  @Expose() lastName: string;
-  @Expose() thirdName?: string | null;
-  @Expose() permissions: string[];
-  @Expose() accountType: AccountType;
-  @Expose() hasCompanyMembership: boolean;
-  @Expose() createdAt: Date;
-  @Expose() updatedAt: Date;
+  @ApiProperty()
+  @Expose()
+  id: string;
+  @ApiProperty()
+  @Expose()
+  email: string;
+  @ApiProperty()
+  @Expose()
+  firstName: string;
+  @ApiProperty()
+  @Expose()
+  lastName: string;
+  @ApiPropertyOptional({ nullable: true })
+  @Expose()
+  thirdName?: string | null;
+  @ApiProperty({ type: [String] })
+  @Expose()
+  permissions: string[];
+  @ApiProperty({ enum: ['freelancer', 'client'] })
+  @Expose()
+  accountType: AccountType;
+  @ApiProperty()
+  @Expose()
+  hasCompanyMembership: boolean;
+  @ApiProperty({ type: String, format: 'date-time' })
+  @Expose()
+  createdAt: Date;
+  @ApiProperty({ type: String, format: 'date-time' })
+  @Expose()
+  updatedAt: Date;
 
   constructor(data: {
     id: string;

@@ -1,15 +1,30 @@
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Exclude, Expose } from 'class-transformer';
 import { InvitationStatus } from '@/infrastructure/database/generated/enums';
 
 @Exclude()
 export class InvitationResponseDto {
-  @Expose() id: string;
-  @Expose() email: string;
-  @Expose() status: InvitationStatus;
-  @Expose() companyId: string | null;
-  @Expose() expiresAt: Date;
-  @Expose() createdAt: Date;
-  @Expose() token?: string;
+  @ApiProperty()
+  @Expose()
+  id: string;
+  @ApiProperty()
+  @Expose()
+  email: string;
+  @ApiProperty({ enum: InvitationStatus })
+  @Expose()
+  status: InvitationStatus;
+  @ApiProperty({ nullable: true })
+  @Expose()
+  companyId: string | null;
+  @ApiProperty({ type: String, format: 'date-time' })
+  @Expose()
+  expiresAt: Date;
+  @ApiProperty({ type: String, format: 'date-time' })
+  @Expose()
+  createdAt: Date;
+  @ApiPropertyOptional({ description: 'Present when invitation is created or resent' })
+  @Expose()
+  token?: string;
 
   constructor(invitation: {
     id: string;

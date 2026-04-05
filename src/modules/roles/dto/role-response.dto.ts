@@ -1,15 +1,28 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { Exclude, Expose } from 'class-transformer';
 import { PermissionResponseDto } from '@/modules/permissions/dto/permission-response.dto';
 import { Permission } from '@/infrastructure/database/generated/client';
 
 @Exclude()
 export class RoleResponseDto {
-  @Expose() id: string;
-  @Expose() slug: string;
-  @Expose() name: string;
-  @Expose() permissions: PermissionResponseDto[];
-  @Expose() createdAt: Date;
-  @Expose() updatedAt: Date;
+  @ApiProperty()
+  @Expose()
+  id: string;
+  @ApiProperty()
+  @Expose()
+  slug: string;
+  @ApiProperty()
+  @Expose()
+  name: string;
+  @ApiProperty({ type: () => [PermissionResponseDto] })
+  @Expose()
+  permissions: PermissionResponseDto[];
+  @ApiProperty({ type: String, format: 'date-time' })
+  @Expose()
+  createdAt: Date;
+  @ApiProperty({ type: String, format: 'date-time' })
+  @Expose()
+  updatedAt: Date;
 
   constructor(role: {
     id: string;
