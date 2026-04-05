@@ -50,6 +50,30 @@ async function seed() {
     update: {},
   });
 
+  const companiesCreate = await prisma.permission.upsert({
+    where: { key: 'companies.create' },
+    create: { key: 'companies.create', description: 'Створення компанії (клієнт)' },
+    update: {},
+  });
+
+  const companiesRead = await prisma.permission.upsert({
+    where: { key: 'companies.read' },
+    create: { key: 'companies.read', description: 'Перегляд своїх компаній' },
+    update: {},
+  });
+
+  const companiesUpdate = await prisma.permission.upsert({
+    where: { key: 'companies.update' },
+    create: { key: 'companies.update', description: 'Оновлення своїх компаній' },
+    update: {},
+  });
+
+  const companiesDelete = await prisma.permission.upsert({
+    where: { key: 'companies.delete' },
+    create: { key: 'companies.delete', description: 'Видалення своїх компаній' },
+    update: {},
+  });
+
   const adminRole = await prisma.role.upsert({
     where: { slug: 'admin' },
     create: { slug: 'admin', name: 'Адміністратор' },
@@ -88,6 +112,7 @@ async function seed() {
     invitationsRead,
     invitationsUpdate,
     invitationsDelete,
+    companiesRead,
   ];
 
   for (const role of [clientRole, freelancerRole]) {
@@ -107,6 +132,48 @@ async function seed() {
       });
     }
   }
+
+  await prisma.rolePermission.upsert({
+    where: {
+      roleId_permissionId: {
+        roleId: clientRole.id,
+        permissionId: companiesCreate.id,
+      },
+    },
+    create: {
+      roleId: clientRole.id,
+      permissionId: companiesCreate.id,
+    },
+    update: {},
+  });
+
+  await prisma.rolePermission.upsert({
+    where: {
+      roleId_permissionId: {
+        roleId: clientRole.id,
+        permissionId: companiesUpdate.id,
+      },
+    },
+    create: {
+      roleId: clientRole.id,
+      permissionId: companiesUpdate.id,
+    },
+    update: {},
+  });
+
+  await prisma.rolePermission.upsert({
+    where: {
+      roleId_permissionId: {
+        roleId: clientRole.id,
+        permissionId: companiesDelete.id,
+      },
+    },
+    create: {
+      roleId: clientRole.id,
+      permissionId: companiesDelete.id,
+    },
+    update: {},
+  });
 
   const hashedPassword = await bcrypt.hash('password', SALT_ROUNDS);
 
