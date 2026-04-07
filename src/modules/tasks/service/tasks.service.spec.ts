@@ -7,6 +7,7 @@ import { Action, AppAbility } from '@/common/ability/ability.types';
 import { ProjectsRepository } from '@/modules/projects/repository/projects.repository';
 import { TasksRepository } from '@/modules/tasks/repository/tasks.repository';
 import { TasksService } from '@/modules/tasks/service/tasks.service';
+import { NotificationsRepository } from '@/modules/notifications/repository/notifications.repository';
 import { CreateTaskDto } from '@/modules/tasks/dto/create-task.dto';
 import { UpdateTaskDto } from '@/modules/tasks/dto/update-task.dto';
 import { TaskResponseDto } from '@/modules/tasks/dto/task-response.dto';
@@ -30,6 +31,10 @@ const mockTasksRepository = {
 
 const mockProjectsRepository = {
   findOne: jest.fn(),
+};
+
+const mockNotificationsRepository = {
+  create: jest.fn(),
 };
 
 function buildAbility(userId: string): AppAbility {
@@ -60,6 +65,7 @@ describe('TasksService', () => {
         TasksService,
         { provide: TasksRepository, useValue: mockTasksRepository },
         { provide: ProjectsRepository, useValue: mockProjectsRepository },
+        { provide: NotificationsRepository, useValue: mockNotificationsRepository },
       ],
     }).compile();
 
@@ -115,6 +121,14 @@ describe('TasksService', () => {
         assigneeId: ownerId,
         status: TaskStatus.PENDING,
       });
+      expect(mockNotificationsRepository.create).toHaveBeenCalledTimes(1);
+      expect(mockNotificationsRepository.create).toHaveBeenCalledWith(
+        expect.objectContaining({
+          userId: ownerId,
+          type: 'SYSTEM',
+          title: 'Task created',
+        }),
+      );
     });
 
     it('should throw NotFoundException when project not found', async () => {
@@ -237,6 +251,29 @@ describe('TasksService', () => {
 
       expect(mockTasksRepository.update).toHaveBeenCalledWith(taskId, { title: 'New' });
       expect(result).toMatchObject({ title: 'New' });
+      expect(mockNotificationsRepository.create).not.toHaveBeenCalled();
+    });
+
+    it('should create notification when status changes', async () => {
+      mockTasksRepository.findOne.mockResolvedValue({ ...existing });
+      const updated = {
+        ...existing,
+        status: TaskStatus.IN_PROGRESS,
+        updatedAt: new Date('2026-01-03'),
+      };
+      mockTasksRepository.update.mockResolvedValue(updated);
+
+      const dto: UpdateTaskDto = { status: TaskStatus.IN_PROGRESS };
+      await service.update(taskId, ability, dto);
+
+      expect(mockNotificationsRepository.create).toHaveBeenCalledTimes(1);
+      expect(mockNotificationsRepository.create).toHaveBeenCalledWith(
+        expect.objectContaining({
+          userId: ownerId,
+          type: 'SYSTEM',
+          title: 'Task status changed',
+        }),
+      );
     });
 
     it('should throw when task not found', async () => {

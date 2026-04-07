@@ -15,6 +15,7 @@ model User {
   invitations       Invitation[]
   projects          Project[]
   tasks             Task[]
+  notifications     Notification[]
 
   freelancerProfile FreelancerProfile?
   clientProfile     ClientProfile?

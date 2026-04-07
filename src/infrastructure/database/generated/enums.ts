@@ -16,6 +16,12 @@ export const InvitationStatus = {
 
 export type InvitationStatus = (typeof InvitationStatus)[keyof typeof InvitationStatus];
 
+export const NotificationType = {
+  SYSTEM: 'SYSTEM',
+} as const;
+
+export type NotificationType = (typeof NotificationType)[keyof typeof NotificationType];
+
 export const TaskStatus = {
   PENDING: 'PENDING',
   IN_PROGRESS: 'IN_PROGRESS',

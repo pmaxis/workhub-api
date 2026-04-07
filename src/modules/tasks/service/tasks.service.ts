@@ -4,6 +4,7 @@ import { AppAbility, Action } from '@/common/ability/ability.types';
 import { TaskStatus } from '@/infrastructure/database/generated/enums';
 import { ProjectsRepository } from '@/modules/projects/repository/projects.repository';
 import { TasksRepository } from '@/modules/tasks/repository/tasks.repository';
+import { NotificationsRepository } from '@/modules/notifications/repository/notifications.repository';
 import { CreateTaskDto } from '@/modules/tasks/dto/create-task.dto';
 import { UpdateTaskDto } from '@/modules/tasks/dto/update-task.dto';
 import { TaskResponseDto } from '@/modules/tasks/dto/task-response.dto';
@@ -13,6 +14,7 @@ export class TasksService {
   constructor(
     private readonly tasksRepository: TasksRepository,
     private readonly projectsRepository: ProjectsRepository,
+    private readonly notificationsRepository: NotificationsRepository,
   ) {}
 
   async create(userId: string, ability: AppAbility, dto: CreateTaskDto): Promise<TaskResponseDto> {
@@ -32,6 +34,7 @@ export class TasksService {
       assigneeId: userId,
     });
 
+    await this.notifyTaskCreated(task);
     return new TaskResponseDto(task);
   }
 
@@ -73,7 +76,12 @@ export class TasksService {
       return new TaskResponseDto(task);
     }
 
+    const prevStatus = task.status;
     const updated = await this.tasksRepository.update(id, dto);
+
+    if (dto.status && dto.status !== prevStatus) {
+      await this.notifyTaskStatusChanged(updated, prevStatus, updated.status);
+    }
 
     return new TaskResponseDto(updated);
   }
@@ -90,5 +98,67 @@ export class TasksService {
     }
 
     await this.tasksRepository.delete(id);
+  }
+
+  private async notifyTaskCreated(task: {
+    id: string;
+    title: string;
+    status: TaskStatus;
+    projectId: string;
+    projectOwnerId: string;
+    projectCompanyId: string | null;
+    assigneeId: string;
+  }): Promise<void> {
+    const recipients = new Set<string>([task.assigneeId, task.projectOwnerId].filter(Boolean));
+    const title = 'Task created';
+    const body = `${task.title} (${task.status})`;
+    const data = { kind: 'task.created', taskId: task.id, projectId: task.projectId };
+
+    await Promise.all(
+      Array.from(recipients).map((userId) =>
+        this.notificationsRepository.create({
+          userId,
+          type: 'SYSTEM',
+          title,
+          body,
+          data,
+        }),
+      ),
+    );
+  }
+
+  private async notifyTaskStatusChanged(
+    task: {
+      id: string;
+      title: string;
+      projectId: string;
+      projectOwnerId: string;
+      assigneeId: string;
+    },
+    from: TaskStatus,
+    to: TaskStatus,
+  ): Promise<void> {
+    const recipients = new Set<string>([task.assigneeId, task.projectOwnerId].filter(Boolean));
+    const title = 'Task status changed';
+    const body = `${task.title}: ${from} → ${to}`;
+    const data = {
+      kind: 'task.status_changed',
+      taskId: task.id,
+      projectId: task.projectId,
+      from,
+      to,
+    };
+
+    await Promise.all(
+      Array.from(recipients).map((userId) =>
+        this.notificationsRepository.create({
+          userId,
+          type: 'SYSTEM',
+          title,
+          body,
+          data,
+        }),
+      ),
+    );
   }
 }

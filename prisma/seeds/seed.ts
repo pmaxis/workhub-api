@@ -76,6 +76,18 @@ async function seed() {
     update: { description: 'Delete your companies' },
   });
 
+  const notificationsRead = await prisma.permission.upsert({
+    where: { key: 'notifications.read' },
+    create: { key: 'notifications.read', description: 'View your notifications' },
+    update: { description: 'View your notifications' },
+  });
+
+  const notificationsUpdate = await prisma.permission.upsert({
+    where: { key: 'notifications.update' },
+    create: { key: 'notifications.update', description: 'Mark your notifications as read' },
+    update: { description: 'Mark your notifications as read' },
+  });
+
   const adminRole = await prisma.role.upsert({
     where: { slug: 'admin' },
     create: { slug: 'admin', name: 'Administrator' },
@@ -115,6 +127,8 @@ async function seed() {
     invitationsUpdate,
     invitationsDelete,
     companiesRead,
+    notificationsRead,
+    notificationsUpdate,
   ];
 
   for (const role of [clientRole, freelancerRole]) {
@@ -210,6 +224,21 @@ async function seed() {
     update: {},
   });
 
+  const existingAdminWelcome = await prisma.notification.findFirst({
+    where: { userId: user.id, title: 'Welcome to WorkHub' },
+  });
+  if (!existingAdminWelcome) {
+    await prisma.notification.create({
+      data: {
+        userId: user.id,
+        title: 'Welcome to WorkHub',
+        body: 'Notifications module is enabled.',
+        type: 'SYSTEM',
+        data: { source: 'seed' },
+      },
+    });
+  }
+
   const clientUser = await prisma.user.upsert({
     where: { email: 'client@test.com' },
     create: {
@@ -247,6 +276,21 @@ async function seed() {
     create: { userId: clientUser.id },
     update: {},
   });
+
+  const existingClientWelcome = await prisma.notification.findFirst({
+    where: { userId: clientUser.id, title: 'Welcome to WorkHub' },
+  });
+  if (!existingClientWelcome) {
+    await prisma.notification.create({
+      data: {
+        userId: clientUser.id,
+        title: 'Welcome to WorkHub',
+        body: 'You have a new notification.',
+        type: 'SYSTEM',
+        data: { source: 'seed' },
+      },
+    });
+  }
 
   console.log(
     'Seed completed: admin@test.com / password, client@test.com / password (client has no company yet—creates their own)',
