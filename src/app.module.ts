@@ -20,6 +20,7 @@ import { TasksModule } from '@/modules/tasks/tasks.module';
 import { WorkspaceModule } from '@/modules/workspace/workspace.module';
 import { CompaniesModule } from '@/modules/companies/companies.module';
 import { NotificationsModule } from '@/modules/notifications/notifications.module';
+import { TimeEntriesModule } from '@/modules/time-entries/time-entries.module';
 
 @Module({
   imports: [
@@ -43,6 +44,7 @@ import { NotificationsModule } from '@/modules/notifications/notifications.modul
     WorkspaceModule,
     CompaniesModule,
     NotificationsModule,
+    TimeEntriesModule,
   ],
   controllers: [],
   providers: [

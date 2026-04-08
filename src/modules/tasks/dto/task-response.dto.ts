@@ -29,6 +29,13 @@ export class TaskResponseDto {
   @Expose()
   updatedAt: Date;
 
+  @ApiProperty({
+    description:
+      'Total seconds logged on this task by the current user (completed intervals plus any running timer).',
+  })
+  @Expose()
+  trackedDurationSeconds: number;
+
   constructor(task: {
     id: string;
     title: string;
@@ -38,6 +45,7 @@ export class TaskResponseDto {
     assigneeId: string;
     createdAt: Date;
     updatedAt: Date;
+    trackedDurationSeconds?: number;
   }) {
     this.id = task.id;
     this.title = task.title;
@@ -47,5 +55,6 @@ export class TaskResponseDto {
     this.assigneeId = task.assigneeId;
     this.createdAt = task.createdAt;
     this.updatedAt = task.updatedAt;
+    this.trackedDurationSeconds = task.trackedDurationSeconds ?? 0;
   }
 }

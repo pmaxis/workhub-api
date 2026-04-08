@@ -70,6 +70,7 @@ async function bootstrap() {
     .addTag('Companies', 'Companies visible to the user; create/update/delete with CASL.')
     .addTag('Projects', 'Projects with pagination and CASL-scoped access.')
     .addTag('Tasks', 'Tasks scoped by project and CASL.')
+    .addTag('Time entries', 'Personal time tracking: timers and manual entries.')
     .addTag('Notifications', 'User notifications: list, unread count, mark as read.')
     .addTag(
       'Invitations',

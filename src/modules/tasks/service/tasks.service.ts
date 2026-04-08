@@ -8,6 +8,7 @@ import { NotificationsRepository } from '@/modules/notifications/repository/noti
 import { CreateTaskDto } from '@/modules/tasks/dto/create-task.dto';
 import { UpdateTaskDto } from '@/modules/tasks/dto/update-task.dto';
 import { TaskResponseDto } from '@/modules/tasks/dto/task-response.dto';
+import type { MappedTask } from '@/modules/tasks/repository/tasks.repository';
 
 @Injectable()
 export class TasksService {
@@ -35,10 +36,14 @@ export class TasksService {
     });
 
     await this.notifyTaskCreated(task);
-    return new TaskResponseDto(task);
+    return this.toTaskDto(task, 0);
   }
 
-  async findAll(ability: AppAbility, projectId?: string): Promise<TaskResponseDto[]> {
+  async findAll(
+    userId: string,
+    ability: AppAbility,
+    projectId?: string,
+  ): Promise<TaskResponseDto[]> {
     if (projectId) {
       const project = await this.projectsRepository.findOne(projectId, ability);
 
@@ -48,20 +53,30 @@ export class TasksService {
     }
 
     const tasks = await this.tasksRepository.findAll({ ability, projectId });
-    return tasks.map((task) => new TaskResponseDto(task));
+    const tracked = await this.tasksRepository.sumTrackedDurationSecondsForUser(
+      userId,
+      tasks.map((t) => t.id),
+    );
+    return tasks.map((task) => this.toTaskDto(task, tracked.get(task.id) ?? 0));
   }
 
-  async findOne(id: string, ability: AppAbility): Promise<TaskResponseDto> {
+  async findOne(id: string, userId: string, ability: AppAbility): Promise<TaskResponseDto> {
     const task = await this.tasksRepository.findOne(id, ability);
 
     if (!task) {
       throw new NotFoundException('Task not found');
     }
 
-    return new TaskResponseDto(task);
+    const tracked = await this.tasksRepository.sumTrackedDurationSecondsForUser(userId, [task.id]);
+    return this.toTaskDto(task, tracked.get(task.id) ?? 0);
   }
 
-  async update(id: string, ability: AppAbility, dto: UpdateTaskDto): Promise<TaskResponseDto> {
+  async update(
+    id: string,
+    userId: string,
+    ability: AppAbility,
+    dto: UpdateTaskDto,
+  ): Promise<TaskResponseDto> {
     const task = await this.tasksRepository.findOne(id, ability);
 
     if (!task) {
@@ -73,7 +88,10 @@ export class TasksService {
     }
 
     if (Object.keys(dto).length === 0) {
-      return new TaskResponseDto(task);
+      const tracked = await this.tasksRepository.sumTrackedDurationSecondsForUser(userId, [
+        task.id,
+      ]);
+      return this.toTaskDto(task, tracked.get(task.id) ?? 0);
     }
 
     const prevStatus = task.status;
@@ -83,7 +101,10 @@ export class TasksService {
       await this.notifyTaskStatusChanged(updated, prevStatus, updated.status);
     }
 
-    return new TaskResponseDto(updated);
+    const tracked = await this.tasksRepository.sumTrackedDurationSecondsForUser(userId, [
+      updated.id,
+    ]);
+    return this.toTaskDto(updated, tracked.get(updated.id) ?? 0);
   }
 
   async delete(id: string, ability: AppAbility): Promise<void> {
@@ -98,6 +119,20 @@ export class TasksService {
     }
 
     await this.tasksRepository.delete(id);
+  }
+
+  private toTaskDto(task: MappedTask, trackedDurationSeconds: number): TaskResponseDto {
+    return new TaskResponseDto({
+      id: task.id,
+      title: task.title,
+      description: task.description,
+      status: task.status,
+      projectId: task.projectId,
+      assigneeId: task.assigneeId,
+      createdAt: task.createdAt,
+      updatedAt: task.updatedAt,
+      trackedDurationSeconds,
+    });
   }
 
   private async notifyTaskCreated(task: {

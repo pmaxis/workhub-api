@@ -58,6 +58,7 @@ export const ModelName = {
   RolePermission: 'RolePermission',
   Session: 'Session',
   Task: 'Task',
+  TimeEntry: 'TimeEntry',
   User: 'User',
   UserRole: 'UserRole',
   FreelancerProfile: 'FreelancerProfile',
@@ -201,6 +202,21 @@ export const TaskScalarFieldEnum = {
 } as const;
 
 export type TaskScalarFieldEnum = (typeof TaskScalarFieldEnum)[keyof typeof TaskScalarFieldEnum];
+
+export const TimeEntryScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  projectId: 'projectId',
+  taskId: 'taskId',
+  description: 'description',
+  startedAt: 'startedAt',
+  endedAt: 'endedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+} as const;
+
+export type TimeEntryScalarFieldEnum =
+  (typeof TimeEntryScalarFieldEnum)[keyof typeof TimeEntryScalarFieldEnum];
 
 export const UserScalarFieldEnum = {
   id: 'id',

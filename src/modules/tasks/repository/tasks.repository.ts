@@ -88,6 +88,33 @@ export class TasksRepository {
     await this.database.task.delete({ where: { id } });
   }
 
+  /** Sums time-entry duration per task for the given user (running entries use “now” as end). */
+  async sumTrackedDurationSecondsForUser(
+    userId: string,
+    taskIds: string[],
+  ): Promise<Map<string, number>> {
+    const map = new Map<string, number>();
+    if (taskIds.length === 0) {
+      return map;
+    }
+
+    const rows = await this.database.timeEntry.findMany({
+      where: { userId, taskId: { in: taskIds } },
+      select: { taskId: true, startedAt: true, endedAt: true },
+    });
+
+    const now = Date.now();
+    for (const row of rows) {
+      if (!row.taskId) continue;
+      const start = row.startedAt.getTime();
+      const end = row.endedAt ? row.endedAt.getTime() : now;
+      const sec = Math.max(0, Math.floor((end - start) / 1000));
+      map.set(row.taskId, (map.get(row.taskId) ?? 0) + sec);
+    }
+
+    return map;
+  }
+
   private abilityFilter(ability: AppAbility): Prisma.TaskWhereInput {
     const filters = accessibleBy(ability, Action.Read) as Record<string, Prisma.TaskWhereInput>;
     return filters['Task'] ?? {};

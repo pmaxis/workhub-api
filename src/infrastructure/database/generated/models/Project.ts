@@ -197,6 +197,7 @@ export type ProjectWhereInput = {
   owner?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>;
   company?: Prisma.XOR<Prisma.CompanyNullableScalarRelationFilter, Prisma.CompanyWhereInput> | null;
   tasks?: Prisma.TaskListRelationFilter;
+  timeEntries?: Prisma.TimeEntryListRelationFilter;
 };
 
 export type ProjectOrderByWithRelationInput = {
@@ -210,6 +211,7 @@ export type ProjectOrderByWithRelationInput = {
   owner?: Prisma.UserOrderByWithRelationInput;
   company?: Prisma.CompanyOrderByWithRelationInput;
   tasks?: Prisma.TaskOrderByRelationAggregateInput;
+  timeEntries?: Prisma.TimeEntryOrderByRelationAggregateInput;
 };
 
 export type ProjectWhereUniqueInput = Prisma.AtLeast<
@@ -230,6 +232,7 @@ export type ProjectWhereUniqueInput = Prisma.AtLeast<
       Prisma.CompanyWhereInput
     > | null;
     tasks?: Prisma.TaskListRelationFilter;
+    timeEntries?: Prisma.TimeEntryListRelationFilter;
   },
   'id'
 >;
@@ -273,6 +276,7 @@ export type ProjectCreateInput = {
   owner: Prisma.UserCreateNestedOneWithoutProjectsInput;
   company?: Prisma.CompanyCreateNestedOneWithoutProjectsInput;
   tasks?: Prisma.TaskCreateNestedManyWithoutProjectInput;
+  timeEntries?: Prisma.TimeEntryCreateNestedManyWithoutProjectInput;
 };
 
 export type ProjectUncheckedCreateInput = {
@@ -284,6 +288,7 @@ export type ProjectUncheckedCreateInput = {
   createdAt?: Date | string;
   updatedAt?: Date | string;
   tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutProjectInput;
+  timeEntries?: Prisma.TimeEntryUncheckedCreateNestedManyWithoutProjectInput;
 };
 
 export type ProjectUpdateInput = {
@@ -295,6 +300,7 @@ export type ProjectUpdateInput = {
   owner?: Prisma.UserUpdateOneRequiredWithoutProjectsNestedInput;
   company?: Prisma.CompanyUpdateOneWithoutProjectsNestedInput;
   tasks?: Prisma.TaskUpdateManyWithoutProjectNestedInput;
+  timeEntries?: Prisma.TimeEntryUpdateManyWithoutProjectNestedInput;
 };
 
 export type ProjectUncheckedUpdateInput = {
@@ -306,6 +312,7 @@ export type ProjectUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   tasks?: Prisma.TaskUncheckedUpdateManyWithoutProjectNestedInput;
+  timeEntries?: Prisma.TimeEntryUncheckedUpdateManyWithoutProjectNestedInput;
 };
 
 export type ProjectCreateManyInput = {
@@ -379,6 +386,11 @@ export type ProjectMinOrderByAggregateInput = {
 export type ProjectScalarRelationFilter = {
   is?: Prisma.ProjectWhereInput;
   isNot?: Prisma.ProjectWhereInput;
+};
+
+export type ProjectNullableScalarRelationFilter = {
+  is?: Prisma.ProjectWhereInput | null;
+  isNot?: Prisma.ProjectWhereInput | null;
 };
 
 export type ProjectCreateNestedManyWithoutCompanyInput = {
@@ -493,6 +505,34 @@ export type ProjectUpdateOneRequiredWithoutTasksNestedInput = {
   >;
 };
 
+export type ProjectCreateNestedOneWithoutTimeEntriesInput = {
+  create?: Prisma.XOR<
+    Prisma.ProjectCreateWithoutTimeEntriesInput,
+    Prisma.ProjectUncheckedCreateWithoutTimeEntriesInput
+  >;
+  connectOrCreate?: Prisma.ProjectCreateOrConnectWithoutTimeEntriesInput;
+  connect?: Prisma.ProjectWhereUniqueInput;
+};
+
+export type ProjectUpdateOneWithoutTimeEntriesNestedInput = {
+  create?: Prisma.XOR<
+    Prisma.ProjectCreateWithoutTimeEntriesInput,
+    Prisma.ProjectUncheckedCreateWithoutTimeEntriesInput
+  >;
+  connectOrCreate?: Prisma.ProjectCreateOrConnectWithoutTimeEntriesInput;
+  upsert?: Prisma.ProjectUpsertWithoutTimeEntriesInput;
+  disconnect?: Prisma.ProjectWhereInput | boolean;
+  delete?: Prisma.ProjectWhereInput | boolean;
+  connect?: Prisma.ProjectWhereUniqueInput;
+  update?: Prisma.XOR<
+    Prisma.XOR<
+      Prisma.ProjectUpdateToOneWithWhereWithoutTimeEntriesInput,
+      Prisma.ProjectUpdateWithoutTimeEntriesInput
+    >,
+    Prisma.ProjectUncheckedUpdateWithoutTimeEntriesInput
+  >;
+};
+
 export type ProjectCreateNestedManyWithoutOwnerInput = {
   create?:
     | Prisma.XOR<
@@ -587,6 +627,7 @@ export type ProjectCreateWithoutCompanyInput = {
   updatedAt?: Date | string;
   owner: Prisma.UserCreateNestedOneWithoutProjectsInput;
   tasks?: Prisma.TaskCreateNestedManyWithoutProjectInput;
+  timeEntries?: Prisma.TimeEntryCreateNestedManyWithoutProjectInput;
 };
 
 export type ProjectUncheckedCreateWithoutCompanyInput = {
@@ -597,6 +638,7 @@ export type ProjectUncheckedCreateWithoutCompanyInput = {
   createdAt?: Date | string;
   updatedAt?: Date | string;
   tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutProjectInput;
+  timeEntries?: Prisma.TimeEntryUncheckedCreateNestedManyWithoutProjectInput;
 };
 
 export type ProjectCreateOrConnectWithoutCompanyInput = {
@@ -661,6 +703,7 @@ export type ProjectCreateWithoutTasksInput = {
   updatedAt?: Date | string;
   owner: Prisma.UserCreateNestedOneWithoutProjectsInput;
   company?: Prisma.CompanyCreateNestedOneWithoutProjectsInput;
+  timeEntries?: Prisma.TimeEntryCreateNestedManyWithoutProjectInput;
 };
 
 export type ProjectUncheckedCreateWithoutTasksInput = {
@@ -671,6 +714,7 @@ export type ProjectUncheckedCreateWithoutTasksInput = {
   companyId?: string | null;
   createdAt?: Date | string;
   updatedAt?: Date | string;
+  timeEntries?: Prisma.TimeEntryUncheckedCreateNestedManyWithoutProjectInput;
 };
 
 export type ProjectCreateOrConnectWithoutTasksInput = {
@@ -709,6 +753,7 @@ export type ProjectUpdateWithoutTasksInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   owner?: Prisma.UserUpdateOneRequiredWithoutProjectsNestedInput;
   company?: Prisma.CompanyUpdateOneWithoutProjectsNestedInput;
+  timeEntries?: Prisma.TimeEntryUpdateManyWithoutProjectNestedInput;
 };
 
 export type ProjectUncheckedUpdateWithoutTasksInput = {
@@ -719,6 +764,79 @@ export type ProjectUncheckedUpdateWithoutTasksInput = {
   companyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+  timeEntries?: Prisma.TimeEntryUncheckedUpdateManyWithoutProjectNestedInput;
+};
+
+export type ProjectCreateWithoutTimeEntriesInput = {
+  id?: string;
+  name: string;
+  description?: string | null;
+  createdAt?: Date | string;
+  updatedAt?: Date | string;
+  owner: Prisma.UserCreateNestedOneWithoutProjectsInput;
+  company?: Prisma.CompanyCreateNestedOneWithoutProjectsInput;
+  tasks?: Prisma.TaskCreateNestedManyWithoutProjectInput;
+};
+
+export type ProjectUncheckedCreateWithoutTimeEntriesInput = {
+  id?: string;
+  name: string;
+  description?: string | null;
+  ownerId: string;
+  companyId?: string | null;
+  createdAt?: Date | string;
+  updatedAt?: Date | string;
+  tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutProjectInput;
+};
+
+export type ProjectCreateOrConnectWithoutTimeEntriesInput = {
+  where: Prisma.ProjectWhereUniqueInput;
+  create: Prisma.XOR<
+    Prisma.ProjectCreateWithoutTimeEntriesInput,
+    Prisma.ProjectUncheckedCreateWithoutTimeEntriesInput
+  >;
+};
+
+export type ProjectUpsertWithoutTimeEntriesInput = {
+  update: Prisma.XOR<
+    Prisma.ProjectUpdateWithoutTimeEntriesInput,
+    Prisma.ProjectUncheckedUpdateWithoutTimeEntriesInput
+  >;
+  create: Prisma.XOR<
+    Prisma.ProjectCreateWithoutTimeEntriesInput,
+    Prisma.ProjectUncheckedCreateWithoutTimeEntriesInput
+  >;
+  where?: Prisma.ProjectWhereInput;
+};
+
+export type ProjectUpdateToOneWithWhereWithoutTimeEntriesInput = {
+  where?: Prisma.ProjectWhereInput;
+  data: Prisma.XOR<
+    Prisma.ProjectUpdateWithoutTimeEntriesInput,
+    Prisma.ProjectUncheckedUpdateWithoutTimeEntriesInput
+  >;
+};
+
+export type ProjectUpdateWithoutTimeEntriesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string;
+  name?: Prisma.StringFieldUpdateOperationsInput | string;
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+  owner?: Prisma.UserUpdateOneRequiredWithoutProjectsNestedInput;
+  company?: Prisma.CompanyUpdateOneWithoutProjectsNestedInput;
+  tasks?: Prisma.TaskUpdateManyWithoutProjectNestedInput;
+};
+
+export type ProjectUncheckedUpdateWithoutTimeEntriesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string;
+  name?: Prisma.StringFieldUpdateOperationsInput | string;
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  ownerId?: Prisma.StringFieldUpdateOperationsInput | string;
+  companyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+  tasks?: Prisma.TaskUncheckedUpdateManyWithoutProjectNestedInput;
 };
 
 export type ProjectCreateWithoutOwnerInput = {
@@ -729,6 +847,7 @@ export type ProjectCreateWithoutOwnerInput = {
   updatedAt?: Date | string;
   company?: Prisma.CompanyCreateNestedOneWithoutProjectsInput;
   tasks?: Prisma.TaskCreateNestedManyWithoutProjectInput;
+  timeEntries?: Prisma.TimeEntryCreateNestedManyWithoutProjectInput;
 };
 
 export type ProjectUncheckedCreateWithoutOwnerInput = {
@@ -739,6 +858,7 @@ export type ProjectUncheckedCreateWithoutOwnerInput = {
   createdAt?: Date | string;
   updatedAt?: Date | string;
   tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutProjectInput;
+  timeEntries?: Prisma.TimeEntryUncheckedCreateNestedManyWithoutProjectInput;
 };
 
 export type ProjectCreateOrConnectWithoutOwnerInput = {
@@ -799,6 +919,7 @@ export type ProjectUpdateWithoutCompanyInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   owner?: Prisma.UserUpdateOneRequiredWithoutProjectsNestedInput;
   tasks?: Prisma.TaskUpdateManyWithoutProjectNestedInput;
+  timeEntries?: Prisma.TimeEntryUpdateManyWithoutProjectNestedInput;
 };
 
 export type ProjectUncheckedUpdateWithoutCompanyInput = {
@@ -809,6 +930,7 @@ export type ProjectUncheckedUpdateWithoutCompanyInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   tasks?: Prisma.TaskUncheckedUpdateManyWithoutProjectNestedInput;
+  timeEntries?: Prisma.TimeEntryUncheckedUpdateManyWithoutProjectNestedInput;
 };
 
 export type ProjectUncheckedUpdateManyWithoutCompanyInput = {
@@ -837,6 +959,7 @@ export type ProjectUpdateWithoutOwnerInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   company?: Prisma.CompanyUpdateOneWithoutProjectsNestedInput;
   tasks?: Prisma.TaskUpdateManyWithoutProjectNestedInput;
+  timeEntries?: Prisma.TimeEntryUpdateManyWithoutProjectNestedInput;
 };
 
 export type ProjectUncheckedUpdateWithoutOwnerInput = {
@@ -847,6 +970,7 @@ export type ProjectUncheckedUpdateWithoutOwnerInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   tasks?: Prisma.TaskUncheckedUpdateManyWithoutProjectNestedInput;
+  timeEntries?: Prisma.TimeEntryUncheckedUpdateManyWithoutProjectNestedInput;
 };
 
 export type ProjectUncheckedUpdateManyWithoutOwnerInput = {
@@ -864,12 +988,14 @@ export type ProjectUncheckedUpdateManyWithoutOwnerInput = {
 
 export type ProjectCountOutputType = {
   tasks: number;
+  timeEntries: number;
 };
 
 export type ProjectCountOutputTypeSelect<
   ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
 > = {
   tasks?: boolean | ProjectCountOutputTypeCountTasksArgs;
+  timeEntries?: boolean | ProjectCountOutputTypeCountTimeEntriesArgs;
 };
 
 /**
@@ -893,6 +1019,15 @@ export type ProjectCountOutputTypeCountTasksArgs<
   where?: Prisma.TaskWhereInput;
 };
 
+/**
+ * ProjectCountOutputType without action
+ */
+export type ProjectCountOutputTypeCountTimeEntriesArgs<
+  ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
+> = {
+  where?: Prisma.TimeEntryWhereInput;
+};
+
 export type ProjectSelect<
   ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
 > = runtime.Types.Extensions.GetSelect<
@@ -907,6 +1042,7 @@ export type ProjectSelect<
     owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>;
     company?: boolean | Prisma.Project$companyArgs<ExtArgs>;
     tasks?: boolean | Prisma.Project$tasksArgs<ExtArgs>;
+    timeEntries?: boolean | Prisma.Project$timeEntriesArgs<ExtArgs>;
     _count?: boolean | Prisma.ProjectCountOutputTypeDefaultArgs<ExtArgs>;
   },
   ExtArgs['result']['project']
@@ -968,6 +1104,7 @@ export type ProjectInclude<
   owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>;
   company?: boolean | Prisma.Project$companyArgs<ExtArgs>;
   tasks?: boolean | Prisma.Project$tasksArgs<ExtArgs>;
+  timeEntries?: boolean | Prisma.Project$timeEntriesArgs<ExtArgs>;
   _count?: boolean | Prisma.ProjectCountOutputTypeDefaultArgs<ExtArgs>;
 };
 export type ProjectIncludeCreateManyAndReturn<
@@ -991,6 +1128,7 @@ export type $ProjectPayload<
     owner: Prisma.$UserPayload<ExtArgs>;
     company: Prisma.$CompanyPayload<ExtArgs> | null;
     tasks: Prisma.$TaskPayload<ExtArgs>[];
+    timeEntries: Prisma.$TimeEntryPayload<ExtArgs>[];
   };
   scalars: runtime.Types.Extensions.GetPayloadResult<
     {
@@ -1549,6 +1687,17 @@ export interface Prisma__ProjectClient<
     | runtime.Types.Result.GetResult<Prisma.$TaskPayload<ExtArgs>, T, 'findMany', GlobalOmitOptions>
     | Null
   >;
+  timeEntries<T extends Prisma.Project$timeEntriesArgs<ExtArgs> = {}>(
+    args?: Prisma.Subset<T, Prisma.Project$timeEntriesArgs<ExtArgs>>,
+  ): Prisma.PrismaPromise<
+    | runtime.Types.Result.GetResult<
+        Prisma.$TimeEntryPayload<ExtArgs>,
+        T,
+        'findMany',
+        GlobalOmitOptions
+      >
+    | Null
+  >;
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2054,6 +2203,32 @@ export type Project$tasksArgs<
   take?: number;
   skip?: number;
   distinct?: Prisma.TaskScalarFieldEnum | Prisma.TaskScalarFieldEnum[];
+};
+
+/**
+ * Project.timeEntries
+ */
+export type Project$timeEntriesArgs<
+  ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
+> = {
+  /**
+   * Select specific fields to fetch from the TimeEntry
+   */
+  select?: Prisma.TimeEntrySelect<ExtArgs> | null;
+  /**
+   * Omit specific fields from the TimeEntry
+   */
+  omit?: Prisma.TimeEntryOmit<ExtArgs> | null;
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TimeEntryInclude<ExtArgs> | null;
+  where?: Prisma.TimeEntryWhereInput;
+  orderBy?: Prisma.TimeEntryOrderByWithRelationInput | Prisma.TimeEntryOrderByWithRelationInput[];
+  cursor?: Prisma.TimeEntryWhereUniqueInput;
+  take?: number;
+  skip?: number;
+  distinct?: Prisma.TimeEntryScalarFieldEnum | Prisma.TimeEntryScalarFieldEnum[];
 };
 
 /**

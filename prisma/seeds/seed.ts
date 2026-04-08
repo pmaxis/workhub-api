@@ -88,6 +88,30 @@ async function seed() {
     update: { description: 'Mark your notifications as read' },
   });
 
+  const timeEntriesCreate = await prisma.permission.upsert({
+    where: { key: 'time_entries.create' },
+    create: { key: 'time_entries.create', description: 'Create your time entries' },
+    update: { description: 'Create your time entries' },
+  });
+
+  const timeEntriesRead = await prisma.permission.upsert({
+    where: { key: 'time_entries.read' },
+    create: { key: 'time_entries.read', description: 'View your time entries' },
+    update: { description: 'View your time entries' },
+  });
+
+  const timeEntriesUpdate = await prisma.permission.upsert({
+    where: { key: 'time_entries.update' },
+    create: { key: 'time_entries.update', description: 'Update your time entries' },
+    update: { description: 'Update your time entries' },
+  });
+
+  const timeEntriesDelete = await prisma.permission.upsert({
+    where: { key: 'time_entries.delete' },
+    create: { key: 'time_entries.delete', description: 'Delete your time entries' },
+    update: { description: 'Delete your time entries' },
+  });
+
   const adminRole = await prisma.role.upsert({
     where: { slug: 'admin' },
     create: { slug: 'admin', name: 'Administrator' },
@@ -129,6 +153,10 @@ async function seed() {
     companiesRead,
     notificationsRead,
     notificationsUpdate,
+    timeEntriesCreate,
+    timeEntriesRead,
+    timeEntriesUpdate,
+    timeEntriesDelete,
   ];
 
   for (const role of [clientRole, freelancerRole]) {

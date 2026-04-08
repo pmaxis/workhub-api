@@ -44,9 +44,10 @@ export class TasksController {
   @CheckPolicies((ability) => ability.can(Action.Read, 'Task'))
   findAll(
     @Query('projectId') projectId: string | undefined,
+    @CurrentUserId() userId: string,
     @CurrentAbility() ability: AppAbility,
   ): Promise<TaskResponseDto[]> {
-    return this.tasksService.findAll(ability, projectId);
+    return this.tasksService.findAll(userId, ability, projectId);
   }
 
   @Get(':id')
@@ -56,9 +57,10 @@ export class TasksController {
   @CheckPolicies((ability) => ability.can(Action.Read, 'Task'))
   findOne(
     @Param('id') id: string,
+    @CurrentUserId() userId: string,
     @CurrentAbility() ability: AppAbility,
   ): Promise<TaskResponseDto> {
-    return this.tasksService.findOne(id, ability);
+    return this.tasksService.findOne(id, userId, ability);
   }
 
   @Patch(':id')
@@ -69,9 +71,10 @@ export class TasksController {
   update(
     @Param('id') id: string,
     @Body() dto: UpdateTaskDto,
+    @CurrentUserId() userId: string,
     @CurrentAbility() ability: AppAbility,
   ): Promise<TaskResponseDto> {
-    return this.tasksService.update(id, ability, dto);
+    return this.tasksService.update(id, userId, ability, dto);
   }
 
   @Delete(':id')

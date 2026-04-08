@@ -86,18 +86,19 @@ describe('TasksController', () => {
       ];
       mockTasksService.findAll.mockResolvedValue(tasks);
 
-      const result = await controller.findAll(undefined, ability);
+      const result = await controller.findAll(undefined, ownerId, ability);
 
       expect(result).toEqual(tasks);
-      expect(mockTasksService.findAll).toHaveBeenCalledWith(ability, undefined);
+      expect(mockTasksService.findAll).toHaveBeenCalledWith(ownerId, ability, undefined);
     });
 
     it('should pass projectId query when provided', async () => {
+      const ownerId = 'u1';
       mockTasksService.findAll.mockResolvedValue([]);
 
-      await controller.findAll('p1', ability);
+      await controller.findAll('p1', ownerId, ability);
 
-      expect(mockTasksService.findAll).toHaveBeenCalledWith(ability, 'p1');
+      expect(mockTasksService.findAll).toHaveBeenCalledWith(ownerId, ability, 'p1');
     });
   });
 
@@ -115,10 +116,10 @@ describe('TasksController', () => {
       });
       mockTasksService.findOne.mockResolvedValue(task);
 
-      const result = await controller.findOne('1', ability);
+      const result = await controller.findOne('1', 'u1', ability);
 
       expect(result).toEqual(task);
-      expect(mockTasksService.findOne).toHaveBeenCalledWith('1', ability);
+      expect(mockTasksService.findOne).toHaveBeenCalledWith('1', 'u1', ability);
     });
   });
 
@@ -137,10 +138,10 @@ describe('TasksController', () => {
       });
       mockTasksService.update.mockResolvedValue(updated);
 
-      const result = await controller.update('1', dto, ability);
+      const result = await controller.update('1', dto, 'u1', ability);
 
       expect(result).toEqual(updated);
-      expect(mockTasksService.update).toHaveBeenCalledWith('1', ability, dto);
+      expect(mockTasksService.update).toHaveBeenCalledWith('1', 'u1', ability, dto);
     });
   });
 

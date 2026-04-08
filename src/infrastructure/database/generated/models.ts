@@ -17,6 +17,7 @@ export type * from './models/Role.js';
 export type * from './models/RolePermission.js';
 export type * from './models/Session.js';
 export type * from './models/Task.js';
+export type * from './models/TimeEntry.js';
 export type * from './models/User.js';
 export type * from './models/UserRole.js';
 export type * from './models/FreelancerProfile.js';

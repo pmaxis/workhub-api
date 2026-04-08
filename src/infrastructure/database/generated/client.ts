@@ -93,6 +93,11 @@ export type Session = Prisma.SessionModel;
  */
 export type Task = Prisma.TaskModel;
 /**
+ * Model TimeEntry
+ *
+ */
+export type TimeEntry = Prisma.TimeEntryModel;
+/**
  * Model User
  *
  */

@@ -385,6 +385,7 @@ export const ModelName = {
   RolePermission: 'RolePermission',
   Session: 'Session',
   Task: 'Task',
+  TimeEntry: 'TimeEntry',
   User: 'User',
   UserRole: 'UserRole',
   FreelancerProfile: 'FreelancerProfile',
@@ -420,6 +421,7 @@ export type TypeMap<
       | 'rolePermission'
       | 'session'
       | 'task'
+      | 'timeEntry'
       | 'user'
       | 'userRole'
       | 'freelancerProfile'
@@ -1174,6 +1176,80 @@ export type TypeMap<
         };
       };
     };
+    TimeEntry: {
+      payload: Prisma.$TimeEntryPayload<ExtArgs>;
+      fields: Prisma.TimeEntryFieldRefs;
+      operations: {
+        findUnique: {
+          args: Prisma.TimeEntryFindUniqueArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TimeEntryPayload> | null;
+        };
+        findUniqueOrThrow: {
+          args: Prisma.TimeEntryFindUniqueOrThrowArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TimeEntryPayload>;
+        };
+        findFirst: {
+          args: Prisma.TimeEntryFindFirstArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TimeEntryPayload> | null;
+        };
+        findFirstOrThrow: {
+          args: Prisma.TimeEntryFindFirstOrThrowArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TimeEntryPayload>;
+        };
+        findMany: {
+          args: Prisma.TimeEntryFindManyArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TimeEntryPayload>[];
+        };
+        create: {
+          args: Prisma.TimeEntryCreateArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TimeEntryPayload>;
+        };
+        createMany: {
+          args: Prisma.TimeEntryCreateManyArgs<ExtArgs>;
+          result: BatchPayload;
+        };
+        createManyAndReturn: {
+          args: Prisma.TimeEntryCreateManyAndReturnArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TimeEntryPayload>[];
+        };
+        delete: {
+          args: Prisma.TimeEntryDeleteArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TimeEntryPayload>;
+        };
+        update: {
+          args: Prisma.TimeEntryUpdateArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TimeEntryPayload>;
+        };
+        deleteMany: {
+          args: Prisma.TimeEntryDeleteManyArgs<ExtArgs>;
+          result: BatchPayload;
+        };
+        updateMany: {
+          args: Prisma.TimeEntryUpdateManyArgs<ExtArgs>;
+          result: BatchPayload;
+        };
+        updateManyAndReturn: {
+          args: Prisma.TimeEntryUpdateManyAndReturnArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TimeEntryPayload>[];
+        };
+        upsert: {
+          args: Prisma.TimeEntryUpsertArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TimeEntryPayload>;
+        };
+        aggregate: {
+          args: Prisma.TimeEntryAggregateArgs<ExtArgs>;
+          result: runtime.Types.Utils.Optional<Prisma.AggregateTimeEntry>;
+        };
+        groupBy: {
+          args: Prisma.TimeEntryGroupByArgs<ExtArgs>;
+          result: runtime.Types.Utils.Optional<Prisma.TimeEntryGroupByOutputType>[];
+        };
+        count: {
+          args: Prisma.TimeEntryCountArgs<ExtArgs>;
+          result: runtime.Types.Utils.Optional<Prisma.TimeEntryCountAggregateOutputType> | number;
+        };
+      };
+    };
     User: {
       payload: Prisma.$UserPayload<ExtArgs>;
       fields: Prisma.UserFieldRefs;
@@ -1710,6 +1786,21 @@ export const TaskScalarFieldEnum = {
 
 export type TaskScalarFieldEnum = (typeof TaskScalarFieldEnum)[keyof typeof TaskScalarFieldEnum];
 
+export const TimeEntryScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  projectId: 'projectId',
+  taskId: 'taskId',
+  description: 'description',
+  startedAt: 'startedAt',
+  endedAt: 'endedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+} as const;
+
+export type TimeEntryScalarFieldEnum =
+  (typeof TimeEntryScalarFieldEnum)[keyof typeof TimeEntryScalarFieldEnum];
+
 export const UserScalarFieldEnum = {
   id: 'id',
   email: 'email',
@@ -2027,6 +2118,7 @@ export type GlobalOmitConfig = {
   rolePermission?: Prisma.RolePermissionOmit;
   session?: Prisma.SessionOmit;
   task?: Prisma.TaskOmit;
+  timeEntry?: Prisma.TimeEntryOmit;
   user?: Prisma.UserOmit;
   userRole?: Prisma.UserRoleOmit;
   freelancerProfile?: Prisma.FreelancerProfileOmit;

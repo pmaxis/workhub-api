@@ -215,6 +215,7 @@ export type UserWhereInput = {
   invitations?: Prisma.InvitationListRelationFilter;
   projects?: Prisma.ProjectListRelationFilter;
   tasks?: Prisma.TaskListRelationFilter;
+  timeEntries?: Prisma.TimeEntryListRelationFilter;
   notifications?: Prisma.NotificationListRelationFilter;
   freelancerProfile?: Prisma.XOR<
     Prisma.FreelancerProfileNullableScalarRelationFilter,
@@ -241,6 +242,7 @@ export type UserOrderByWithRelationInput = {
   invitations?: Prisma.InvitationOrderByRelationAggregateInput;
   projects?: Prisma.ProjectOrderByRelationAggregateInput;
   tasks?: Prisma.TaskOrderByRelationAggregateInput;
+  timeEntries?: Prisma.TimeEntryOrderByRelationAggregateInput;
   notifications?: Prisma.NotificationOrderByRelationAggregateInput;
   freelancerProfile?: Prisma.FreelancerProfileOrderByWithRelationInput;
   clientProfile?: Prisma.ClientProfileOrderByWithRelationInput;
@@ -265,6 +267,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<
     invitations?: Prisma.InvitationListRelationFilter;
     projects?: Prisma.ProjectListRelationFilter;
     tasks?: Prisma.TaskListRelationFilter;
+    timeEntries?: Prisma.TimeEntryListRelationFilter;
     notifications?: Prisma.NotificationListRelationFilter;
     freelancerProfile?: Prisma.XOR<
       Prisma.FreelancerProfileNullableScalarRelationFilter,
@@ -323,6 +326,7 @@ export type UserCreateInput = {
   invitations?: Prisma.InvitationCreateNestedManyWithoutInvitedByInput;
   projects?: Prisma.ProjectCreateNestedManyWithoutOwnerInput;
   tasks?: Prisma.TaskCreateNestedManyWithoutAssigneeInput;
+  timeEntries?: Prisma.TimeEntryCreateNestedManyWithoutUserInput;
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput;
   freelancerProfile?: Prisma.FreelancerProfileCreateNestedOneWithoutUserInput;
   clientProfile?: Prisma.ClientProfileCreateNestedOneWithoutUserInput;
@@ -343,6 +347,7 @@ export type UserUncheckedCreateInput = {
   invitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutInvitedByInput;
   projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutOwnerInput;
   tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutAssigneeInput;
+  timeEntries?: Prisma.TimeEntryUncheckedCreateNestedManyWithoutUserInput;
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput;
   freelancerProfile?: Prisma.FreelancerProfileUncheckedCreateNestedOneWithoutUserInput;
   clientProfile?: Prisma.ClientProfileUncheckedCreateNestedOneWithoutUserInput;
@@ -363,6 +368,7 @@ export type UserUpdateInput = {
   invitations?: Prisma.InvitationUpdateManyWithoutInvitedByNestedInput;
   projects?: Prisma.ProjectUpdateManyWithoutOwnerNestedInput;
   tasks?: Prisma.TaskUpdateManyWithoutAssigneeNestedInput;
+  timeEntries?: Prisma.TimeEntryUpdateManyWithoutUserNestedInput;
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput;
   freelancerProfile?: Prisma.FreelancerProfileUpdateOneWithoutUserNestedInput;
   clientProfile?: Prisma.ClientProfileUpdateOneWithoutUserNestedInput;
@@ -383,6 +389,7 @@ export type UserUncheckedUpdateInput = {
   invitations?: Prisma.InvitationUncheckedUpdateManyWithoutInvitedByNestedInput;
   projects?: Prisma.ProjectUncheckedUpdateManyWithoutOwnerNestedInput;
   tasks?: Prisma.TaskUncheckedUpdateManyWithoutAssigneeNestedInput;
+  timeEntries?: Prisma.TimeEntryUncheckedUpdateManyWithoutUserNestedInput;
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput;
   freelancerProfile?: Prisma.FreelancerProfileUncheckedUpdateOneWithoutUserNestedInput;
   clientProfile?: Prisma.ClientProfileUncheckedUpdateOneWithoutUserNestedInput;
@@ -595,6 +602,32 @@ export type UserUpdateOneRequiredWithoutTasksNestedInput = {
   >;
 };
 
+export type UserCreateNestedOneWithoutTimeEntriesInput = {
+  create?: Prisma.XOR<
+    Prisma.UserCreateWithoutTimeEntriesInput,
+    Prisma.UserUncheckedCreateWithoutTimeEntriesInput
+  >;
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutTimeEntriesInput;
+  connect?: Prisma.UserWhereUniqueInput;
+};
+
+export type UserUpdateOneRequiredWithoutTimeEntriesNestedInput = {
+  create?: Prisma.XOR<
+    Prisma.UserCreateWithoutTimeEntriesInput,
+    Prisma.UserUncheckedCreateWithoutTimeEntriesInput
+  >;
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutTimeEntriesInput;
+  upsert?: Prisma.UserUpsertWithoutTimeEntriesInput;
+  connect?: Prisma.UserWhereUniqueInput;
+  update?: Prisma.XOR<
+    Prisma.XOR<
+      Prisma.UserUpdateToOneWithWhereWithoutTimeEntriesInput,
+      Prisma.UserUpdateWithoutTimeEntriesInput
+    >,
+    Prisma.UserUncheckedUpdateWithoutTimeEntriesInput
+  >;
+};
+
 export type UserCreateNestedOneWithoutRolesInput = {
   create?: Prisma.XOR<
     Prisma.UserCreateWithoutRolesInput,
@@ -687,6 +720,7 @@ export type UserCreateWithoutInvitationsInput = {
   roles?: Prisma.UserRoleCreateNestedManyWithoutUserInput;
   projects?: Prisma.ProjectCreateNestedManyWithoutOwnerInput;
   tasks?: Prisma.TaskCreateNestedManyWithoutAssigneeInput;
+  timeEntries?: Prisma.TimeEntryCreateNestedManyWithoutUserInput;
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput;
   freelancerProfile?: Prisma.FreelancerProfileCreateNestedOneWithoutUserInput;
   clientProfile?: Prisma.ClientProfileCreateNestedOneWithoutUserInput;
@@ -706,6 +740,7 @@ export type UserUncheckedCreateWithoutInvitationsInput = {
   roles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput;
   projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutOwnerInput;
   tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutAssigneeInput;
+  timeEntries?: Prisma.TimeEntryUncheckedCreateNestedManyWithoutUserInput;
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput;
   freelancerProfile?: Prisma.FreelancerProfileUncheckedCreateNestedOneWithoutUserInput;
   clientProfile?: Prisma.ClientProfileUncheckedCreateNestedOneWithoutUserInput;
@@ -753,6 +788,7 @@ export type UserUpdateWithoutInvitationsInput = {
   roles?: Prisma.UserRoleUpdateManyWithoutUserNestedInput;
   projects?: Prisma.ProjectUpdateManyWithoutOwnerNestedInput;
   tasks?: Prisma.TaskUpdateManyWithoutAssigneeNestedInput;
+  timeEntries?: Prisma.TimeEntryUpdateManyWithoutUserNestedInput;
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput;
   freelancerProfile?: Prisma.FreelancerProfileUpdateOneWithoutUserNestedInput;
   clientProfile?: Prisma.ClientProfileUpdateOneWithoutUserNestedInput;
@@ -772,6 +808,7 @@ export type UserUncheckedUpdateWithoutInvitationsInput = {
   roles?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput;
   projects?: Prisma.ProjectUncheckedUpdateManyWithoutOwnerNestedInput;
   tasks?: Prisma.TaskUncheckedUpdateManyWithoutAssigneeNestedInput;
+  timeEntries?: Prisma.TimeEntryUncheckedUpdateManyWithoutUserNestedInput;
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput;
   freelancerProfile?: Prisma.FreelancerProfileUncheckedUpdateOneWithoutUserNestedInput;
   clientProfile?: Prisma.ClientProfileUncheckedUpdateOneWithoutUserNestedInput;
@@ -792,6 +829,7 @@ export type UserCreateWithoutNotificationsInput = {
   invitations?: Prisma.InvitationCreateNestedManyWithoutInvitedByInput;
   projects?: Prisma.ProjectCreateNestedManyWithoutOwnerInput;
   tasks?: Prisma.TaskCreateNestedManyWithoutAssigneeInput;
+  timeEntries?: Prisma.TimeEntryCreateNestedManyWithoutUserInput;
   freelancerProfile?: Prisma.FreelancerProfileCreateNestedOneWithoutUserInput;
   clientProfile?: Prisma.ClientProfileCreateNestedOneWithoutUserInput;
 };
@@ -811,6 +849,7 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   invitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutInvitedByInput;
   projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutOwnerInput;
   tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutAssigneeInput;
+  timeEntries?: Prisma.TimeEntryUncheckedCreateNestedManyWithoutUserInput;
   freelancerProfile?: Prisma.FreelancerProfileUncheckedCreateNestedOneWithoutUserInput;
   clientProfile?: Prisma.ClientProfileUncheckedCreateNestedOneWithoutUserInput;
 };
@@ -858,6 +897,7 @@ export type UserUpdateWithoutNotificationsInput = {
   invitations?: Prisma.InvitationUpdateManyWithoutInvitedByNestedInput;
   projects?: Prisma.ProjectUpdateManyWithoutOwnerNestedInput;
   tasks?: Prisma.TaskUpdateManyWithoutAssigneeNestedInput;
+  timeEntries?: Prisma.TimeEntryUpdateManyWithoutUserNestedInput;
   freelancerProfile?: Prisma.FreelancerProfileUpdateOneWithoutUserNestedInput;
   clientProfile?: Prisma.ClientProfileUpdateOneWithoutUserNestedInput;
 };
@@ -877,6 +917,7 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   invitations?: Prisma.InvitationUncheckedUpdateManyWithoutInvitedByNestedInput;
   projects?: Prisma.ProjectUncheckedUpdateManyWithoutOwnerNestedInput;
   tasks?: Prisma.TaskUncheckedUpdateManyWithoutAssigneeNestedInput;
+  timeEntries?: Prisma.TimeEntryUncheckedUpdateManyWithoutUserNestedInput;
   freelancerProfile?: Prisma.FreelancerProfileUncheckedUpdateOneWithoutUserNestedInput;
   clientProfile?: Prisma.ClientProfileUncheckedUpdateOneWithoutUserNestedInput;
 };
@@ -895,6 +936,7 @@ export type UserCreateWithoutProjectsInput = {
   roles?: Prisma.UserRoleCreateNestedManyWithoutUserInput;
   invitations?: Prisma.InvitationCreateNestedManyWithoutInvitedByInput;
   tasks?: Prisma.TaskCreateNestedManyWithoutAssigneeInput;
+  timeEntries?: Prisma.TimeEntryCreateNestedManyWithoutUserInput;
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput;
   freelancerProfile?: Prisma.FreelancerProfileCreateNestedOneWithoutUserInput;
   clientProfile?: Prisma.ClientProfileCreateNestedOneWithoutUserInput;
@@ -914,6 +956,7 @@ export type UserUncheckedCreateWithoutProjectsInput = {
   roles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput;
   invitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutInvitedByInput;
   tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutAssigneeInput;
+  timeEntries?: Prisma.TimeEntryUncheckedCreateNestedManyWithoutUserInput;
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput;
   freelancerProfile?: Prisma.FreelancerProfileUncheckedCreateNestedOneWithoutUserInput;
   clientProfile?: Prisma.ClientProfileUncheckedCreateNestedOneWithoutUserInput;
@@ -961,6 +1004,7 @@ export type UserUpdateWithoutProjectsInput = {
   roles?: Prisma.UserRoleUpdateManyWithoutUserNestedInput;
   invitations?: Prisma.InvitationUpdateManyWithoutInvitedByNestedInput;
   tasks?: Prisma.TaskUpdateManyWithoutAssigneeNestedInput;
+  timeEntries?: Prisma.TimeEntryUpdateManyWithoutUserNestedInput;
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput;
   freelancerProfile?: Prisma.FreelancerProfileUpdateOneWithoutUserNestedInput;
   clientProfile?: Prisma.ClientProfileUpdateOneWithoutUserNestedInput;
@@ -980,6 +1024,7 @@ export type UserUncheckedUpdateWithoutProjectsInput = {
   roles?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput;
   invitations?: Prisma.InvitationUncheckedUpdateManyWithoutInvitedByNestedInput;
   tasks?: Prisma.TaskUncheckedUpdateManyWithoutAssigneeNestedInput;
+  timeEntries?: Prisma.TimeEntryUncheckedUpdateManyWithoutUserNestedInput;
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput;
   freelancerProfile?: Prisma.FreelancerProfileUncheckedUpdateOneWithoutUserNestedInput;
   clientProfile?: Prisma.ClientProfileUncheckedUpdateOneWithoutUserNestedInput;
@@ -999,6 +1044,7 @@ export type UserCreateWithoutSessionsInput = {
   invitations?: Prisma.InvitationCreateNestedManyWithoutInvitedByInput;
   projects?: Prisma.ProjectCreateNestedManyWithoutOwnerInput;
   tasks?: Prisma.TaskCreateNestedManyWithoutAssigneeInput;
+  timeEntries?: Prisma.TimeEntryCreateNestedManyWithoutUserInput;
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput;
   freelancerProfile?: Prisma.FreelancerProfileCreateNestedOneWithoutUserInput;
   clientProfile?: Prisma.ClientProfileCreateNestedOneWithoutUserInput;
@@ -1018,6 +1064,7 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   invitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutInvitedByInput;
   projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutOwnerInput;
   tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutAssigneeInput;
+  timeEntries?: Prisma.TimeEntryUncheckedCreateNestedManyWithoutUserInput;
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput;
   freelancerProfile?: Prisma.FreelancerProfileUncheckedCreateNestedOneWithoutUserInput;
   clientProfile?: Prisma.ClientProfileUncheckedCreateNestedOneWithoutUserInput;
@@ -1065,6 +1112,7 @@ export type UserUpdateWithoutSessionsInput = {
   invitations?: Prisma.InvitationUpdateManyWithoutInvitedByNestedInput;
   projects?: Prisma.ProjectUpdateManyWithoutOwnerNestedInput;
   tasks?: Prisma.TaskUpdateManyWithoutAssigneeNestedInput;
+  timeEntries?: Prisma.TimeEntryUpdateManyWithoutUserNestedInput;
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput;
   freelancerProfile?: Prisma.FreelancerProfileUpdateOneWithoutUserNestedInput;
   clientProfile?: Prisma.ClientProfileUpdateOneWithoutUserNestedInput;
@@ -1084,6 +1132,7 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   invitations?: Prisma.InvitationUncheckedUpdateManyWithoutInvitedByNestedInput;
   projects?: Prisma.ProjectUncheckedUpdateManyWithoutOwnerNestedInput;
   tasks?: Prisma.TaskUncheckedUpdateManyWithoutAssigneeNestedInput;
+  timeEntries?: Prisma.TimeEntryUncheckedUpdateManyWithoutUserNestedInput;
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput;
   freelancerProfile?: Prisma.FreelancerProfileUncheckedUpdateOneWithoutUserNestedInput;
   clientProfile?: Prisma.ClientProfileUncheckedUpdateOneWithoutUserNestedInput;
@@ -1103,6 +1152,7 @@ export type UserCreateWithoutTasksInput = {
   roles?: Prisma.UserRoleCreateNestedManyWithoutUserInput;
   invitations?: Prisma.InvitationCreateNestedManyWithoutInvitedByInput;
   projects?: Prisma.ProjectCreateNestedManyWithoutOwnerInput;
+  timeEntries?: Prisma.TimeEntryCreateNestedManyWithoutUserInput;
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput;
   freelancerProfile?: Prisma.FreelancerProfileCreateNestedOneWithoutUserInput;
   clientProfile?: Prisma.ClientProfileCreateNestedOneWithoutUserInput;
@@ -1122,6 +1172,7 @@ export type UserUncheckedCreateWithoutTasksInput = {
   roles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput;
   invitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutInvitedByInput;
   projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutOwnerInput;
+  timeEntries?: Prisma.TimeEntryUncheckedCreateNestedManyWithoutUserInput;
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput;
   freelancerProfile?: Prisma.FreelancerProfileUncheckedCreateNestedOneWithoutUserInput;
   clientProfile?: Prisma.ClientProfileUncheckedCreateNestedOneWithoutUserInput;
@@ -1166,6 +1217,7 @@ export type UserUpdateWithoutTasksInput = {
   roles?: Prisma.UserRoleUpdateManyWithoutUserNestedInput;
   invitations?: Prisma.InvitationUpdateManyWithoutInvitedByNestedInput;
   projects?: Prisma.ProjectUpdateManyWithoutOwnerNestedInput;
+  timeEntries?: Prisma.TimeEntryUpdateManyWithoutUserNestedInput;
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput;
   freelancerProfile?: Prisma.FreelancerProfileUpdateOneWithoutUserNestedInput;
   clientProfile?: Prisma.ClientProfileUpdateOneWithoutUserNestedInput;
@@ -1185,6 +1237,115 @@ export type UserUncheckedUpdateWithoutTasksInput = {
   roles?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput;
   invitations?: Prisma.InvitationUncheckedUpdateManyWithoutInvitedByNestedInput;
   projects?: Prisma.ProjectUncheckedUpdateManyWithoutOwnerNestedInput;
+  timeEntries?: Prisma.TimeEntryUncheckedUpdateManyWithoutUserNestedInput;
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput;
+  freelancerProfile?: Prisma.FreelancerProfileUncheckedUpdateOneWithoutUserNestedInput;
+  clientProfile?: Prisma.ClientProfileUncheckedUpdateOneWithoutUserNestedInput;
+};
+
+export type UserCreateWithoutTimeEntriesInput = {
+  id?: string;
+  email: string;
+  password: string;
+  lastName: string;
+  firstName: string;
+  thirdName?: string | null;
+  isActivated?: boolean;
+  createdAt?: Date | string;
+  updatedAt?: Date | string;
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput;
+  roles?: Prisma.UserRoleCreateNestedManyWithoutUserInput;
+  invitations?: Prisma.InvitationCreateNestedManyWithoutInvitedByInput;
+  projects?: Prisma.ProjectCreateNestedManyWithoutOwnerInput;
+  tasks?: Prisma.TaskCreateNestedManyWithoutAssigneeInput;
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput;
+  freelancerProfile?: Prisma.FreelancerProfileCreateNestedOneWithoutUserInput;
+  clientProfile?: Prisma.ClientProfileCreateNestedOneWithoutUserInput;
+};
+
+export type UserUncheckedCreateWithoutTimeEntriesInput = {
+  id?: string;
+  email: string;
+  password: string;
+  lastName: string;
+  firstName: string;
+  thirdName?: string | null;
+  isActivated?: boolean;
+  createdAt?: Date | string;
+  updatedAt?: Date | string;
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput;
+  roles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput;
+  invitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutInvitedByInput;
+  projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutOwnerInput;
+  tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutAssigneeInput;
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput;
+  freelancerProfile?: Prisma.FreelancerProfileUncheckedCreateNestedOneWithoutUserInput;
+  clientProfile?: Prisma.ClientProfileUncheckedCreateNestedOneWithoutUserInput;
+};
+
+export type UserCreateOrConnectWithoutTimeEntriesInput = {
+  where: Prisma.UserWhereUniqueInput;
+  create: Prisma.XOR<
+    Prisma.UserCreateWithoutTimeEntriesInput,
+    Prisma.UserUncheckedCreateWithoutTimeEntriesInput
+  >;
+};
+
+export type UserUpsertWithoutTimeEntriesInput = {
+  update: Prisma.XOR<
+    Prisma.UserUpdateWithoutTimeEntriesInput,
+    Prisma.UserUncheckedUpdateWithoutTimeEntriesInput
+  >;
+  create: Prisma.XOR<
+    Prisma.UserCreateWithoutTimeEntriesInput,
+    Prisma.UserUncheckedCreateWithoutTimeEntriesInput
+  >;
+  where?: Prisma.UserWhereInput;
+};
+
+export type UserUpdateToOneWithWhereWithoutTimeEntriesInput = {
+  where?: Prisma.UserWhereInput;
+  data: Prisma.XOR<
+    Prisma.UserUpdateWithoutTimeEntriesInput,
+    Prisma.UserUncheckedUpdateWithoutTimeEntriesInput
+  >;
+};
+
+export type UserUpdateWithoutTimeEntriesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string;
+  email?: Prisma.StringFieldUpdateOperationsInput | string;
+  password?: Prisma.StringFieldUpdateOperationsInput | string;
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string;
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string;
+  thirdName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  isActivated?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput;
+  roles?: Prisma.UserRoleUpdateManyWithoutUserNestedInput;
+  invitations?: Prisma.InvitationUpdateManyWithoutInvitedByNestedInput;
+  projects?: Prisma.ProjectUpdateManyWithoutOwnerNestedInput;
+  tasks?: Prisma.TaskUpdateManyWithoutAssigneeNestedInput;
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput;
+  freelancerProfile?: Prisma.FreelancerProfileUpdateOneWithoutUserNestedInput;
+  clientProfile?: Prisma.ClientProfileUpdateOneWithoutUserNestedInput;
+};
+
+export type UserUncheckedUpdateWithoutTimeEntriesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string;
+  email?: Prisma.StringFieldUpdateOperationsInput | string;
+  password?: Prisma.StringFieldUpdateOperationsInput | string;
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string;
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string;
+  thirdName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  isActivated?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput;
+  roles?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput;
+  invitations?: Prisma.InvitationUncheckedUpdateManyWithoutInvitedByNestedInput;
+  projects?: Prisma.ProjectUncheckedUpdateManyWithoutOwnerNestedInput;
+  tasks?: Prisma.TaskUncheckedUpdateManyWithoutAssigneeNestedInput;
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput;
   freelancerProfile?: Prisma.FreelancerProfileUncheckedUpdateOneWithoutUserNestedInput;
   clientProfile?: Prisma.ClientProfileUncheckedUpdateOneWithoutUserNestedInput;
@@ -1204,6 +1365,7 @@ export type UserCreateWithoutRolesInput = {
   invitations?: Prisma.InvitationCreateNestedManyWithoutInvitedByInput;
   projects?: Prisma.ProjectCreateNestedManyWithoutOwnerInput;
   tasks?: Prisma.TaskCreateNestedManyWithoutAssigneeInput;
+  timeEntries?: Prisma.TimeEntryCreateNestedManyWithoutUserInput;
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput;
   freelancerProfile?: Prisma.FreelancerProfileCreateNestedOneWithoutUserInput;
   clientProfile?: Prisma.ClientProfileCreateNestedOneWithoutUserInput;
@@ -1223,6 +1385,7 @@ export type UserUncheckedCreateWithoutRolesInput = {
   invitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutInvitedByInput;
   projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutOwnerInput;
   tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutAssigneeInput;
+  timeEntries?: Prisma.TimeEntryUncheckedCreateNestedManyWithoutUserInput;
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput;
   freelancerProfile?: Prisma.FreelancerProfileUncheckedCreateNestedOneWithoutUserInput;
   clientProfile?: Prisma.ClientProfileUncheckedCreateNestedOneWithoutUserInput;
@@ -1267,6 +1430,7 @@ export type UserUpdateWithoutRolesInput = {
   invitations?: Prisma.InvitationUpdateManyWithoutInvitedByNestedInput;
   projects?: Prisma.ProjectUpdateManyWithoutOwnerNestedInput;
   tasks?: Prisma.TaskUpdateManyWithoutAssigneeNestedInput;
+  timeEntries?: Prisma.TimeEntryUpdateManyWithoutUserNestedInput;
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput;
   freelancerProfile?: Prisma.FreelancerProfileUpdateOneWithoutUserNestedInput;
   clientProfile?: Prisma.ClientProfileUpdateOneWithoutUserNestedInput;
@@ -1286,6 +1450,7 @@ export type UserUncheckedUpdateWithoutRolesInput = {
   invitations?: Prisma.InvitationUncheckedUpdateManyWithoutInvitedByNestedInput;
   projects?: Prisma.ProjectUncheckedUpdateManyWithoutOwnerNestedInput;
   tasks?: Prisma.TaskUncheckedUpdateManyWithoutAssigneeNestedInput;
+  timeEntries?: Prisma.TimeEntryUncheckedUpdateManyWithoutUserNestedInput;
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput;
   freelancerProfile?: Prisma.FreelancerProfileUncheckedUpdateOneWithoutUserNestedInput;
   clientProfile?: Prisma.ClientProfileUncheckedUpdateOneWithoutUserNestedInput;
@@ -1306,6 +1471,7 @@ export type UserCreateWithoutFreelancerProfileInput = {
   invitations?: Prisma.InvitationCreateNestedManyWithoutInvitedByInput;
   projects?: Prisma.ProjectCreateNestedManyWithoutOwnerInput;
   tasks?: Prisma.TaskCreateNestedManyWithoutAssigneeInput;
+  timeEntries?: Prisma.TimeEntryCreateNestedManyWithoutUserInput;
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput;
   clientProfile?: Prisma.ClientProfileCreateNestedOneWithoutUserInput;
 };
@@ -1325,6 +1491,7 @@ export type UserUncheckedCreateWithoutFreelancerProfileInput = {
   invitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutInvitedByInput;
   projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutOwnerInput;
   tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutAssigneeInput;
+  timeEntries?: Prisma.TimeEntryUncheckedCreateNestedManyWithoutUserInput;
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput;
   clientProfile?: Prisma.ClientProfileUncheckedCreateNestedOneWithoutUserInput;
 };
@@ -1372,6 +1539,7 @@ export type UserUpdateWithoutFreelancerProfileInput = {
   invitations?: Prisma.InvitationUpdateManyWithoutInvitedByNestedInput;
   projects?: Prisma.ProjectUpdateManyWithoutOwnerNestedInput;
   tasks?: Prisma.TaskUpdateManyWithoutAssigneeNestedInput;
+  timeEntries?: Prisma.TimeEntryUpdateManyWithoutUserNestedInput;
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput;
   clientProfile?: Prisma.ClientProfileUpdateOneWithoutUserNestedInput;
 };
@@ -1391,6 +1559,7 @@ export type UserUncheckedUpdateWithoutFreelancerProfileInput = {
   invitations?: Prisma.InvitationUncheckedUpdateManyWithoutInvitedByNestedInput;
   projects?: Prisma.ProjectUncheckedUpdateManyWithoutOwnerNestedInput;
   tasks?: Prisma.TaskUncheckedUpdateManyWithoutAssigneeNestedInput;
+  timeEntries?: Prisma.TimeEntryUncheckedUpdateManyWithoutUserNestedInput;
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput;
   clientProfile?: Prisma.ClientProfileUncheckedUpdateOneWithoutUserNestedInput;
 };
@@ -1410,6 +1579,7 @@ export type UserCreateWithoutClientProfileInput = {
   invitations?: Prisma.InvitationCreateNestedManyWithoutInvitedByInput;
   projects?: Prisma.ProjectCreateNestedManyWithoutOwnerInput;
   tasks?: Prisma.TaskCreateNestedManyWithoutAssigneeInput;
+  timeEntries?: Prisma.TimeEntryCreateNestedManyWithoutUserInput;
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput;
   freelancerProfile?: Prisma.FreelancerProfileCreateNestedOneWithoutUserInput;
 };
@@ -1429,6 +1599,7 @@ export type UserUncheckedCreateWithoutClientProfileInput = {
   invitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutInvitedByInput;
   projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutOwnerInput;
   tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutAssigneeInput;
+  timeEntries?: Prisma.TimeEntryUncheckedCreateNestedManyWithoutUserInput;
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput;
   freelancerProfile?: Prisma.FreelancerProfileUncheckedCreateNestedOneWithoutUserInput;
 };
@@ -1476,6 +1647,7 @@ export type UserUpdateWithoutClientProfileInput = {
   invitations?: Prisma.InvitationUpdateManyWithoutInvitedByNestedInput;
   projects?: Prisma.ProjectUpdateManyWithoutOwnerNestedInput;
   tasks?: Prisma.TaskUpdateManyWithoutAssigneeNestedInput;
+  timeEntries?: Prisma.TimeEntryUpdateManyWithoutUserNestedInput;
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput;
   freelancerProfile?: Prisma.FreelancerProfileUpdateOneWithoutUserNestedInput;
 };
@@ -1495,6 +1667,7 @@ export type UserUncheckedUpdateWithoutClientProfileInput = {
   invitations?: Prisma.InvitationUncheckedUpdateManyWithoutInvitedByNestedInput;
   projects?: Prisma.ProjectUncheckedUpdateManyWithoutOwnerNestedInput;
   tasks?: Prisma.TaskUncheckedUpdateManyWithoutAssigneeNestedInput;
+  timeEntries?: Prisma.TimeEntryUncheckedUpdateManyWithoutUserNestedInput;
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput;
   freelancerProfile?: Prisma.FreelancerProfileUncheckedUpdateOneWithoutUserNestedInput;
 };
@@ -1509,6 +1682,7 @@ export type UserCountOutputType = {
   invitations: number;
   projects: number;
   tasks: number;
+  timeEntries: number;
   notifications: number;
 };
 
@@ -1520,6 +1694,7 @@ export type UserCountOutputTypeSelect<
   invitations?: boolean | UserCountOutputTypeCountInvitationsArgs;
   projects?: boolean | UserCountOutputTypeCountProjectsArgs;
   tasks?: boolean | UserCountOutputTypeCountTasksArgs;
+  timeEntries?: boolean | UserCountOutputTypeCountTimeEntriesArgs;
   notifications?: boolean | UserCountOutputTypeCountNotificationsArgs;
 };
 
@@ -1583,6 +1758,15 @@ export type UserCountOutputTypeCountTasksArgs<
 /**
  * UserCountOutputType without action
  */
+export type UserCountOutputTypeCountTimeEntriesArgs<
+  ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
+> = {
+  where?: Prisma.TimeEntryWhereInput;
+};
+
+/**
+ * UserCountOutputType without action
+ */
 export type UserCountOutputTypeCountNotificationsArgs<
   ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
 > = {
@@ -1607,6 +1791,7 @@ export type UserSelect<
     invitations?: boolean | Prisma.User$invitationsArgs<ExtArgs>;
     projects?: boolean | Prisma.User$projectsArgs<ExtArgs>;
     tasks?: boolean | Prisma.User$tasksArgs<ExtArgs>;
+    timeEntries?: boolean | Prisma.User$timeEntriesArgs<ExtArgs>;
     notifications?: boolean | Prisma.User$notificationsArgs<ExtArgs>;
     freelancerProfile?: boolean | Prisma.User$freelancerProfileArgs<ExtArgs>;
     clientProfile?: boolean | Prisma.User$clientProfileArgs<ExtArgs>;
@@ -1683,6 +1868,7 @@ export type UserInclude<
   invitations?: boolean | Prisma.User$invitationsArgs<ExtArgs>;
   projects?: boolean | Prisma.User$projectsArgs<ExtArgs>;
   tasks?: boolean | Prisma.User$tasksArgs<ExtArgs>;
+  timeEntries?: boolean | Prisma.User$timeEntriesArgs<ExtArgs>;
   notifications?: boolean | Prisma.User$notificationsArgs<ExtArgs>;
   freelancerProfile?: boolean | Prisma.User$freelancerProfileArgs<ExtArgs>;
   clientProfile?: boolean | Prisma.User$clientProfileArgs<ExtArgs>;
@@ -1705,6 +1891,7 @@ export type $UserPayload<
     invitations: Prisma.$InvitationPayload<ExtArgs>[];
     projects: Prisma.$ProjectPayload<ExtArgs>[];
     tasks: Prisma.$TaskPayload<ExtArgs>[];
+    timeEntries: Prisma.$TimeEntryPayload<ExtArgs>[];
     notifications: Prisma.$NotificationPayload<ExtArgs>[];
     freelancerProfile: Prisma.$FreelancerProfilePayload<ExtArgs> | null;
     clientProfile: Prisma.$ClientProfilePayload<ExtArgs> | null;
@@ -2278,6 +2465,17 @@ export interface Prisma__UserClient<
     args?: Prisma.Subset<T, Prisma.User$tasksArgs<ExtArgs>>,
   ): Prisma.PrismaPromise<
     | runtime.Types.Result.GetResult<Prisma.$TaskPayload<ExtArgs>, T, 'findMany', GlobalOmitOptions>
+    | Null
+  >;
+  timeEntries<T extends Prisma.User$timeEntriesArgs<ExtArgs> = {}>(
+    args?: Prisma.Subset<T, Prisma.User$timeEntriesArgs<ExtArgs>>,
+  ): Prisma.PrismaPromise<
+    | runtime.Types.Result.GetResult<
+        Prisma.$TimeEntryPayload<ExtArgs>,
+        T,
+        'findMany',
+        GlobalOmitOptions
+      >
     | Null
   >;
   notifications<T extends Prisma.User$notificationsArgs<ExtArgs> = {}>(
@@ -2899,6 +3097,32 @@ export type User$tasksArgs<
   take?: number;
   skip?: number;
   distinct?: Prisma.TaskScalarFieldEnum | Prisma.TaskScalarFieldEnum[];
+};
+
+/**
+ * User.timeEntries
+ */
+export type User$timeEntriesArgs<
+  ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
+> = {
+  /**
+   * Select specific fields to fetch from the TimeEntry
+   */
+  select?: Prisma.TimeEntrySelect<ExtArgs> | null;
+  /**
+   * Omit specific fields from the TimeEntry
+   */
+  omit?: Prisma.TimeEntryOmit<ExtArgs> | null;
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TimeEntryInclude<ExtArgs> | null;
+  where?: Prisma.TimeEntryWhereInput;
+  orderBy?: Prisma.TimeEntryOrderByWithRelationInput | Prisma.TimeEntryOrderByWithRelationInput[];
+  cursor?: Prisma.TimeEntryWhereUniqueInput;
+  take?: number;
+  skip?: number;
+  distinct?: Prisma.TimeEntryScalarFieldEnum | Prisma.TimeEntryScalarFieldEnum[];
 };
 
 /**

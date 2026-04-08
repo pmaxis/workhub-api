@@ -27,6 +27,7 @@ const mockTasksRepository = {
   findOne: jest.fn(),
   update: jest.fn(),
   delete: jest.fn(),
+  sumTrackedDurationSecondsForUser: jest.fn(),
 };
 
 const mockProjectsRepository = {
@@ -59,6 +60,7 @@ describe('TasksService', () => {
   beforeEach(async () => {
     jest.clearAllMocks();
     ability = buildAbility(ownerId);
+    mockTasksRepository.sumTrackedDurationSecondsForUser.mockResolvedValue(new Map());
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -154,19 +156,22 @@ describe('TasksService', () => {
       };
       mockTasksRepository.findAll.mockResolvedValue([row]);
 
-      const result = await service.findAll(ability);
+      const result = await service.findAll(ownerId, ability);
 
       expect(mockProjectsRepository.findOne).not.toHaveBeenCalled();
       expect(mockTasksRepository.findAll).toHaveBeenCalledWith({ ability, projectId: undefined });
+      expect(mockTasksRepository.sumTrackedDurationSecondsForUser).toHaveBeenCalledWith(ownerId, [
+        taskId,
+      ]);
       expect(result).toHaveLength(1);
-      expect(result[0]).toMatchObject({ id: taskId });
+      expect(result[0]).toMatchObject({ id: taskId, trackedDurationSeconds: 0 });
     });
 
     it('should validate project when projectId filter is set', async () => {
       mockProjectsRepository.findOne.mockResolvedValue({ id: projectId });
       mockTasksRepository.findAll.mockResolvedValue([]);
 
-      await service.findAll(ability, projectId);
+      await service.findAll(ownerId, ability, projectId);
 
       expect(mockProjectsRepository.findOne).toHaveBeenCalledWith(projectId, ability);
       expect(mockTasksRepository.findAll).toHaveBeenCalledWith({ ability, projectId });
@@ -175,7 +180,7 @@ describe('TasksService', () => {
     it('should throw when filtered project not found', async () => {
       mockProjectsRepository.findOne.mockResolvedValue(null);
 
-      await expect(service.findAll(ability, projectId)).rejects.toThrow(NotFoundException);
+      await expect(service.findAll(ownerId, ability, projectId)).rejects.toThrow(NotFoundException);
       expect(mockTasksRepository.findAll).not.toHaveBeenCalled();
     });
   });
@@ -195,16 +200,19 @@ describe('TasksService', () => {
       };
       mockTasksRepository.findOne.mockResolvedValue(row);
 
-      const result = await service.findOne(taskId, ability);
+      const result = await service.findOne(taskId, ownerId, ability);
 
       expect(mockTasksRepository.findOne).toHaveBeenCalledWith(taskId, ability);
+      expect(mockTasksRepository.sumTrackedDurationSecondsForUser).toHaveBeenCalledWith(ownerId, [
+        taskId,
+      ]);
       expect(result).toMatchObject({ id: taskId, status: TaskStatus.COMPLETED });
     });
 
     it('should throw when task not found', async () => {
       mockTasksRepository.findOne.mockResolvedValue(null);
 
-      await expect(service.findOne(taskId, ability)).rejects.toThrow(NotFoundException);
+      await expect(service.findOne(taskId, ownerId, ability)).rejects.toThrow(NotFoundException);
     });
   });
 
@@ -224,7 +232,7 @@ describe('TasksService', () => {
     it('should return current task when dto has no fields to apply', async () => {
       mockTasksRepository.findOne.mockResolvedValue({ ...existing });
 
-      const result = await service.update(taskId, ability, {} as UpdateTaskDto);
+      const result = await service.update(taskId, ownerId, ability, {} as UpdateTaskDto);
 
       expect(mockTasksRepository.update).not.toHaveBeenCalled();
       expect(result).toMatchObject({ id: taskId, title: 'Old' });
@@ -247,7 +255,7 @@ describe('TasksService', () => {
       mockTasksRepository.update.mockResolvedValue(updated);
 
       const dto: UpdateTaskDto = { title: 'New' };
-      const result = await service.update(taskId, ability, dto);
+      const result = await service.update(taskId, ownerId, ability, dto);
 
       expect(mockTasksRepository.update).toHaveBeenCalledWith(taskId, { title: 'New' });
       expect(result).toMatchObject({ title: 'New' });
@@ -264,7 +272,7 @@ describe('TasksService', () => {
       mockTasksRepository.update.mockResolvedValue(updated);
 
       const dto: UpdateTaskDto = { status: TaskStatus.IN_PROGRESS };
-      await service.update(taskId, ability, dto);
+      await service.update(taskId, ownerId, ability, dto);
 
       expect(mockNotificationsRepository.create).toHaveBeenCalledTimes(1);
       expect(mockNotificationsRepository.create).toHaveBeenCalledWith(
@@ -279,7 +287,7 @@ describe('TasksService', () => {
     it('should throw when task not found', async () => {
       mockTasksRepository.findOne.mockResolvedValue(null);
 
-      await expect(service.update(taskId, ability, { title: 'x' })).rejects.toThrow(
+      await expect(service.update(taskId, ownerId, ability, { title: 'x' })).rejects.toThrow(
         NotFoundException,
       );
       expect(mockTasksRepository.update).not.toHaveBeenCalled();
@@ -289,7 +297,7 @@ describe('TasksService', () => {
       const readOnly = buildReadOnlyTaskAbility(ownerId);
       mockTasksRepository.findOne.mockResolvedValue({ ...existing });
 
-      await expect(service.update(taskId, readOnly, { title: 'x' })).rejects.toThrow(
+      await expect(service.update(taskId, ownerId, readOnly, { title: 'x' })).rejects.toThrow(
         ForbiddenException,
       );
       expect(mockTasksRepository.update).not.toHaveBeenCalled();
