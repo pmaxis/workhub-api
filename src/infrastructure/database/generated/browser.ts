@@ -27,6 +27,21 @@ export type Company = Prisma.CompanyModel;
  */
 export type CompanyMember = Prisma.CompanyMemberModel;
 /**
+ * Model Invoice
+ *
+ */
+export type Invoice = Prisma.InvoiceModel;
+/**
+ * Model Payment
+ *
+ */
+export type Payment = Prisma.PaymentModel;
+/**
+ * Model Expense
+ *
+ */
+export type Expense = Prisma.ExpenseModel;
+/**
  * Model Invitation
  *
  */

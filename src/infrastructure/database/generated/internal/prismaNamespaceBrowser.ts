@@ -50,6 +50,9 @@ export const AnyNull = runtime.AnyNull;
 export const ModelName = {
   Company: 'Company',
   CompanyMember: 'CompanyMember',
+  Invoice: 'Invoice',
+  Payment: 'Payment',
+  Expense: 'Expense',
   Invitation: 'Invitation',
   Notification: 'Notification',
   Permission: 'Permission',
@@ -100,6 +103,58 @@ export const CompanyMemberScalarFieldEnum = {
 
 export type CompanyMemberScalarFieldEnum =
   (typeof CompanyMemberScalarFieldEnum)[keyof typeof CompanyMemberScalarFieldEnum];
+
+export const InvoiceScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  projectId: 'projectId',
+  number: 'number',
+  title: 'title',
+  amount: 'amount',
+  currency: 'currency',
+  status: 'status',
+  issuedAt: 'issuedAt',
+  dueAt: 'dueAt',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+} as const;
+
+export type InvoiceScalarFieldEnum =
+  (typeof InvoiceScalarFieldEnum)[keyof typeof InvoiceScalarFieldEnum];
+
+export const PaymentScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  invoiceId: 'invoiceId',
+  amount: 'amount',
+  currency: 'currency',
+  receivedAt: 'receivedAt',
+  method: 'method',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+} as const;
+
+export type PaymentScalarFieldEnum =
+  (typeof PaymentScalarFieldEnum)[keyof typeof PaymentScalarFieldEnum];
+
+export const ExpenseScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  projectId: 'projectId',
+  description: 'description',
+  category: 'category',
+  amount: 'amount',
+  currency: 'currency',
+  spentAt: 'spentAt',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+} as const;
+
+export type ExpenseScalarFieldEnum =
+  (typeof ExpenseScalarFieldEnum)[keyof typeof ExpenseScalarFieldEnum];
 
 export const InvitationScalarFieldEnum = {
   id: 'id',

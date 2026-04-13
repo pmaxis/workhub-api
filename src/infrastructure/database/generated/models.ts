@@ -9,6 +9,9 @@
  */
 export type * from './models/Company.js';
 export type * from './models/CompanyMember.js';
+export type * from './models/Invoice.js';
+export type * from './models/Payment.js';
+export type * from './models/Expense.js';
 export type * from './models/Invitation.js';
 export type * from './models/Notification.js';
 export type * from './models/Permission.js';

@@ -71,6 +71,13 @@ async function bootstrap() {
     .addTag('Projects', 'Projects with pagination and CASL-scoped access.')
     .addTag('Tasks', 'Tasks scoped by project and CASL.')
     .addTag('Time entries', 'Personal time tracking: timers and manual entries.')
+    .addTag('Invoices', 'Personal invoices: CRUD with optional project link and CASL.')
+    .addTag('Payments', 'Recorded payments: optional invoice link, CASL-scoped.')
+    .addTag('Expenses', 'Business expenses: CRUD with optional project link.')
+    .addTag(
+      'Finance analytics',
+      'Aggregated totals: invoice breakdown by status, payments vs expenses, net cashflow.',
+    )
     .addTag('Notifications', 'User notifications: list, unread count, mark as read.')
     .addTag(
       'Invitations',

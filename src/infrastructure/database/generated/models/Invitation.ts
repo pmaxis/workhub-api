@@ -505,10 +505,6 @@ export type EnumInvitationStatusFieldUpdateOperationsInput = {
   set?: $Enums.InvitationStatus;
 };
 
-export type NullableStringFieldUpdateOperationsInput = {
-  set?: string | null;
-};
-
 export type InvitationCreateNestedManyWithoutInvitedByInput = {
   create?:
     | Prisma.XOR<

@@ -16,6 +16,9 @@ model User {
   projects          Project[]
   tasks             Task[]
   timeEntries       TimeEntry[]
+  invoices          Invoice[]
+  payments          Payment[]
+  expenses          Expense[]
   notifications     Notification[]
 
   freelancerProfile FreelancerProfile?

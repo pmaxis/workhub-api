@@ -21,6 +21,10 @@ import { WorkspaceModule } from '@/modules/workspace/workspace.module';
 import { CompaniesModule } from '@/modules/companies/companies.module';
 import { NotificationsModule } from '@/modules/notifications/notifications.module';
 import { TimeEntriesModule } from '@/modules/time-entries/time-entries.module';
+import { InvoicesModule } from '@/modules/invoices/invoices.module';
+import { PaymentsModule } from '@/modules/payments/payments.module';
+import { ExpensesModule } from '@/modules/expenses/expenses.module';
+import { FinanceAnalyticsModule } from '@/modules/finance-analytics/finance-analytics.module';
 
 @Module({
   imports: [
@@ -45,6 +49,10 @@ import { TimeEntriesModule } from '@/modules/time-entries/time-entries.module';
     CompaniesModule,
     NotificationsModule,
     TimeEntriesModule,
+    InvoicesModule,
+    PaymentsModule,
+    ExpensesModule,
+    FinanceAnalyticsModule,
   ],
   controllers: [],
   providers: [

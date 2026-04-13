@@ -112,6 +112,75 @@ async function seed() {
     update: { description: 'Delete your time entries' },
   });
 
+  const invoicesCreate = await prisma.permission.upsert({
+    where: { key: 'invoices.create' },
+    create: { key: 'invoices.create', description: 'Create your invoices' },
+    update: { description: 'Create your invoices' },
+  });
+  const invoicesRead = await prisma.permission.upsert({
+    where: { key: 'invoices.read' },
+    create: { key: 'invoices.read', description: 'View your invoices' },
+    update: { description: 'View your invoices' },
+  });
+  const invoicesUpdate = await prisma.permission.upsert({
+    where: { key: 'invoices.update' },
+    create: { key: 'invoices.update', description: 'Update your invoices' },
+    update: { description: 'Update your invoices' },
+  });
+  const invoicesDelete = await prisma.permission.upsert({
+    where: { key: 'invoices.delete' },
+    create: { key: 'invoices.delete', description: 'Delete your invoices' },
+    update: { description: 'Delete your invoices' },
+  });
+
+  const paymentsCreate = await prisma.permission.upsert({
+    where: { key: 'payments.create' },
+    create: { key: 'payments.create', description: 'Record payments' },
+    update: { description: 'Record payments' },
+  });
+  const paymentsRead = await prisma.permission.upsert({
+    where: { key: 'payments.read' },
+    create: { key: 'payments.read', description: 'View your payments' },
+    update: { description: 'View your payments' },
+  });
+  const paymentsUpdate = await prisma.permission.upsert({
+    where: { key: 'payments.update' },
+    create: { key: 'payments.update', description: 'Update your payments' },
+    update: { description: 'Update your payments' },
+  });
+  const paymentsDelete = await prisma.permission.upsert({
+    where: { key: 'payments.delete' },
+    create: { key: 'payments.delete', description: 'Delete your payments' },
+    update: { description: 'Delete your payments' },
+  });
+
+  const expensesCreate = await prisma.permission.upsert({
+    where: { key: 'expenses.create' },
+    create: { key: 'expenses.create', description: 'Create your expenses' },
+    update: { description: 'Create your expenses' },
+  });
+  const expensesRead = await prisma.permission.upsert({
+    where: { key: 'expenses.read' },
+    create: { key: 'expenses.read', description: 'View your expenses' },
+    update: { description: 'View your expenses' },
+  });
+  const expensesUpdate = await prisma.permission.upsert({
+    where: { key: 'expenses.update' },
+    create: { key: 'expenses.update', description: 'Update your expenses' },
+    update: { description: 'Update your expenses' },
+  });
+  const expensesDelete = await prisma.permission.upsert({
+    where: { key: 'expenses.delete' },
+    create: { key: 'expenses.delete', description: 'Delete your expenses' },
+    update: { description: 'Delete your expenses' },
+  });
+
+  const financeAnalyticsRead = await prisma.permission.upsert({
+    where: { key: 'finance.analytics.read' },
+    create: { key: 'finance.analytics.read', description: 'View finance analytics summary' },
+    update: { description: 'View finance analytics summary' },
+  });
+
   const adminRole = await prisma.role.upsert({
     where: { slug: 'admin' },
     create: { slug: 'admin', name: 'Administrator' },
@@ -157,6 +226,19 @@ async function seed() {
     timeEntriesRead,
     timeEntriesUpdate,
     timeEntriesDelete,
+    invoicesCreate,
+    invoicesRead,
+    invoicesUpdate,
+    invoicesDelete,
+    paymentsCreate,
+    paymentsRead,
+    paymentsUpdate,
+    paymentsDelete,
+    expensesCreate,
+    expensesRead,
+    expensesUpdate,
+    expensesDelete,
+    financeAnalyticsRead,
   ];
 
   for (const role of [clientRole, freelancerRole]) {
