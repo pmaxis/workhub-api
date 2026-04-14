@@ -72,6 +72,26 @@ export type Role = Prisma.RoleModel;
  */
 export type RolePermission = Prisma.RolePermissionModel;
 /**
+ * Model BrainNote
+ *
+ */
+export type BrainNote = Prisma.BrainNoteModel;
+/**
+ * Model KnowledgeArticle
+ *
+ */
+export type KnowledgeArticle = Prisma.KnowledgeArticleModel;
+/**
+ * Model BrainTemplate
+ *
+ */
+export type BrainTemplate = Prisma.BrainTemplateModel;
+/**
+ * Model BrainJournalEntry
+ *
+ */
+export type BrainJournalEntry = Prisma.BrainJournalEntryModel;
+/**
  * Model Session
  *
  */

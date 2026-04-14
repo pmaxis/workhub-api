@@ -221,6 +221,9 @@ export type TaskWhereInput = {
   project?: Prisma.XOR<Prisma.ProjectScalarRelationFilter, Prisma.ProjectWhereInput>;
   assignee?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>;
   timeEntries?: Prisma.TimeEntryListRelationFilter;
+  brainNotes?: Prisma.BrainNoteListRelationFilter;
+  knowledgeArticles?: Prisma.KnowledgeArticleListRelationFilter;
+  brainTemplates?: Prisma.BrainTemplateListRelationFilter;
 };
 
 export type TaskOrderByWithRelationInput = {
@@ -237,6 +240,9 @@ export type TaskOrderByWithRelationInput = {
   project?: Prisma.ProjectOrderByWithRelationInput;
   assignee?: Prisma.UserOrderByWithRelationInput;
   timeEntries?: Prisma.TimeEntryOrderByRelationAggregateInput;
+  brainNotes?: Prisma.BrainNoteOrderByRelationAggregateInput;
+  knowledgeArticles?: Prisma.KnowledgeArticleOrderByRelationAggregateInput;
+  brainTemplates?: Prisma.BrainTemplateOrderByRelationAggregateInput;
 };
 
 export type TaskWhereUniqueInput = Prisma.AtLeast<
@@ -257,6 +263,9 @@ export type TaskWhereUniqueInput = Prisma.AtLeast<
     project?: Prisma.XOR<Prisma.ProjectScalarRelationFilter, Prisma.ProjectWhereInput>;
     assignee?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>;
     timeEntries?: Prisma.TimeEntryListRelationFilter;
+    brainNotes?: Prisma.BrainNoteListRelationFilter;
+    knowledgeArticles?: Prisma.KnowledgeArticleListRelationFilter;
+    brainTemplates?: Prisma.BrainTemplateListRelationFilter;
   },
   'id'
 >;
@@ -305,6 +314,9 @@ export type TaskCreateInput = {
   project: Prisma.ProjectCreateNestedOneWithoutTasksInput;
   assignee: Prisma.UserCreateNestedOneWithoutTasksInput;
   timeEntries?: Prisma.TimeEntryCreateNestedManyWithoutTaskInput;
+  brainNotes?: Prisma.BrainNoteCreateNestedManyWithoutTaskInput;
+  knowledgeArticles?: Prisma.KnowledgeArticleCreateNestedManyWithoutTaskInput;
+  brainTemplates?: Prisma.BrainTemplateCreateNestedManyWithoutTaskInput;
 };
 
 export type TaskUncheckedCreateInput = {
@@ -319,6 +331,9 @@ export type TaskUncheckedCreateInput = {
   createdAt?: Date | string;
   updatedAt?: Date | string;
   timeEntries?: Prisma.TimeEntryUncheckedCreateNestedManyWithoutTaskInput;
+  brainNotes?: Prisma.BrainNoteUncheckedCreateNestedManyWithoutTaskInput;
+  knowledgeArticles?: Prisma.KnowledgeArticleUncheckedCreateNestedManyWithoutTaskInput;
+  brainTemplates?: Prisma.BrainTemplateUncheckedCreateNestedManyWithoutTaskInput;
 };
 
 export type TaskUpdateInput = {
@@ -333,6 +348,9 @@ export type TaskUpdateInput = {
   project?: Prisma.ProjectUpdateOneRequiredWithoutTasksNestedInput;
   assignee?: Prisma.UserUpdateOneRequiredWithoutTasksNestedInput;
   timeEntries?: Prisma.TimeEntryUpdateManyWithoutTaskNestedInput;
+  brainNotes?: Prisma.BrainNoteUpdateManyWithoutTaskNestedInput;
+  knowledgeArticles?: Prisma.KnowledgeArticleUpdateManyWithoutTaskNestedInput;
+  brainTemplates?: Prisma.BrainTemplateUpdateManyWithoutTaskNestedInput;
 };
 
 export type TaskUncheckedUpdateInput = {
@@ -347,6 +365,9 @@ export type TaskUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   timeEntries?: Prisma.TimeEntryUncheckedUpdateManyWithoutTaskNestedInput;
+  brainNotes?: Prisma.BrainNoteUncheckedUpdateManyWithoutTaskNestedInput;
+  knowledgeArticles?: Prisma.KnowledgeArticleUncheckedUpdateManyWithoutTaskNestedInput;
+  brainTemplates?: Prisma.BrainTemplateUncheckedUpdateManyWithoutTaskNestedInput;
 };
 
 export type TaskCreateManyInput = {
@@ -396,6 +417,11 @@ export type TaskOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder;
 };
 
+export type TaskNullableScalarRelationFilter = {
+  is?: Prisma.TaskWhereInput | null;
+  isNot?: Prisma.TaskWhereInput | null;
+};
+
 export type TaskCountOrderByAggregateInput = {
   id?: Prisma.SortOrder;
   title?: Prisma.SortOrder;
@@ -433,11 +459,6 @@ export type TaskMinOrderByAggregateInput = {
   assigneeId?: Prisma.SortOrder;
   createdAt?: Prisma.SortOrder;
   updatedAt?: Prisma.SortOrder;
-};
-
-export type TaskNullableScalarRelationFilter = {
-  is?: Prisma.TaskWhereInput | null;
-  isNot?: Prisma.TaskWhereInput | null;
 };
 
 export type TaskCreateNestedManyWithoutProjectInput = {
@@ -524,6 +545,90 @@ export type TaskUncheckedUpdateManyWithoutProjectNestedInput = {
     | Prisma.TaskUpdateManyWithWhereWithoutProjectInput
     | Prisma.TaskUpdateManyWithWhereWithoutProjectInput[];
   deleteMany?: Prisma.TaskScalarWhereInput | Prisma.TaskScalarWhereInput[];
+};
+
+export type TaskCreateNestedOneWithoutBrainNotesInput = {
+  create?: Prisma.XOR<
+    Prisma.TaskCreateWithoutBrainNotesInput,
+    Prisma.TaskUncheckedCreateWithoutBrainNotesInput
+  >;
+  connectOrCreate?: Prisma.TaskCreateOrConnectWithoutBrainNotesInput;
+  connect?: Prisma.TaskWhereUniqueInput;
+};
+
+export type TaskUpdateOneWithoutBrainNotesNestedInput = {
+  create?: Prisma.XOR<
+    Prisma.TaskCreateWithoutBrainNotesInput,
+    Prisma.TaskUncheckedCreateWithoutBrainNotesInput
+  >;
+  connectOrCreate?: Prisma.TaskCreateOrConnectWithoutBrainNotesInput;
+  upsert?: Prisma.TaskUpsertWithoutBrainNotesInput;
+  disconnect?: Prisma.TaskWhereInput | boolean;
+  delete?: Prisma.TaskWhereInput | boolean;
+  connect?: Prisma.TaskWhereUniqueInput;
+  update?: Prisma.XOR<
+    Prisma.XOR<
+      Prisma.TaskUpdateToOneWithWhereWithoutBrainNotesInput,
+      Prisma.TaskUpdateWithoutBrainNotesInput
+    >,
+    Prisma.TaskUncheckedUpdateWithoutBrainNotesInput
+  >;
+};
+
+export type TaskCreateNestedOneWithoutKnowledgeArticlesInput = {
+  create?: Prisma.XOR<
+    Prisma.TaskCreateWithoutKnowledgeArticlesInput,
+    Prisma.TaskUncheckedCreateWithoutKnowledgeArticlesInput
+  >;
+  connectOrCreate?: Prisma.TaskCreateOrConnectWithoutKnowledgeArticlesInput;
+  connect?: Prisma.TaskWhereUniqueInput;
+};
+
+export type TaskUpdateOneWithoutKnowledgeArticlesNestedInput = {
+  create?: Prisma.XOR<
+    Prisma.TaskCreateWithoutKnowledgeArticlesInput,
+    Prisma.TaskUncheckedCreateWithoutKnowledgeArticlesInput
+  >;
+  connectOrCreate?: Prisma.TaskCreateOrConnectWithoutKnowledgeArticlesInput;
+  upsert?: Prisma.TaskUpsertWithoutKnowledgeArticlesInput;
+  disconnect?: Prisma.TaskWhereInput | boolean;
+  delete?: Prisma.TaskWhereInput | boolean;
+  connect?: Prisma.TaskWhereUniqueInput;
+  update?: Prisma.XOR<
+    Prisma.XOR<
+      Prisma.TaskUpdateToOneWithWhereWithoutKnowledgeArticlesInput,
+      Prisma.TaskUpdateWithoutKnowledgeArticlesInput
+    >,
+    Prisma.TaskUncheckedUpdateWithoutKnowledgeArticlesInput
+  >;
+};
+
+export type TaskCreateNestedOneWithoutBrainTemplatesInput = {
+  create?: Prisma.XOR<
+    Prisma.TaskCreateWithoutBrainTemplatesInput,
+    Prisma.TaskUncheckedCreateWithoutBrainTemplatesInput
+  >;
+  connectOrCreate?: Prisma.TaskCreateOrConnectWithoutBrainTemplatesInput;
+  connect?: Prisma.TaskWhereUniqueInput;
+};
+
+export type TaskUpdateOneWithoutBrainTemplatesNestedInput = {
+  create?: Prisma.XOR<
+    Prisma.TaskCreateWithoutBrainTemplatesInput,
+    Prisma.TaskUncheckedCreateWithoutBrainTemplatesInput
+  >;
+  connectOrCreate?: Prisma.TaskCreateOrConnectWithoutBrainTemplatesInput;
+  upsert?: Prisma.TaskUpsertWithoutBrainTemplatesInput;
+  disconnect?: Prisma.TaskWhereInput | boolean;
+  delete?: Prisma.TaskWhereInput | boolean;
+  connect?: Prisma.TaskWhereUniqueInput;
+  update?: Prisma.XOR<
+    Prisma.XOR<
+      Prisma.TaskUpdateToOneWithWhereWithoutBrainTemplatesInput,
+      Prisma.TaskUpdateWithoutBrainTemplatesInput
+    >,
+    Prisma.TaskUncheckedUpdateWithoutBrainTemplatesInput
+  >;
 };
 
 export type EnumTaskStatusFieldUpdateOperationsInput = {
@@ -655,6 +760,9 @@ export type TaskCreateWithoutProjectInput = {
   updatedAt?: Date | string;
   assignee: Prisma.UserCreateNestedOneWithoutTasksInput;
   timeEntries?: Prisma.TimeEntryCreateNestedManyWithoutTaskInput;
+  brainNotes?: Prisma.BrainNoteCreateNestedManyWithoutTaskInput;
+  knowledgeArticles?: Prisma.KnowledgeArticleCreateNestedManyWithoutTaskInput;
+  brainTemplates?: Prisma.BrainTemplateCreateNestedManyWithoutTaskInput;
 };
 
 export type TaskUncheckedCreateWithoutProjectInput = {
@@ -668,6 +776,9 @@ export type TaskUncheckedCreateWithoutProjectInput = {
   createdAt?: Date | string;
   updatedAt?: Date | string;
   timeEntries?: Prisma.TimeEntryUncheckedCreateNestedManyWithoutTaskInput;
+  brainNotes?: Prisma.BrainNoteUncheckedCreateNestedManyWithoutTaskInput;
+  knowledgeArticles?: Prisma.KnowledgeArticleUncheckedCreateNestedManyWithoutTaskInput;
+  brainTemplates?: Prisma.BrainTemplateUncheckedCreateNestedManyWithoutTaskInput;
 };
 
 export type TaskCreateOrConnectWithoutProjectInput = {
@@ -727,6 +838,282 @@ export type TaskScalarWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<'Task'> | Date | string;
 };
 
+export type TaskCreateWithoutBrainNotesInput = {
+  id?: string;
+  title: string;
+  description?: string | null;
+  status?: $Enums.TaskStatus;
+  projectOwnerId: string;
+  projectCompanyId?: string | null;
+  createdAt?: Date | string;
+  updatedAt?: Date | string;
+  project: Prisma.ProjectCreateNestedOneWithoutTasksInput;
+  assignee: Prisma.UserCreateNestedOneWithoutTasksInput;
+  timeEntries?: Prisma.TimeEntryCreateNestedManyWithoutTaskInput;
+  knowledgeArticles?: Prisma.KnowledgeArticleCreateNestedManyWithoutTaskInput;
+  brainTemplates?: Prisma.BrainTemplateCreateNestedManyWithoutTaskInput;
+};
+
+export type TaskUncheckedCreateWithoutBrainNotesInput = {
+  id?: string;
+  title: string;
+  description?: string | null;
+  status?: $Enums.TaskStatus;
+  projectId: string;
+  projectOwnerId: string;
+  projectCompanyId?: string | null;
+  assigneeId: string;
+  createdAt?: Date | string;
+  updatedAt?: Date | string;
+  timeEntries?: Prisma.TimeEntryUncheckedCreateNestedManyWithoutTaskInput;
+  knowledgeArticles?: Prisma.KnowledgeArticleUncheckedCreateNestedManyWithoutTaskInput;
+  brainTemplates?: Prisma.BrainTemplateUncheckedCreateNestedManyWithoutTaskInput;
+};
+
+export type TaskCreateOrConnectWithoutBrainNotesInput = {
+  where: Prisma.TaskWhereUniqueInput;
+  create: Prisma.XOR<
+    Prisma.TaskCreateWithoutBrainNotesInput,
+    Prisma.TaskUncheckedCreateWithoutBrainNotesInput
+  >;
+};
+
+export type TaskUpsertWithoutBrainNotesInput = {
+  update: Prisma.XOR<
+    Prisma.TaskUpdateWithoutBrainNotesInput,
+    Prisma.TaskUncheckedUpdateWithoutBrainNotesInput
+  >;
+  create: Prisma.XOR<
+    Prisma.TaskCreateWithoutBrainNotesInput,
+    Prisma.TaskUncheckedCreateWithoutBrainNotesInput
+  >;
+  where?: Prisma.TaskWhereInput;
+};
+
+export type TaskUpdateToOneWithWhereWithoutBrainNotesInput = {
+  where?: Prisma.TaskWhereInput;
+  data: Prisma.XOR<
+    Prisma.TaskUpdateWithoutBrainNotesInput,
+    Prisma.TaskUncheckedUpdateWithoutBrainNotesInput
+  >;
+};
+
+export type TaskUpdateWithoutBrainNotesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string;
+  title?: Prisma.StringFieldUpdateOperationsInput | string;
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  status?: Prisma.EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus;
+  projectOwnerId?: Prisma.StringFieldUpdateOperationsInput | string;
+  projectCompanyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+  project?: Prisma.ProjectUpdateOneRequiredWithoutTasksNestedInput;
+  assignee?: Prisma.UserUpdateOneRequiredWithoutTasksNestedInput;
+  timeEntries?: Prisma.TimeEntryUpdateManyWithoutTaskNestedInput;
+  knowledgeArticles?: Prisma.KnowledgeArticleUpdateManyWithoutTaskNestedInput;
+  brainTemplates?: Prisma.BrainTemplateUpdateManyWithoutTaskNestedInput;
+};
+
+export type TaskUncheckedUpdateWithoutBrainNotesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string;
+  title?: Prisma.StringFieldUpdateOperationsInput | string;
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  status?: Prisma.EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus;
+  projectId?: Prisma.StringFieldUpdateOperationsInput | string;
+  projectOwnerId?: Prisma.StringFieldUpdateOperationsInput | string;
+  projectCompanyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  assigneeId?: Prisma.StringFieldUpdateOperationsInput | string;
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+  timeEntries?: Prisma.TimeEntryUncheckedUpdateManyWithoutTaskNestedInput;
+  knowledgeArticles?: Prisma.KnowledgeArticleUncheckedUpdateManyWithoutTaskNestedInput;
+  brainTemplates?: Prisma.BrainTemplateUncheckedUpdateManyWithoutTaskNestedInput;
+};
+
+export type TaskCreateWithoutKnowledgeArticlesInput = {
+  id?: string;
+  title: string;
+  description?: string | null;
+  status?: $Enums.TaskStatus;
+  projectOwnerId: string;
+  projectCompanyId?: string | null;
+  createdAt?: Date | string;
+  updatedAt?: Date | string;
+  project: Prisma.ProjectCreateNestedOneWithoutTasksInput;
+  assignee: Prisma.UserCreateNestedOneWithoutTasksInput;
+  timeEntries?: Prisma.TimeEntryCreateNestedManyWithoutTaskInput;
+  brainNotes?: Prisma.BrainNoteCreateNestedManyWithoutTaskInput;
+  brainTemplates?: Prisma.BrainTemplateCreateNestedManyWithoutTaskInput;
+};
+
+export type TaskUncheckedCreateWithoutKnowledgeArticlesInput = {
+  id?: string;
+  title: string;
+  description?: string | null;
+  status?: $Enums.TaskStatus;
+  projectId: string;
+  projectOwnerId: string;
+  projectCompanyId?: string | null;
+  assigneeId: string;
+  createdAt?: Date | string;
+  updatedAt?: Date | string;
+  timeEntries?: Prisma.TimeEntryUncheckedCreateNestedManyWithoutTaskInput;
+  brainNotes?: Prisma.BrainNoteUncheckedCreateNestedManyWithoutTaskInput;
+  brainTemplates?: Prisma.BrainTemplateUncheckedCreateNestedManyWithoutTaskInput;
+};
+
+export type TaskCreateOrConnectWithoutKnowledgeArticlesInput = {
+  where: Prisma.TaskWhereUniqueInput;
+  create: Prisma.XOR<
+    Prisma.TaskCreateWithoutKnowledgeArticlesInput,
+    Prisma.TaskUncheckedCreateWithoutKnowledgeArticlesInput
+  >;
+};
+
+export type TaskUpsertWithoutKnowledgeArticlesInput = {
+  update: Prisma.XOR<
+    Prisma.TaskUpdateWithoutKnowledgeArticlesInput,
+    Prisma.TaskUncheckedUpdateWithoutKnowledgeArticlesInput
+  >;
+  create: Prisma.XOR<
+    Prisma.TaskCreateWithoutKnowledgeArticlesInput,
+    Prisma.TaskUncheckedCreateWithoutKnowledgeArticlesInput
+  >;
+  where?: Prisma.TaskWhereInput;
+};
+
+export type TaskUpdateToOneWithWhereWithoutKnowledgeArticlesInput = {
+  where?: Prisma.TaskWhereInput;
+  data: Prisma.XOR<
+    Prisma.TaskUpdateWithoutKnowledgeArticlesInput,
+    Prisma.TaskUncheckedUpdateWithoutKnowledgeArticlesInput
+  >;
+};
+
+export type TaskUpdateWithoutKnowledgeArticlesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string;
+  title?: Prisma.StringFieldUpdateOperationsInput | string;
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  status?: Prisma.EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus;
+  projectOwnerId?: Prisma.StringFieldUpdateOperationsInput | string;
+  projectCompanyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+  project?: Prisma.ProjectUpdateOneRequiredWithoutTasksNestedInput;
+  assignee?: Prisma.UserUpdateOneRequiredWithoutTasksNestedInput;
+  timeEntries?: Prisma.TimeEntryUpdateManyWithoutTaskNestedInput;
+  brainNotes?: Prisma.BrainNoteUpdateManyWithoutTaskNestedInput;
+  brainTemplates?: Prisma.BrainTemplateUpdateManyWithoutTaskNestedInput;
+};
+
+export type TaskUncheckedUpdateWithoutKnowledgeArticlesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string;
+  title?: Prisma.StringFieldUpdateOperationsInput | string;
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  status?: Prisma.EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus;
+  projectId?: Prisma.StringFieldUpdateOperationsInput | string;
+  projectOwnerId?: Prisma.StringFieldUpdateOperationsInput | string;
+  projectCompanyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  assigneeId?: Prisma.StringFieldUpdateOperationsInput | string;
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+  timeEntries?: Prisma.TimeEntryUncheckedUpdateManyWithoutTaskNestedInput;
+  brainNotes?: Prisma.BrainNoteUncheckedUpdateManyWithoutTaskNestedInput;
+  brainTemplates?: Prisma.BrainTemplateUncheckedUpdateManyWithoutTaskNestedInput;
+};
+
+export type TaskCreateWithoutBrainTemplatesInput = {
+  id?: string;
+  title: string;
+  description?: string | null;
+  status?: $Enums.TaskStatus;
+  projectOwnerId: string;
+  projectCompanyId?: string | null;
+  createdAt?: Date | string;
+  updatedAt?: Date | string;
+  project: Prisma.ProjectCreateNestedOneWithoutTasksInput;
+  assignee: Prisma.UserCreateNestedOneWithoutTasksInput;
+  timeEntries?: Prisma.TimeEntryCreateNestedManyWithoutTaskInput;
+  brainNotes?: Prisma.BrainNoteCreateNestedManyWithoutTaskInput;
+  knowledgeArticles?: Prisma.KnowledgeArticleCreateNestedManyWithoutTaskInput;
+};
+
+export type TaskUncheckedCreateWithoutBrainTemplatesInput = {
+  id?: string;
+  title: string;
+  description?: string | null;
+  status?: $Enums.TaskStatus;
+  projectId: string;
+  projectOwnerId: string;
+  projectCompanyId?: string | null;
+  assigneeId: string;
+  createdAt?: Date | string;
+  updatedAt?: Date | string;
+  timeEntries?: Prisma.TimeEntryUncheckedCreateNestedManyWithoutTaskInput;
+  brainNotes?: Prisma.BrainNoteUncheckedCreateNestedManyWithoutTaskInput;
+  knowledgeArticles?: Prisma.KnowledgeArticleUncheckedCreateNestedManyWithoutTaskInput;
+};
+
+export type TaskCreateOrConnectWithoutBrainTemplatesInput = {
+  where: Prisma.TaskWhereUniqueInput;
+  create: Prisma.XOR<
+    Prisma.TaskCreateWithoutBrainTemplatesInput,
+    Prisma.TaskUncheckedCreateWithoutBrainTemplatesInput
+  >;
+};
+
+export type TaskUpsertWithoutBrainTemplatesInput = {
+  update: Prisma.XOR<
+    Prisma.TaskUpdateWithoutBrainTemplatesInput,
+    Prisma.TaskUncheckedUpdateWithoutBrainTemplatesInput
+  >;
+  create: Prisma.XOR<
+    Prisma.TaskCreateWithoutBrainTemplatesInput,
+    Prisma.TaskUncheckedCreateWithoutBrainTemplatesInput
+  >;
+  where?: Prisma.TaskWhereInput;
+};
+
+export type TaskUpdateToOneWithWhereWithoutBrainTemplatesInput = {
+  where?: Prisma.TaskWhereInput;
+  data: Prisma.XOR<
+    Prisma.TaskUpdateWithoutBrainTemplatesInput,
+    Prisma.TaskUncheckedUpdateWithoutBrainTemplatesInput
+  >;
+};
+
+export type TaskUpdateWithoutBrainTemplatesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string;
+  title?: Prisma.StringFieldUpdateOperationsInput | string;
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  status?: Prisma.EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus;
+  projectOwnerId?: Prisma.StringFieldUpdateOperationsInput | string;
+  projectCompanyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+  project?: Prisma.ProjectUpdateOneRequiredWithoutTasksNestedInput;
+  assignee?: Prisma.UserUpdateOneRequiredWithoutTasksNestedInput;
+  timeEntries?: Prisma.TimeEntryUpdateManyWithoutTaskNestedInput;
+  brainNotes?: Prisma.BrainNoteUpdateManyWithoutTaskNestedInput;
+  knowledgeArticles?: Prisma.KnowledgeArticleUpdateManyWithoutTaskNestedInput;
+};
+
+export type TaskUncheckedUpdateWithoutBrainTemplatesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string;
+  title?: Prisma.StringFieldUpdateOperationsInput | string;
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  status?: Prisma.EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus;
+  projectId?: Prisma.StringFieldUpdateOperationsInput | string;
+  projectOwnerId?: Prisma.StringFieldUpdateOperationsInput | string;
+  projectCompanyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  assigneeId?: Prisma.StringFieldUpdateOperationsInput | string;
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+  timeEntries?: Prisma.TimeEntryUncheckedUpdateManyWithoutTaskNestedInput;
+  brainNotes?: Prisma.BrainNoteUncheckedUpdateManyWithoutTaskNestedInput;
+  knowledgeArticles?: Prisma.KnowledgeArticleUncheckedUpdateManyWithoutTaskNestedInput;
+};
+
 export type TaskCreateWithoutTimeEntriesInput = {
   id?: string;
   title: string;
@@ -738,6 +1125,9 @@ export type TaskCreateWithoutTimeEntriesInput = {
   updatedAt?: Date | string;
   project: Prisma.ProjectCreateNestedOneWithoutTasksInput;
   assignee: Prisma.UserCreateNestedOneWithoutTasksInput;
+  brainNotes?: Prisma.BrainNoteCreateNestedManyWithoutTaskInput;
+  knowledgeArticles?: Prisma.KnowledgeArticleCreateNestedManyWithoutTaskInput;
+  brainTemplates?: Prisma.BrainTemplateCreateNestedManyWithoutTaskInput;
 };
 
 export type TaskUncheckedCreateWithoutTimeEntriesInput = {
@@ -751,6 +1141,9 @@ export type TaskUncheckedCreateWithoutTimeEntriesInput = {
   assigneeId: string;
   createdAt?: Date | string;
   updatedAt?: Date | string;
+  brainNotes?: Prisma.BrainNoteUncheckedCreateNestedManyWithoutTaskInput;
+  knowledgeArticles?: Prisma.KnowledgeArticleUncheckedCreateNestedManyWithoutTaskInput;
+  brainTemplates?: Prisma.BrainTemplateUncheckedCreateNestedManyWithoutTaskInput;
 };
 
 export type TaskCreateOrConnectWithoutTimeEntriesInput = {
@@ -792,6 +1185,9 @@ export type TaskUpdateWithoutTimeEntriesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   project?: Prisma.ProjectUpdateOneRequiredWithoutTasksNestedInput;
   assignee?: Prisma.UserUpdateOneRequiredWithoutTasksNestedInput;
+  brainNotes?: Prisma.BrainNoteUpdateManyWithoutTaskNestedInput;
+  knowledgeArticles?: Prisma.KnowledgeArticleUpdateManyWithoutTaskNestedInput;
+  brainTemplates?: Prisma.BrainTemplateUpdateManyWithoutTaskNestedInput;
 };
 
 export type TaskUncheckedUpdateWithoutTimeEntriesInput = {
@@ -805,6 +1201,9 @@ export type TaskUncheckedUpdateWithoutTimeEntriesInput = {
   assigneeId?: Prisma.StringFieldUpdateOperationsInput | string;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+  brainNotes?: Prisma.BrainNoteUncheckedUpdateManyWithoutTaskNestedInput;
+  knowledgeArticles?: Prisma.KnowledgeArticleUncheckedUpdateManyWithoutTaskNestedInput;
+  brainTemplates?: Prisma.BrainTemplateUncheckedUpdateManyWithoutTaskNestedInput;
 };
 
 export type TaskCreateWithoutAssigneeInput = {
@@ -818,6 +1217,9 @@ export type TaskCreateWithoutAssigneeInput = {
   updatedAt?: Date | string;
   project: Prisma.ProjectCreateNestedOneWithoutTasksInput;
   timeEntries?: Prisma.TimeEntryCreateNestedManyWithoutTaskInput;
+  brainNotes?: Prisma.BrainNoteCreateNestedManyWithoutTaskInput;
+  knowledgeArticles?: Prisma.KnowledgeArticleCreateNestedManyWithoutTaskInput;
+  brainTemplates?: Prisma.BrainTemplateCreateNestedManyWithoutTaskInput;
 };
 
 export type TaskUncheckedCreateWithoutAssigneeInput = {
@@ -831,6 +1233,9 @@ export type TaskUncheckedCreateWithoutAssigneeInput = {
   createdAt?: Date | string;
   updatedAt?: Date | string;
   timeEntries?: Prisma.TimeEntryUncheckedCreateNestedManyWithoutTaskInput;
+  brainNotes?: Prisma.BrainNoteUncheckedCreateNestedManyWithoutTaskInput;
+  knowledgeArticles?: Prisma.KnowledgeArticleUncheckedCreateNestedManyWithoutTaskInput;
+  brainTemplates?: Prisma.BrainTemplateUncheckedCreateNestedManyWithoutTaskInput;
 };
 
 export type TaskCreateOrConnectWithoutAssigneeInput = {
@@ -897,6 +1302,9 @@ export type TaskUpdateWithoutProjectInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   assignee?: Prisma.UserUpdateOneRequiredWithoutTasksNestedInput;
   timeEntries?: Prisma.TimeEntryUpdateManyWithoutTaskNestedInput;
+  brainNotes?: Prisma.BrainNoteUpdateManyWithoutTaskNestedInput;
+  knowledgeArticles?: Prisma.KnowledgeArticleUpdateManyWithoutTaskNestedInput;
+  brainTemplates?: Prisma.BrainTemplateUpdateManyWithoutTaskNestedInput;
 };
 
 export type TaskUncheckedUpdateWithoutProjectInput = {
@@ -910,6 +1318,9 @@ export type TaskUncheckedUpdateWithoutProjectInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   timeEntries?: Prisma.TimeEntryUncheckedUpdateManyWithoutTaskNestedInput;
+  brainNotes?: Prisma.BrainNoteUncheckedUpdateManyWithoutTaskNestedInput;
+  knowledgeArticles?: Prisma.KnowledgeArticleUncheckedUpdateManyWithoutTaskNestedInput;
+  brainTemplates?: Prisma.BrainTemplateUncheckedUpdateManyWithoutTaskNestedInput;
 };
 
 export type TaskUncheckedUpdateManyWithoutProjectInput = {
@@ -947,6 +1358,9 @@ export type TaskUpdateWithoutAssigneeInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   project?: Prisma.ProjectUpdateOneRequiredWithoutTasksNestedInput;
   timeEntries?: Prisma.TimeEntryUpdateManyWithoutTaskNestedInput;
+  brainNotes?: Prisma.BrainNoteUpdateManyWithoutTaskNestedInput;
+  knowledgeArticles?: Prisma.KnowledgeArticleUpdateManyWithoutTaskNestedInput;
+  brainTemplates?: Prisma.BrainTemplateUpdateManyWithoutTaskNestedInput;
 };
 
 export type TaskUncheckedUpdateWithoutAssigneeInput = {
@@ -960,6 +1374,9 @@ export type TaskUncheckedUpdateWithoutAssigneeInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   timeEntries?: Prisma.TimeEntryUncheckedUpdateManyWithoutTaskNestedInput;
+  brainNotes?: Prisma.BrainNoteUncheckedUpdateManyWithoutTaskNestedInput;
+  knowledgeArticles?: Prisma.KnowledgeArticleUncheckedUpdateManyWithoutTaskNestedInput;
+  brainTemplates?: Prisma.BrainTemplateUncheckedUpdateManyWithoutTaskNestedInput;
 };
 
 export type TaskUncheckedUpdateManyWithoutAssigneeInput = {
@@ -980,12 +1397,18 @@ export type TaskUncheckedUpdateManyWithoutAssigneeInput = {
 
 export type TaskCountOutputType = {
   timeEntries: number;
+  brainNotes: number;
+  knowledgeArticles: number;
+  brainTemplates: number;
 };
 
 export type TaskCountOutputTypeSelect<
   ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
 > = {
   timeEntries?: boolean | TaskCountOutputTypeCountTimeEntriesArgs;
+  brainNotes?: boolean | TaskCountOutputTypeCountBrainNotesArgs;
+  knowledgeArticles?: boolean | TaskCountOutputTypeCountKnowledgeArticlesArgs;
+  brainTemplates?: boolean | TaskCountOutputTypeCountBrainTemplatesArgs;
 };
 
 /**
@@ -1009,6 +1432,33 @@ export type TaskCountOutputTypeCountTimeEntriesArgs<
   where?: Prisma.TimeEntryWhereInput;
 };
 
+/**
+ * TaskCountOutputType without action
+ */
+export type TaskCountOutputTypeCountBrainNotesArgs<
+  ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
+> = {
+  where?: Prisma.BrainNoteWhereInput;
+};
+
+/**
+ * TaskCountOutputType without action
+ */
+export type TaskCountOutputTypeCountKnowledgeArticlesArgs<
+  ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
+> = {
+  where?: Prisma.KnowledgeArticleWhereInput;
+};
+
+/**
+ * TaskCountOutputType without action
+ */
+export type TaskCountOutputTypeCountBrainTemplatesArgs<
+  ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
+> = {
+  where?: Prisma.BrainTemplateWhereInput;
+};
+
 export type TaskSelect<
   ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
 > = runtime.Types.Extensions.GetSelect<
@@ -1026,6 +1476,9 @@ export type TaskSelect<
     project?: boolean | Prisma.ProjectDefaultArgs<ExtArgs>;
     assignee?: boolean | Prisma.UserDefaultArgs<ExtArgs>;
     timeEntries?: boolean | Prisma.Task$timeEntriesArgs<ExtArgs>;
+    brainNotes?: boolean | Prisma.Task$brainNotesArgs<ExtArgs>;
+    knowledgeArticles?: boolean | Prisma.Task$knowledgeArticlesArgs<ExtArgs>;
+    brainTemplates?: boolean | Prisma.Task$brainTemplatesArgs<ExtArgs>;
     _count?: boolean | Prisma.TaskCountOutputTypeDefaultArgs<ExtArgs>;
   },
   ExtArgs['result']['task']
@@ -1105,6 +1558,9 @@ export type TaskInclude<
   project?: boolean | Prisma.ProjectDefaultArgs<ExtArgs>;
   assignee?: boolean | Prisma.UserDefaultArgs<ExtArgs>;
   timeEntries?: boolean | Prisma.Task$timeEntriesArgs<ExtArgs>;
+  brainNotes?: boolean | Prisma.Task$brainNotesArgs<ExtArgs>;
+  knowledgeArticles?: boolean | Prisma.Task$knowledgeArticlesArgs<ExtArgs>;
+  brainTemplates?: boolean | Prisma.Task$brainTemplatesArgs<ExtArgs>;
   _count?: boolean | Prisma.TaskCountOutputTypeDefaultArgs<ExtArgs>;
 };
 export type TaskIncludeCreateManyAndReturn<
@@ -1128,6 +1584,9 @@ export type $TaskPayload<
     project: Prisma.$ProjectPayload<ExtArgs>;
     assignee: Prisma.$UserPayload<ExtArgs>;
     timeEntries: Prisma.$TimeEntryPayload<ExtArgs>[];
+    brainNotes: Prisma.$BrainNotePayload<ExtArgs>[];
+    knowledgeArticles: Prisma.$KnowledgeArticlePayload<ExtArgs>[];
+    brainTemplates: Prisma.$BrainTemplatePayload<ExtArgs>[];
   };
   scalars: runtime.Types.Extensions.GetPayloadResult<
     {
@@ -1690,6 +2149,39 @@ export interface Prisma__TaskClient<
       >
     | Null
   >;
+  brainNotes<T extends Prisma.Task$brainNotesArgs<ExtArgs> = {}>(
+    args?: Prisma.Subset<T, Prisma.Task$brainNotesArgs<ExtArgs>>,
+  ): Prisma.PrismaPromise<
+    | runtime.Types.Result.GetResult<
+        Prisma.$BrainNotePayload<ExtArgs>,
+        T,
+        'findMany',
+        GlobalOmitOptions
+      >
+    | Null
+  >;
+  knowledgeArticles<T extends Prisma.Task$knowledgeArticlesArgs<ExtArgs> = {}>(
+    args?: Prisma.Subset<T, Prisma.Task$knowledgeArticlesArgs<ExtArgs>>,
+  ): Prisma.PrismaPromise<
+    | runtime.Types.Result.GetResult<
+        Prisma.$KnowledgeArticlePayload<ExtArgs>,
+        T,
+        'findMany',
+        GlobalOmitOptions
+      >
+    | Null
+  >;
+  brainTemplates<T extends Prisma.Task$brainTemplatesArgs<ExtArgs> = {}>(
+    args?: Prisma.Subset<T, Prisma.Task$brainTemplatesArgs<ExtArgs>>,
+  ): Prisma.PrismaPromise<
+    | runtime.Types.Result.GetResult<
+        Prisma.$BrainTemplatePayload<ExtArgs>,
+        T,
+        'findMany',
+        GlobalOmitOptions
+      >
+    | Null
+  >;
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2177,6 +2669,88 @@ export type Task$timeEntriesArgs<
   take?: number;
   skip?: number;
   distinct?: Prisma.TimeEntryScalarFieldEnum | Prisma.TimeEntryScalarFieldEnum[];
+};
+
+/**
+ * Task.brainNotes
+ */
+export type Task$brainNotesArgs<
+  ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
+> = {
+  /**
+   * Select specific fields to fetch from the BrainNote
+   */
+  select?: Prisma.BrainNoteSelect<ExtArgs> | null;
+  /**
+   * Omit specific fields from the BrainNote
+   */
+  omit?: Prisma.BrainNoteOmit<ExtArgs> | null;
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BrainNoteInclude<ExtArgs> | null;
+  where?: Prisma.BrainNoteWhereInput;
+  orderBy?: Prisma.BrainNoteOrderByWithRelationInput | Prisma.BrainNoteOrderByWithRelationInput[];
+  cursor?: Prisma.BrainNoteWhereUniqueInput;
+  take?: number;
+  skip?: number;
+  distinct?: Prisma.BrainNoteScalarFieldEnum | Prisma.BrainNoteScalarFieldEnum[];
+};
+
+/**
+ * Task.knowledgeArticles
+ */
+export type Task$knowledgeArticlesArgs<
+  ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
+> = {
+  /**
+   * Select specific fields to fetch from the KnowledgeArticle
+   */
+  select?: Prisma.KnowledgeArticleSelect<ExtArgs> | null;
+  /**
+   * Omit specific fields from the KnowledgeArticle
+   */
+  omit?: Prisma.KnowledgeArticleOmit<ExtArgs> | null;
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.KnowledgeArticleInclude<ExtArgs> | null;
+  where?: Prisma.KnowledgeArticleWhereInput;
+  orderBy?:
+    | Prisma.KnowledgeArticleOrderByWithRelationInput
+    | Prisma.KnowledgeArticleOrderByWithRelationInput[];
+  cursor?: Prisma.KnowledgeArticleWhereUniqueInput;
+  take?: number;
+  skip?: number;
+  distinct?: Prisma.KnowledgeArticleScalarFieldEnum | Prisma.KnowledgeArticleScalarFieldEnum[];
+};
+
+/**
+ * Task.brainTemplates
+ */
+export type Task$brainTemplatesArgs<
+  ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
+> = {
+  /**
+   * Select specific fields to fetch from the BrainTemplate
+   */
+  select?: Prisma.BrainTemplateSelect<ExtArgs> | null;
+  /**
+   * Omit specific fields from the BrainTemplate
+   */
+  omit?: Prisma.BrainTemplateOmit<ExtArgs> | null;
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BrainTemplateInclude<ExtArgs> | null;
+  where?: Prisma.BrainTemplateWhereInput;
+  orderBy?:
+    | Prisma.BrainTemplateOrderByWithRelationInput
+    | Prisma.BrainTemplateOrderByWithRelationInput[];
+  cursor?: Prisma.BrainTemplateWhereUniqueInput;
+  take?: number;
+  skip?: number;
+  distinct?: Prisma.BrainTemplateScalarFieldEnum | Prisma.BrainTemplateScalarFieldEnum[];
 };
 
 /**

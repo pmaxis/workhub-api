@@ -10,16 +10,20 @@ model User {
 
   isActivated       Boolean          @default(false) @map("is_activated")
 
-  sessions          Session[]
-  roles             UserRole[]
-  invitations       Invitation[]
-  projects          Project[]
-  tasks             Task[]
-  timeEntries       TimeEntry[]
-  invoices          Invoice[]
-  payments          Payment[]
-  expenses          Expense[]
-  notifications     Notification[]
+  sessions            Session[]
+  roles               UserRole[]
+  invitations         Invitation[]
+  projects            Project[]
+  tasks               Task[]
+  timeEntries         TimeEntry[]
+  invoices            Invoice[]
+  payments            Payment[]
+  expenses            Expense[]
+  brainNotes          BrainNote[]
+  knowledgeArticles   KnowledgeArticle[]
+  brainTemplates      BrainTemplate[]
+  brainJournalEntries BrainJournalEntry[]
+  notifications       Notification[]
 
   freelancerProfile FreelancerProfile?
   clientProfile     ClientProfile?

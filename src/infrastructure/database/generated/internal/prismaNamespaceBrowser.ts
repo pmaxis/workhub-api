@@ -59,6 +59,10 @@ export const ModelName = {
   Project: 'Project',
   Role: 'Role',
   RolePermission: 'RolePermission',
+  BrainNote: 'BrainNote',
+  KnowledgeArticle: 'KnowledgeArticle',
+  BrainTemplate: 'BrainTemplate',
+  BrainJournalEntry: 'BrainJournalEntry',
   Session: 'Session',
   Task: 'Task',
   TimeEntry: 'TimeEntry',
@@ -228,6 +232,62 @@ export const RolePermissionScalarFieldEnum = {
 
 export type RolePermissionScalarFieldEnum =
   (typeof RolePermissionScalarFieldEnum)[keyof typeof RolePermissionScalarFieldEnum];
+
+export const BrainNoteScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  taskId: 'taskId',
+  title: 'title',
+  body: 'body',
+  tags: 'tags',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+} as const;
+
+export type BrainNoteScalarFieldEnum =
+  (typeof BrainNoteScalarFieldEnum)[keyof typeof BrainNoteScalarFieldEnum];
+
+export const KnowledgeArticleScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  taskId: 'taskId',
+  title: 'title',
+  body: 'body',
+  tags: 'tags',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+} as const;
+
+export type KnowledgeArticleScalarFieldEnum =
+  (typeof KnowledgeArticleScalarFieldEnum)[keyof typeof KnowledgeArticleScalarFieldEnum];
+
+export const BrainTemplateScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  taskId: 'taskId',
+  title: 'title',
+  body: 'body',
+  tags: 'tags',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+} as const;
+
+export type BrainTemplateScalarFieldEnum =
+  (typeof BrainTemplateScalarFieldEnum)[keyof typeof BrainTemplateScalarFieldEnum];
+
+export const BrainJournalEntryScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  entryDate: 'entryDate',
+  title: 'title',
+  body: 'body',
+  mood: 'mood',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+} as const;
+
+export type BrainJournalEntryScalarFieldEnum =
+  (typeof BrainJournalEntryScalarFieldEnum)[keyof typeof BrainJournalEntryScalarFieldEnum];
 
 export const SessionScalarFieldEnum = {
   id: 'id',

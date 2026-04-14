@@ -386,6 +386,10 @@ export const ModelName = {
   Project: 'Project',
   Role: 'Role',
   RolePermission: 'RolePermission',
+  BrainNote: 'BrainNote',
+  KnowledgeArticle: 'KnowledgeArticle',
+  BrainTemplate: 'BrainTemplate',
+  BrainJournalEntry: 'BrainJournalEntry',
   Session: 'Session',
   Task: 'Task',
   TimeEntry: 'TimeEntry',
@@ -425,6 +429,10 @@ export type TypeMap<
       | 'project'
       | 'role'
       | 'rolePermission'
+      | 'brainNote'
+      | 'knowledgeArticle'
+      | 'brainTemplate'
+      | 'brainJournalEntry'
       | 'session'
       | 'task'
       | 'timeEntry'
@@ -1256,6 +1264,308 @@ export type TypeMap<
         };
       };
     };
+    BrainNote: {
+      payload: Prisma.$BrainNotePayload<ExtArgs>;
+      fields: Prisma.BrainNoteFieldRefs;
+      operations: {
+        findUnique: {
+          args: Prisma.BrainNoteFindUniqueArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BrainNotePayload> | null;
+        };
+        findUniqueOrThrow: {
+          args: Prisma.BrainNoteFindUniqueOrThrowArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BrainNotePayload>;
+        };
+        findFirst: {
+          args: Prisma.BrainNoteFindFirstArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BrainNotePayload> | null;
+        };
+        findFirstOrThrow: {
+          args: Prisma.BrainNoteFindFirstOrThrowArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BrainNotePayload>;
+        };
+        findMany: {
+          args: Prisma.BrainNoteFindManyArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BrainNotePayload>[];
+        };
+        create: {
+          args: Prisma.BrainNoteCreateArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BrainNotePayload>;
+        };
+        createMany: {
+          args: Prisma.BrainNoteCreateManyArgs<ExtArgs>;
+          result: BatchPayload;
+        };
+        createManyAndReturn: {
+          args: Prisma.BrainNoteCreateManyAndReturnArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BrainNotePayload>[];
+        };
+        delete: {
+          args: Prisma.BrainNoteDeleteArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BrainNotePayload>;
+        };
+        update: {
+          args: Prisma.BrainNoteUpdateArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BrainNotePayload>;
+        };
+        deleteMany: {
+          args: Prisma.BrainNoteDeleteManyArgs<ExtArgs>;
+          result: BatchPayload;
+        };
+        updateMany: {
+          args: Prisma.BrainNoteUpdateManyArgs<ExtArgs>;
+          result: BatchPayload;
+        };
+        updateManyAndReturn: {
+          args: Prisma.BrainNoteUpdateManyAndReturnArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BrainNotePayload>[];
+        };
+        upsert: {
+          args: Prisma.BrainNoteUpsertArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BrainNotePayload>;
+        };
+        aggregate: {
+          args: Prisma.BrainNoteAggregateArgs<ExtArgs>;
+          result: runtime.Types.Utils.Optional<Prisma.AggregateBrainNote>;
+        };
+        groupBy: {
+          args: Prisma.BrainNoteGroupByArgs<ExtArgs>;
+          result: runtime.Types.Utils.Optional<Prisma.BrainNoteGroupByOutputType>[];
+        };
+        count: {
+          args: Prisma.BrainNoteCountArgs<ExtArgs>;
+          result: runtime.Types.Utils.Optional<Prisma.BrainNoteCountAggregateOutputType> | number;
+        };
+      };
+    };
+    KnowledgeArticle: {
+      payload: Prisma.$KnowledgeArticlePayload<ExtArgs>;
+      fields: Prisma.KnowledgeArticleFieldRefs;
+      operations: {
+        findUnique: {
+          args: Prisma.KnowledgeArticleFindUniqueArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$KnowledgeArticlePayload> | null;
+        };
+        findUniqueOrThrow: {
+          args: Prisma.KnowledgeArticleFindUniqueOrThrowArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$KnowledgeArticlePayload>;
+        };
+        findFirst: {
+          args: Prisma.KnowledgeArticleFindFirstArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$KnowledgeArticlePayload> | null;
+        };
+        findFirstOrThrow: {
+          args: Prisma.KnowledgeArticleFindFirstOrThrowArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$KnowledgeArticlePayload>;
+        };
+        findMany: {
+          args: Prisma.KnowledgeArticleFindManyArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$KnowledgeArticlePayload>[];
+        };
+        create: {
+          args: Prisma.KnowledgeArticleCreateArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$KnowledgeArticlePayload>;
+        };
+        createMany: {
+          args: Prisma.KnowledgeArticleCreateManyArgs<ExtArgs>;
+          result: BatchPayload;
+        };
+        createManyAndReturn: {
+          args: Prisma.KnowledgeArticleCreateManyAndReturnArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$KnowledgeArticlePayload>[];
+        };
+        delete: {
+          args: Prisma.KnowledgeArticleDeleteArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$KnowledgeArticlePayload>;
+        };
+        update: {
+          args: Prisma.KnowledgeArticleUpdateArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$KnowledgeArticlePayload>;
+        };
+        deleteMany: {
+          args: Prisma.KnowledgeArticleDeleteManyArgs<ExtArgs>;
+          result: BatchPayload;
+        };
+        updateMany: {
+          args: Prisma.KnowledgeArticleUpdateManyArgs<ExtArgs>;
+          result: BatchPayload;
+        };
+        updateManyAndReturn: {
+          args: Prisma.KnowledgeArticleUpdateManyAndReturnArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$KnowledgeArticlePayload>[];
+        };
+        upsert: {
+          args: Prisma.KnowledgeArticleUpsertArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$KnowledgeArticlePayload>;
+        };
+        aggregate: {
+          args: Prisma.KnowledgeArticleAggregateArgs<ExtArgs>;
+          result: runtime.Types.Utils.Optional<Prisma.AggregateKnowledgeArticle>;
+        };
+        groupBy: {
+          args: Prisma.KnowledgeArticleGroupByArgs<ExtArgs>;
+          result: runtime.Types.Utils.Optional<Prisma.KnowledgeArticleGroupByOutputType>[];
+        };
+        count: {
+          args: Prisma.KnowledgeArticleCountArgs<ExtArgs>;
+          result:
+            | runtime.Types.Utils.Optional<Prisma.KnowledgeArticleCountAggregateOutputType>
+            | number;
+        };
+      };
+    };
+    BrainTemplate: {
+      payload: Prisma.$BrainTemplatePayload<ExtArgs>;
+      fields: Prisma.BrainTemplateFieldRefs;
+      operations: {
+        findUnique: {
+          args: Prisma.BrainTemplateFindUniqueArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BrainTemplatePayload> | null;
+        };
+        findUniqueOrThrow: {
+          args: Prisma.BrainTemplateFindUniqueOrThrowArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BrainTemplatePayload>;
+        };
+        findFirst: {
+          args: Prisma.BrainTemplateFindFirstArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BrainTemplatePayload> | null;
+        };
+        findFirstOrThrow: {
+          args: Prisma.BrainTemplateFindFirstOrThrowArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BrainTemplatePayload>;
+        };
+        findMany: {
+          args: Prisma.BrainTemplateFindManyArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BrainTemplatePayload>[];
+        };
+        create: {
+          args: Prisma.BrainTemplateCreateArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BrainTemplatePayload>;
+        };
+        createMany: {
+          args: Prisma.BrainTemplateCreateManyArgs<ExtArgs>;
+          result: BatchPayload;
+        };
+        createManyAndReturn: {
+          args: Prisma.BrainTemplateCreateManyAndReturnArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BrainTemplatePayload>[];
+        };
+        delete: {
+          args: Prisma.BrainTemplateDeleteArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BrainTemplatePayload>;
+        };
+        update: {
+          args: Prisma.BrainTemplateUpdateArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BrainTemplatePayload>;
+        };
+        deleteMany: {
+          args: Prisma.BrainTemplateDeleteManyArgs<ExtArgs>;
+          result: BatchPayload;
+        };
+        updateMany: {
+          args: Prisma.BrainTemplateUpdateManyArgs<ExtArgs>;
+          result: BatchPayload;
+        };
+        updateManyAndReturn: {
+          args: Prisma.BrainTemplateUpdateManyAndReturnArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BrainTemplatePayload>[];
+        };
+        upsert: {
+          args: Prisma.BrainTemplateUpsertArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BrainTemplatePayload>;
+        };
+        aggregate: {
+          args: Prisma.BrainTemplateAggregateArgs<ExtArgs>;
+          result: runtime.Types.Utils.Optional<Prisma.AggregateBrainTemplate>;
+        };
+        groupBy: {
+          args: Prisma.BrainTemplateGroupByArgs<ExtArgs>;
+          result: runtime.Types.Utils.Optional<Prisma.BrainTemplateGroupByOutputType>[];
+        };
+        count: {
+          args: Prisma.BrainTemplateCountArgs<ExtArgs>;
+          result:
+            | runtime.Types.Utils.Optional<Prisma.BrainTemplateCountAggregateOutputType>
+            | number;
+        };
+      };
+    };
+    BrainJournalEntry: {
+      payload: Prisma.$BrainJournalEntryPayload<ExtArgs>;
+      fields: Prisma.BrainJournalEntryFieldRefs;
+      operations: {
+        findUnique: {
+          args: Prisma.BrainJournalEntryFindUniqueArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BrainJournalEntryPayload> | null;
+        };
+        findUniqueOrThrow: {
+          args: Prisma.BrainJournalEntryFindUniqueOrThrowArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BrainJournalEntryPayload>;
+        };
+        findFirst: {
+          args: Prisma.BrainJournalEntryFindFirstArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BrainJournalEntryPayload> | null;
+        };
+        findFirstOrThrow: {
+          args: Prisma.BrainJournalEntryFindFirstOrThrowArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BrainJournalEntryPayload>;
+        };
+        findMany: {
+          args: Prisma.BrainJournalEntryFindManyArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BrainJournalEntryPayload>[];
+        };
+        create: {
+          args: Prisma.BrainJournalEntryCreateArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BrainJournalEntryPayload>;
+        };
+        createMany: {
+          args: Prisma.BrainJournalEntryCreateManyArgs<ExtArgs>;
+          result: BatchPayload;
+        };
+        createManyAndReturn: {
+          args: Prisma.BrainJournalEntryCreateManyAndReturnArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BrainJournalEntryPayload>[];
+        };
+        delete: {
+          args: Prisma.BrainJournalEntryDeleteArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BrainJournalEntryPayload>;
+        };
+        update: {
+          args: Prisma.BrainJournalEntryUpdateArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BrainJournalEntryPayload>;
+        };
+        deleteMany: {
+          args: Prisma.BrainJournalEntryDeleteManyArgs<ExtArgs>;
+          result: BatchPayload;
+        };
+        updateMany: {
+          args: Prisma.BrainJournalEntryUpdateManyArgs<ExtArgs>;
+          result: BatchPayload;
+        };
+        updateManyAndReturn: {
+          args: Prisma.BrainJournalEntryUpdateManyAndReturnArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BrainJournalEntryPayload>[];
+        };
+        upsert: {
+          args: Prisma.BrainJournalEntryUpsertArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BrainJournalEntryPayload>;
+        };
+        aggregate: {
+          args: Prisma.BrainJournalEntryAggregateArgs<ExtArgs>;
+          result: runtime.Types.Utils.Optional<Prisma.AggregateBrainJournalEntry>;
+        };
+        groupBy: {
+          args: Prisma.BrainJournalEntryGroupByArgs<ExtArgs>;
+          result: runtime.Types.Utils.Optional<Prisma.BrainJournalEntryGroupByOutputType>[];
+        };
+        count: {
+          args: Prisma.BrainJournalEntryCountArgs<ExtArgs>;
+          result:
+            | runtime.Types.Utils.Optional<Prisma.BrainJournalEntryCountAggregateOutputType>
+            | number;
+        };
+      };
+    };
     Session: {
       payload: Prisma.$SessionPayload<ExtArgs>;
       fields: Prisma.SessionFieldRefs;
@@ -2037,6 +2347,62 @@ export const RolePermissionScalarFieldEnum = {
 export type RolePermissionScalarFieldEnum =
   (typeof RolePermissionScalarFieldEnum)[keyof typeof RolePermissionScalarFieldEnum];
 
+export const BrainNoteScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  taskId: 'taskId',
+  title: 'title',
+  body: 'body',
+  tags: 'tags',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+} as const;
+
+export type BrainNoteScalarFieldEnum =
+  (typeof BrainNoteScalarFieldEnum)[keyof typeof BrainNoteScalarFieldEnum];
+
+export const KnowledgeArticleScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  taskId: 'taskId',
+  title: 'title',
+  body: 'body',
+  tags: 'tags',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+} as const;
+
+export type KnowledgeArticleScalarFieldEnum =
+  (typeof KnowledgeArticleScalarFieldEnum)[keyof typeof KnowledgeArticleScalarFieldEnum];
+
+export const BrainTemplateScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  taskId: 'taskId',
+  title: 'title',
+  body: 'body',
+  tags: 'tags',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+} as const;
+
+export type BrainTemplateScalarFieldEnum =
+  (typeof BrainTemplateScalarFieldEnum)[keyof typeof BrainTemplateScalarFieldEnum];
+
+export const BrainJournalEntryScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  entryDate: 'entryDate',
+  title: 'title',
+  body: 'body',
+  mood: 'mood',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+} as const;
+
+export type BrainJournalEntryScalarFieldEnum =
+  (typeof BrainJournalEntryScalarFieldEnum)[keyof typeof BrainJournalEntryScalarFieldEnum];
+
 export const SessionScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
@@ -2425,6 +2791,10 @@ export type GlobalOmitConfig = {
   project?: Prisma.ProjectOmit;
   role?: Prisma.RoleOmit;
   rolePermission?: Prisma.RolePermissionOmit;
+  brainNote?: Prisma.BrainNoteOmit;
+  knowledgeArticle?: Prisma.KnowledgeArticleOmit;
+  brainTemplate?: Prisma.BrainTemplateOmit;
+  brainJournalEntry?: Prisma.BrainJournalEntryOmit;
   session?: Prisma.SessionOmit;
   task?: Prisma.TaskOmit;
   timeEntry?: Prisma.TimeEntryOmit;

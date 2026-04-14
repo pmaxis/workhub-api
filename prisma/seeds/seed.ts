@@ -181,6 +181,96 @@ async function seed() {
     update: { description: 'View finance analytics summary' },
   });
 
+  const brainNotesCreate = await prisma.permission.upsert({
+    where: { key: 'brain_notes.create' },
+    create: { key: 'brain_notes.create', description: 'Create Second Brain notes' },
+    update: { description: 'Create Second Brain notes' },
+  });
+  const brainNotesRead = await prisma.permission.upsert({
+    where: { key: 'brain_notes.read' },
+    create: { key: 'brain_notes.read', description: 'View your Second Brain notes' },
+    update: { description: 'View your Second Brain notes' },
+  });
+  const brainNotesUpdate = await prisma.permission.upsert({
+    where: { key: 'brain_notes.update' },
+    create: { key: 'brain_notes.update', description: 'Update your Second Brain notes' },
+    update: { description: 'Update your Second Brain notes' },
+  });
+  const brainNotesDelete = await prisma.permission.upsert({
+    where: { key: 'brain_notes.delete' },
+    create: { key: 'brain_notes.delete', description: 'Delete your Second Brain notes' },
+    update: { description: 'Delete your Second Brain notes' },
+  });
+
+  const knowledgeArticlesCreate = await prisma.permission.upsert({
+    where: { key: 'knowledge_articles.create' },
+    create: { key: 'knowledge_articles.create', description: 'Create knowledge base articles' },
+    update: { description: 'Create knowledge base articles' },
+  });
+  const knowledgeArticlesRead = await prisma.permission.upsert({
+    where: { key: 'knowledge_articles.read' },
+    create: { key: 'knowledge_articles.read', description: 'View your knowledge base articles' },
+    update: { description: 'View your knowledge base articles' },
+  });
+  const knowledgeArticlesUpdate = await prisma.permission.upsert({
+    where: { key: 'knowledge_articles.update' },
+    create: {
+      key: 'knowledge_articles.update',
+      description: 'Update your knowledge base articles',
+    },
+    update: { description: 'Update your knowledge base articles' },
+  });
+  const knowledgeArticlesDelete = await prisma.permission.upsert({
+    where: { key: 'knowledge_articles.delete' },
+    create: {
+      key: 'knowledge_articles.delete',
+      description: 'Delete your knowledge base articles',
+    },
+    update: { description: 'Delete your knowledge base articles' },
+  });
+
+  const brainTemplatesCreate = await prisma.permission.upsert({
+    where: { key: 'brain_templates.create' },
+    create: { key: 'brain_templates.create', description: 'Create Second Brain templates' },
+    update: { description: 'Create Second Brain templates' },
+  });
+  const brainTemplatesRead = await prisma.permission.upsert({
+    where: { key: 'brain_templates.read' },
+    create: { key: 'brain_templates.read', description: 'View your Second Brain templates' },
+    update: { description: 'View your Second Brain templates' },
+  });
+  const brainTemplatesUpdate = await prisma.permission.upsert({
+    where: { key: 'brain_templates.update' },
+    create: { key: 'brain_templates.update', description: 'Update your Second Brain templates' },
+    update: { description: 'Update your Second Brain templates' },
+  });
+  const brainTemplatesDelete = await prisma.permission.upsert({
+    where: { key: 'brain_templates.delete' },
+    create: { key: 'brain_templates.delete', description: 'Delete your Second Brain templates' },
+    update: { description: 'Delete your Second Brain templates' },
+  });
+
+  const journalEntriesCreate = await prisma.permission.upsert({
+    where: { key: 'brain_journal_entries.create' },
+    create: { key: 'brain_journal_entries.create', description: 'Create journal entries' },
+    update: { description: 'Create journal entries' },
+  });
+  const journalEntriesRead = await prisma.permission.upsert({
+    where: { key: 'brain_journal_entries.read' },
+    create: { key: 'brain_journal_entries.read', description: 'View your journal entries' },
+    update: { description: 'View your journal entries' },
+  });
+  const journalEntriesUpdate = await prisma.permission.upsert({
+    where: { key: 'brain_journal_entries.update' },
+    create: { key: 'brain_journal_entries.update', description: 'Update your journal entries' },
+    update: { description: 'Update your journal entries' },
+  });
+  const journalEntriesDelete = await prisma.permission.upsert({
+    where: { key: 'brain_journal_entries.delete' },
+    create: { key: 'brain_journal_entries.delete', description: 'Delete your journal entries' },
+    update: { description: 'Delete your journal entries' },
+  });
+
   const adminRole = await prisma.role.upsert({
     where: { slug: 'admin' },
     create: { slug: 'admin', name: 'Administrator' },
@@ -239,6 +329,22 @@ async function seed() {
     expensesUpdate,
     expensesDelete,
     financeAnalyticsRead,
+    brainNotesCreate,
+    brainNotesRead,
+    brainNotesUpdate,
+    brainNotesDelete,
+    knowledgeArticlesCreate,
+    knowledgeArticlesRead,
+    knowledgeArticlesUpdate,
+    knowledgeArticlesDelete,
+    brainTemplatesCreate,
+    brainTemplatesRead,
+    brainTemplatesUpdate,
+    brainTemplatesDelete,
+    journalEntriesCreate,
+    journalEntriesRead,
+    journalEntriesUpdate,
+    journalEntriesDelete,
   ];
 
   for (const role of [clientRole, freelancerRole]) {

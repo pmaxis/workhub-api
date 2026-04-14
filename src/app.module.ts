@@ -25,6 +25,10 @@ import { InvoicesModule } from '@/modules/invoices/invoices.module';
 import { PaymentsModule } from '@/modules/payments/payments.module';
 import { ExpensesModule } from '@/modules/expenses/expenses.module';
 import { FinanceAnalyticsModule } from '@/modules/finance-analytics/finance-analytics.module';
+import { BrainNotesModule } from '@/modules/brain-notes/brain-notes.module';
+import { KnowledgeArticlesModule } from '@/modules/knowledge-articles/knowledge-articles.module';
+import { BrainTemplatesModule } from '@/modules/brain-templates/brain-templates.module';
+import { JournalEntriesModule } from '@/modules/journal-entries/journal-entries.module';
 
 @Module({
   imports: [
@@ -53,6 +57,10 @@ import { FinanceAnalyticsModule } from '@/modules/finance-analytics/finance-anal
     PaymentsModule,
     ExpensesModule,
     FinanceAnalyticsModule,
+    BrainNotesModule,
+    KnowledgeArticlesModule,
+    BrainTemplatesModule,
+    JournalEntriesModule,
   ],
   controllers: [],
   providers: [

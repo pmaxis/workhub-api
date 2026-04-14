@@ -1,0 +1,80 @@
+model BrainNote {
+  id     String @id @default(cuid())
+
+  userId String @map("user_id")
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  taskId String? @map("task_id")
+  task   Task?   @relation(fields: [taskId], references: [id], onDelete: SetNull)
+
+  title  String
+  body   String @db.Text
+  tags   String?
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([userId, updatedAt])
+  @@index([taskId])
+  @@map("brain_notes")
+}
+
+model KnowledgeArticle {
+  id     String @id @default(cuid())
+
+  userId String @map("user_id")
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  taskId String? @map("task_id")
+  task   Task?   @relation(fields: [taskId], references: [id], onDelete: SetNull)
+
+  title  String
+  body   String @db.Text
+  tags   String?
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([userId, updatedAt])
+  @@index([taskId])
+  @@map("knowledge_articles")
+}
+
+model BrainTemplate {
+  id     String @id @default(cuid())
+
+  userId String @map("user_id")
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  taskId String? @map("task_id")
+  task   Task?   @relation(fields: [taskId], references: [id], onDelete: SetNull)
+
+  title  String
+  body   String @db.Text
+  tags   String?
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([userId, updatedAt])
+  @@index([taskId])
+  @@map("brain_templates")
+}
+
+model BrainJournalEntry {
+  id     String @id @default(cuid())
+
+  userId String @map("user_id")
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  entryDate DateTime @map("entry_date")
+  title     String?
+  body      String   @db.Text
+  mood      String?
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([userId, entryDate])
+  @@map("brain_journal_entries")
+}

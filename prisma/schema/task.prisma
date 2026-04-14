@@ -16,6 +16,9 @@ model Task {
   assignee    User        @relation(fields: [assigneeId], references: [id])
 
   timeEntries TimeEntry[]
+  brainNotes         BrainNote[]
+  knowledgeArticles  KnowledgeArticle[]
+  brainTemplates     BrainTemplate[]
 
   createdAt   DateTime    @default(now()) @map("created_at")
   updatedAt   DateTime    @updatedAt      @map("updated_at")
