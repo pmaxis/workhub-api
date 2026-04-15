@@ -70,6 +70,8 @@ async function bootstrap() {
     .addTag('Companies', 'Companies visible to the user; create/update/delete with CASL.')
     .addTag('Projects', 'Projects with pagination and CASL-scoped access.')
     .addTag('Tasks', 'Tasks scoped by project and CASL.')
+    .addTag('Planning', 'Calendar and deadline views derived from tasks and reminders.')
+    .addTag('Reminders', 'Personal reminders with optional task link.')
     .addTag('Time entries', 'Personal time tracking: timers and manual entries.')
     .addTag('Invoices', 'Personal invoices: CRUD with optional project link and CASL.')
     .addTag('Payments', 'Recorded payments: optional invoice link, CASL-scoped.')

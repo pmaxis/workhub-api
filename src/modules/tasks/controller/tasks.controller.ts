@@ -40,14 +40,26 @@ export class TasksController {
   @Get()
   @ApiOperation({ summary: 'List tasks (optionally filtered by project)' })
   @ApiQuery({ name: 'projectId', required: false, description: 'Filter by project ID' })
+  @ApiQuery({
+    name: 'dueFrom',
+    required: false,
+    description: 'Filter tasks with a due date on or after this calendar day (YYYY-MM-DD)',
+  })
+  @ApiQuery({
+    name: 'dueTo',
+    required: false,
+    description: 'Filter tasks with a due date on or before this calendar day (YYYY-MM-DD)',
+  })
   @ApiOkResponse({ type: [TaskResponseDto] })
   @CheckPolicies((ability) => ability.can(Action.Read, 'Task'))
   findAll(
     @Query('projectId') projectId: string | undefined,
+    @Query('dueFrom') dueFrom: string | undefined,
+    @Query('dueTo') dueTo: string | undefined,
     @CurrentUserId() userId: string,
     @CurrentAbility() ability: AppAbility,
   ): Promise<TaskResponseDto[]> {
-    return this.tasksService.findAll(userId, ability, projectId);
+    return this.tasksService.findAll(userId, ability, projectId, dueFrom, dueTo);
   }
 
   @Get(':id')

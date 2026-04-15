@@ -28,6 +28,7 @@ const mockTask: MappedTask = {
   title: 'My task',
   description: null,
   status: TaskStatus.PENDING,
+  dueAt: null,
   projectId: 'p-1',
   projectOwnerId: userId,
   projectCompanyId: null,

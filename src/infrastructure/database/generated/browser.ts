@@ -62,6 +62,11 @@ export type Permission = Prisma.PermissionModel;
  */
 export type Project = Prisma.ProjectModel;
 /**
+ * Model Reminder
+ *
+ */
+export type Reminder = Prisma.ReminderModel;
+/**
  * Model Role
  *
  */

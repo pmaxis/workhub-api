@@ -29,6 +29,8 @@ import { BrainNotesModule } from '@/modules/brain-notes/brain-notes.module';
 import { KnowledgeArticlesModule } from '@/modules/knowledge-articles/knowledge-articles.module';
 import { BrainTemplatesModule } from '@/modules/brain-templates/brain-templates.module';
 import { JournalEntriesModule } from '@/modules/journal-entries/journal-entries.module';
+import { RemindersModule } from '@/modules/reminders/reminders.module';
+import { PlanningModule } from '@/modules/planning/planning.module';
 
 @Module({
   imports: [
@@ -61,6 +63,8 @@ import { JournalEntriesModule } from '@/modules/journal-entries/journal-entries.
     KnowledgeArticlesModule,
     BrainTemplatesModule,
     JournalEntriesModule,
+    RemindersModule,
+    PlanningModule,
   ],
   controllers: [],
   providers: [

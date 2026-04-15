@@ -23,6 +23,7 @@ model User {
   knowledgeArticles   KnowledgeArticle[]
   brainTemplates      BrainTemplate[]
   brainJournalEntries BrainJournalEntry[]
+  reminders           Reminder[]
   notifications       Notification[]
 
   freelancerProfile FreelancerProfile?

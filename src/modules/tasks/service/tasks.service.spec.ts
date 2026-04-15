@@ -95,6 +95,7 @@ describe('TasksService', () => {
         title: dto.title,
         description: null,
         status: TaskStatus.PENDING,
+        dueAt: null as Date | null,
         projectId,
         projectOwnerId: ownerId,
         projectCompanyId: null as string | null,
@@ -139,6 +140,45 @@ describe('TasksService', () => {
       await expect(service.create(ownerId, ability, dto)).rejects.toThrow(NotFoundException);
       expect(mockTasksRepository.create).not.toHaveBeenCalled();
     });
+
+    it('should pass dueAt to repository when provided', async () => {
+      mockProjectsRepository.findOne.mockResolvedValue({
+        id: projectId,
+        ownerId,
+        companyId: null,
+      });
+      const due = new Date('2026-05-01T12:00:00.000Z');
+      const row = {
+        id: taskId,
+        title: 'With due',
+        description: null,
+        status: TaskStatus.PENDING,
+        dueAt: due,
+        projectId,
+        projectOwnerId: ownerId,
+        projectCompanyId: null as string | null,
+        assigneeId: ownerId,
+        ...baseDates,
+      };
+      mockTasksRepository.create.mockResolvedValue(row);
+
+      await service.create(ownerId, ability, {
+        title: 'With due',
+        projectId,
+        dueAt: '2026-05-01T12:00:00.000Z',
+      });
+
+      expect(mockTasksRepository.create).toHaveBeenCalledWith({
+        title: 'With due',
+        description: null,
+        status: TaskStatus.PENDING,
+        dueAt: new Date('2026-05-01T12:00:00.000Z'),
+        projectId,
+        projectOwnerId: ownerId,
+        projectCompanyId: null,
+        assigneeId: ownerId,
+      });
+    });
   });
 
   describe('findAll', () => {
@@ -148,6 +188,7 @@ describe('TasksService', () => {
         title: 'T',
         description: null,
         status: TaskStatus.PENDING,
+        dueAt: null as Date | null,
         projectId,
         projectOwnerId: ownerId,
         projectCompanyId: null as string | null,
@@ -159,7 +200,12 @@ describe('TasksService', () => {
       const result = await service.findAll(ownerId, ability);
 
       expect(mockProjectsRepository.findOne).not.toHaveBeenCalled();
-      expect(mockTasksRepository.findAll).toHaveBeenCalledWith({ ability, projectId: undefined });
+      expect(mockTasksRepository.findAll).toHaveBeenCalledWith({
+        ability,
+        projectId: undefined,
+        dueFrom: undefined,
+        dueTo: undefined,
+      });
       expect(mockTasksRepository.sumTrackedDurationSecondsForUser).toHaveBeenCalledWith(ownerId, [
         taskId,
       ]);
@@ -174,7 +220,25 @@ describe('TasksService', () => {
       await service.findAll(ownerId, ability, projectId);
 
       expect(mockProjectsRepository.findOne).toHaveBeenCalledWith(projectId, ability);
-      expect(mockTasksRepository.findAll).toHaveBeenCalledWith({ ability, projectId });
+      expect(mockTasksRepository.findAll).toHaveBeenCalledWith({
+        ability,
+        projectId,
+        dueFrom: undefined,
+        dueTo: undefined,
+      });
+    });
+
+    it('should pass dueFrom and dueTo to repository', async () => {
+      mockTasksRepository.findAll.mockResolvedValue([]);
+
+      await service.findAll(ownerId, ability, undefined, '2026-04-01', '2026-04-30');
+
+      expect(mockTasksRepository.findAll).toHaveBeenCalledWith({
+        ability,
+        projectId: undefined,
+        dueFrom: '2026-04-01',
+        dueTo: '2026-04-30',
+      });
     });
 
     it('should throw when filtered project not found', async () => {
@@ -192,6 +256,7 @@ describe('TasksService', () => {
         title: 'T',
         description: null,
         status: TaskStatus.COMPLETED,
+        dueAt: null as Date | null,
         projectId,
         projectOwnerId: ownerId,
         projectCompanyId: null as string | null,
@@ -222,6 +287,7 @@ describe('TasksService', () => {
       title: 'Old',
       description: 'd',
       status: TaskStatus.PENDING,
+      dueAt: null as Date | null,
       projectId,
       projectOwnerId: ownerId,
       projectCompanyId: null as string | null,
@@ -245,6 +311,7 @@ describe('TasksService', () => {
         title: 'New',
         description: 'd',
         status: TaskStatus.PENDING,
+        dueAt: null as Date | null,
         projectId,
         projectOwnerId: ownerId,
         projectCompanyId: null as string | null,
@@ -260,6 +327,42 @@ describe('TasksService', () => {
       expect(mockTasksRepository.update).toHaveBeenCalledWith(taskId, { title: 'New' });
       expect(result).toMatchObject({ title: 'New' });
       expect(mockNotificationsRepository.create).not.toHaveBeenCalled();
+    });
+
+    it('should map dueAt string to Date on update', async () => {
+      mockTasksRepository.findOne.mockResolvedValue({ ...existing });
+      const due = new Date('2026-06-01T12:00:00.000Z');
+      const updated = {
+        ...existing,
+        dueAt: due,
+        updatedAt: new Date('2026-01-03'),
+      };
+      mockTasksRepository.update.mockResolvedValue(updated);
+
+      await service.update(taskId, ownerId, ability, {
+        dueAt: '2026-06-01T12:00:00.000Z',
+      });
+
+      expect(mockTasksRepository.update).toHaveBeenCalledWith(taskId, {
+        dueAt: new Date('2026-06-01T12:00:00.000Z'),
+      });
+    });
+
+    it('should clear dueAt when dto.dueAt is null', async () => {
+      mockTasksRepository.findOne.mockResolvedValue({
+        ...existing,
+        dueAt: new Date('2026-05-01T00:00:00.000Z'),
+      });
+      const updated = {
+        ...existing,
+        dueAt: null as Date | null,
+        updatedAt: new Date('2026-01-03'),
+      };
+      mockTasksRepository.update.mockResolvedValue(updated);
+
+      await service.update(taskId, ownerId, ability, { dueAt: null });
+
+      expect(mockTasksRepository.update).toHaveBeenCalledWith(taskId, { dueAt: null });
     });
 
     it('should create notification when status changes', async () => {
@@ -310,6 +413,7 @@ describe('TasksService', () => {
       title: 'T',
       description: null,
       status: TaskStatus.PENDING,
+      dueAt: null as Date | null,
       projectId,
       projectOwnerId: ownerId,
       projectCompanyId: null as string | null,

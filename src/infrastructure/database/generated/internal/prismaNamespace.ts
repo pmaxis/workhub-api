@@ -384,6 +384,7 @@ export const ModelName = {
   Notification: 'Notification',
   Permission: 'Permission',
   Project: 'Project',
+  Reminder: 'Reminder',
   Role: 'Role',
   RolePermission: 'RolePermission',
   BrainNote: 'BrainNote',
@@ -427,6 +428,7 @@ export type TypeMap<
       | 'notification'
       | 'permission'
       | 'project'
+      | 'reminder'
       | 'role'
       | 'rolePermission'
       | 'brainNote'
@@ -1111,6 +1113,80 @@ export type TypeMap<
         count: {
           args: Prisma.ProjectCountArgs<ExtArgs>;
           result: runtime.Types.Utils.Optional<Prisma.ProjectCountAggregateOutputType> | number;
+        };
+      };
+    };
+    Reminder: {
+      payload: Prisma.$ReminderPayload<ExtArgs>;
+      fields: Prisma.ReminderFieldRefs;
+      operations: {
+        findUnique: {
+          args: Prisma.ReminderFindUniqueArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReminderPayload> | null;
+        };
+        findUniqueOrThrow: {
+          args: Prisma.ReminderFindUniqueOrThrowArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReminderPayload>;
+        };
+        findFirst: {
+          args: Prisma.ReminderFindFirstArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReminderPayload> | null;
+        };
+        findFirstOrThrow: {
+          args: Prisma.ReminderFindFirstOrThrowArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReminderPayload>;
+        };
+        findMany: {
+          args: Prisma.ReminderFindManyArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReminderPayload>[];
+        };
+        create: {
+          args: Prisma.ReminderCreateArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReminderPayload>;
+        };
+        createMany: {
+          args: Prisma.ReminderCreateManyArgs<ExtArgs>;
+          result: BatchPayload;
+        };
+        createManyAndReturn: {
+          args: Prisma.ReminderCreateManyAndReturnArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReminderPayload>[];
+        };
+        delete: {
+          args: Prisma.ReminderDeleteArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReminderPayload>;
+        };
+        update: {
+          args: Prisma.ReminderUpdateArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReminderPayload>;
+        };
+        deleteMany: {
+          args: Prisma.ReminderDeleteManyArgs<ExtArgs>;
+          result: BatchPayload;
+        };
+        updateMany: {
+          args: Prisma.ReminderUpdateManyArgs<ExtArgs>;
+          result: BatchPayload;
+        };
+        updateManyAndReturn: {
+          args: Prisma.ReminderUpdateManyAndReturnArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReminderPayload>[];
+        };
+        upsert: {
+          args: Prisma.ReminderUpsertArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReminderPayload>;
+        };
+        aggregate: {
+          args: Prisma.ReminderAggregateArgs<ExtArgs>;
+          result: runtime.Types.Utils.Optional<Prisma.AggregateReminder>;
+        };
+        groupBy: {
+          args: Prisma.ReminderGroupByArgs<ExtArgs>;
+          result: runtime.Types.Utils.Optional<Prisma.ReminderGroupByOutputType>[];
+        };
+        count: {
+          args: Prisma.ReminderCountArgs<ExtArgs>;
+          result: runtime.Types.Utils.Optional<Prisma.ReminderCountAggregateOutputType> | number;
         };
       };
     };
@@ -2329,6 +2405,21 @@ export const ProjectScalarFieldEnum = {
 export type ProjectScalarFieldEnum =
   (typeof ProjectScalarFieldEnum)[keyof typeof ProjectScalarFieldEnum];
 
+export const ReminderScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  title: 'title',
+  notes: 'notes',
+  remindAt: 'remindAt',
+  taskId: 'taskId',
+  dismissedAt: 'dismissedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+} as const;
+
+export type ReminderScalarFieldEnum =
+  (typeof ReminderScalarFieldEnum)[keyof typeof ReminderScalarFieldEnum];
+
 export const RoleScalarFieldEnum = {
   id: 'id',
   slug: 'slug',
@@ -2422,6 +2513,7 @@ export const TaskScalarFieldEnum = {
   title: 'title',
   description: 'description',
   status: 'status',
+  dueAt: 'dueAt',
   projectId: 'projectId',
   projectOwnerId: 'projectOwnerId',
   projectCompanyId: 'projectCompanyId',
@@ -2789,6 +2881,7 @@ export type GlobalOmitConfig = {
   notification?: Prisma.NotificationOmit;
   permission?: Prisma.PermissionOmit;
   project?: Prisma.ProjectOmit;
+  reminder?: Prisma.ReminderOmit;
   role?: Prisma.RoleOmit;
   rolePermission?: Prisma.RolePermissionOmit;
   brainNote?: Prisma.BrainNoteOmit;

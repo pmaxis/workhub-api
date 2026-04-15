@@ -57,6 +57,7 @@ export const ModelName = {
   Notification: 'Notification',
   Permission: 'Permission',
   Project: 'Project',
+  Reminder: 'Reminder',
   Role: 'Role',
   RolePermission: 'RolePermission',
   BrainNote: 'BrainNote',
@@ -215,6 +216,21 @@ export const ProjectScalarFieldEnum = {
 export type ProjectScalarFieldEnum =
   (typeof ProjectScalarFieldEnum)[keyof typeof ProjectScalarFieldEnum];
 
+export const ReminderScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  title: 'title',
+  notes: 'notes',
+  remindAt: 'remindAt',
+  taskId: 'taskId',
+  dismissedAt: 'dismissedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+} as const;
+
+export type ReminderScalarFieldEnum =
+  (typeof ReminderScalarFieldEnum)[keyof typeof ReminderScalarFieldEnum];
+
 export const RoleScalarFieldEnum = {
   id: 'id',
   slug: 'slug',
@@ -308,6 +324,7 @@ export const TaskScalarFieldEnum = {
   title: 'title',
   description: 'description',
   status: 'status',
+  dueAt: 'dueAt',
   projectId: 'projectId',
   projectOwnerId: 'projectOwnerId',
   projectCompanyId: 'projectCompanyId',

@@ -11,6 +11,7 @@ export type MappedTask = {
   title: string;
   description: string | null;
   status: TaskStatus;
+  dueAt: Date | null;
   projectId: string;
   projectOwnerId: string;
   projectCompanyId: string | null;
@@ -22,6 +23,10 @@ export type MappedTask = {
 export interface FindAllTasksOptions {
   ability: AppAbility;
   projectId?: string;
+  /** Inclusive calendar day (YYYY-MM-DD), UTC bounds */
+  dueFrom?: string;
+  /** Inclusive calendar day (YYYY-MM-DD), UTC bounds */
+  dueTo?: string;
 }
 
 @Injectable()
@@ -32,6 +37,7 @@ export class TasksRepository {
     title: string;
     description?: string | null;
     status: TaskStatus;
+    dueAt?: Date | null;
     projectId: string;
     projectOwnerId: string;
     projectCompanyId: string | null;
@@ -42,15 +48,67 @@ export class TasksRepository {
   }
 
   async findAll(options: FindAllTasksOptions): Promise<MappedTask[]> {
-    const { ability, projectId } = options;
+    const { ability, projectId, dueFrom, dueTo } = options;
+
+    const dueFilter = this.buildDueDateFilter(dueFrom, dueTo);
 
     const where: Prisma.TaskWhereInput = {
-      AND: [this.abilityFilter(ability), ...(projectId ? [{ projectId }] : [])],
+      AND: [
+        this.abilityFilter(ability),
+        ...(projectId ? [{ projectId }] : []),
+        ...(dueFilter ? [dueFilter] : []),
+      ],
     };
 
     const tasks = await this.database.task.findMany({
       where,
       orderBy: { updatedAt: 'desc' },
+    });
+
+    return tasks.map((task) => this.mapTask(task));
+  }
+
+  /** Tasks with a due date in [from, to] (calendar days, UTC), `dueAt` not null. */
+  async findByDueDateRange(
+    ability: AppAbility,
+    dueFrom: string,
+    dueTo: string,
+  ): Promise<MappedTask[]> {
+    const where: Prisma.TaskWhereInput = {
+      AND: [this.abilityFilter(ability), this.buildDueDateFilter(dueFrom, dueTo) ?? {}],
+    };
+
+    const tasks = await this.database.task.findMany({
+      where,
+      orderBy: [{ dueAt: 'asc' }, { title: 'asc' }],
+    });
+
+    return tasks.map((task) => this.mapTask(task));
+  }
+
+  /**
+   * Incomplete tasks with `dueAt` set, ordered by due date (soonest first).
+   * Includes overdue; caps at `take` rows.
+   */
+  async findOpenDeadlines(
+    ability: AppAbility,
+    horizonEnd: Date,
+    take: number,
+  ): Promise<MappedTask[]> {
+    const where: Prisma.TaskWhereInput = {
+      AND: [
+        this.abilityFilter(ability),
+        {
+          status: { not: TaskStatus.COMPLETED },
+          dueAt: { not: null, lte: horizonEnd },
+        },
+      ],
+    };
+
+    const tasks = await this.database.task.findMany({
+      where,
+      orderBy: [{ dueAt: 'asc' }, { title: 'asc' }],
+      take,
     });
 
     return tasks.map((task) => this.mapTask(task));
@@ -74,6 +132,7 @@ export class TasksRepository {
       title?: string;
       description?: string | null;
       status?: TaskStatus;
+      dueAt?: Date | null;
     },
   ) {
     const task = await this.database.task.update({
@@ -120,12 +179,44 @@ export class TasksRepository {
     return filters['Task'] ?? {};
   }
 
+  private buildDueDateFilter(dueFrom?: string, dueTo?: string): Prisma.TaskWhereInput | undefined {
+    const from = dueFrom?.trim();
+    const to = dueTo?.trim();
+    if (!from && !to) {
+      return undefined;
+    }
+    if (from && to) {
+      return {
+        dueAt: {
+          not: null,
+          gte: this.startUtcDay(from),
+          lte: this.endUtcDay(to),
+        },
+      };
+    }
+    if (from) {
+      return { dueAt: { not: null, gte: this.startUtcDay(from) } };
+    }
+    return { dueAt: { not: null, lte: this.endUtcDay(to!) } };
+  }
+
+  private startUtcDay(isoDate: string): Date {
+    const d = isoDate.slice(0, 10);
+    return new Date(`${d}T00:00:00.000Z`);
+  }
+
+  private endUtcDay(isoDate: string): Date {
+    const d = isoDate.slice(0, 10);
+    return new Date(`${d}T23:59:59.999Z`);
+  }
+
   private mapTask(task: Task): MappedTask {
     return {
       id: task.id,
       title: task.title,
       description: task.description,
       status: task.status,
+      dueAt: task.dueAt,
       projectId: task.projectId,
       projectOwnerId: task.projectOwnerId,
       projectCompanyId: task.projectCompanyId,

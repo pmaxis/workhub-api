@@ -271,6 +271,27 @@ async function seed() {
     update: { description: 'Delete your journal entries' },
   });
 
+  const remindersCreate = await prisma.permission.upsert({
+    where: { key: 'reminders.create' },
+    create: { key: 'reminders.create', description: 'Create reminders' },
+    update: { description: 'Create reminders' },
+  });
+  const remindersRead = await prisma.permission.upsert({
+    where: { key: 'reminders.read' },
+    create: { key: 'reminders.read', description: 'View your reminders' },
+    update: { description: 'View your reminders' },
+  });
+  const remindersUpdate = await prisma.permission.upsert({
+    where: { key: 'reminders.update' },
+    create: { key: 'reminders.update', description: 'Update your reminders' },
+    update: { description: 'Update your reminders' },
+  });
+  const remindersDelete = await prisma.permission.upsert({
+    where: { key: 'reminders.delete' },
+    create: { key: 'reminders.delete', description: 'Delete your reminders' },
+    update: { description: 'Delete your reminders' },
+  });
+
   const adminRole = await prisma.role.upsert({
     where: { slug: 'admin' },
     create: { slug: 'admin', name: 'Administrator' },
@@ -345,6 +366,10 @@ async function seed() {
     journalEntriesRead,
     journalEntriesUpdate,
     journalEntriesDelete,
+    remindersCreate,
+    remindersRead,
+    remindersUpdate,
+    remindersDelete,
   ];
 
   for (const role of [clientRole, freelancerRole]) {

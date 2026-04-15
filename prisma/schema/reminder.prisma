@@ -1,0 +1,22 @@
+model Reminder {
+  id          String    @id @default(cuid())
+
+  userId      String    @map("user_id")
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  title       String
+  notes       String?
+
+  remindAt    DateTime  @map("remind_at")
+
+  taskId      String?   @map("task_id")
+  task        Task?     @relation(fields: [taskId], references: [id], onDelete: SetNull)
+
+  dismissedAt DateTime? @map("dismissed_at")
+
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+
+  @@index([userId, remindAt])
+  @@map("reminders")
+}

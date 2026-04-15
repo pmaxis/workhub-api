@@ -16,6 +16,9 @@ export class TaskResponseDto {
   @ApiProperty({ enum: TaskStatus })
   @Expose()
   status: TaskStatus;
+  @ApiProperty({ nullable: true, type: String, format: 'date-time' })
+  @Expose()
+  dueAt: Date | null;
   @ApiProperty()
   @Expose()
   projectId: string;
@@ -41,6 +44,7 @@ export class TaskResponseDto {
     title: string;
     description: string | null;
     status: TaskStatus;
+    dueAt: Date | null;
     projectId: string;
     assigneeId: string;
     createdAt: Date;
@@ -51,6 +55,7 @@ export class TaskResponseDto {
     this.title = task.title;
     this.description = task.description;
     this.status = task.status;
+    this.dueAt = task.dueAt;
     this.projectId = task.projectId;
     this.assigneeId = task.assigneeId;
     this.createdAt = task.createdAt;

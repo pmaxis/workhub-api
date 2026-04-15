@@ -28,6 +28,7 @@ export type TaskMinAggregateOutputType = {
   title: string | null;
   description: string | null;
   status: $Enums.TaskStatus | null;
+  dueAt: Date | null;
   projectId: string | null;
   projectOwnerId: string | null;
   projectCompanyId: string | null;
@@ -41,6 +42,7 @@ export type TaskMaxAggregateOutputType = {
   title: string | null;
   description: string | null;
   status: $Enums.TaskStatus | null;
+  dueAt: Date | null;
   projectId: string | null;
   projectOwnerId: string | null;
   projectCompanyId: string | null;
@@ -54,6 +56,7 @@ export type TaskCountAggregateOutputType = {
   title: number;
   description: number;
   status: number;
+  dueAt: number;
   projectId: number;
   projectOwnerId: number;
   projectCompanyId: number;
@@ -68,6 +71,7 @@ export type TaskMinAggregateInputType = {
   title?: true;
   description?: true;
   status?: true;
+  dueAt?: true;
   projectId?: true;
   projectOwnerId?: true;
   projectCompanyId?: true;
@@ -81,6 +85,7 @@ export type TaskMaxAggregateInputType = {
   title?: true;
   description?: true;
   status?: true;
+  dueAt?: true;
   projectId?: true;
   projectOwnerId?: true;
   projectCompanyId?: true;
@@ -94,6 +99,7 @@ export type TaskCountAggregateInputType = {
   title?: true;
   description?: true;
   status?: true;
+  dueAt?: true;
   projectId?: true;
   projectOwnerId?: true;
   projectCompanyId?: true;
@@ -181,6 +187,7 @@ export type TaskGroupByOutputType = {
   title: string;
   description: string | null;
   status: $Enums.TaskStatus;
+  dueAt: Date | null;
   projectId: string;
   projectOwnerId: string;
   projectCompanyId: string | null;
@@ -212,6 +219,7 @@ export type TaskWhereInput = {
   title?: Prisma.StringFilter<'Task'> | string;
   description?: Prisma.StringNullableFilter<'Task'> | string | null;
   status?: Prisma.EnumTaskStatusFilter<'Task'> | $Enums.TaskStatus;
+  dueAt?: Prisma.DateTimeNullableFilter<'Task'> | Date | string | null;
   projectId?: Prisma.StringFilter<'Task'> | string;
   projectOwnerId?: Prisma.StringFilter<'Task'> | string;
   projectCompanyId?: Prisma.StringNullableFilter<'Task'> | string | null;
@@ -224,6 +232,7 @@ export type TaskWhereInput = {
   brainNotes?: Prisma.BrainNoteListRelationFilter;
   knowledgeArticles?: Prisma.KnowledgeArticleListRelationFilter;
   brainTemplates?: Prisma.BrainTemplateListRelationFilter;
+  reminders?: Prisma.ReminderListRelationFilter;
 };
 
 export type TaskOrderByWithRelationInput = {
@@ -231,6 +240,7 @@ export type TaskOrderByWithRelationInput = {
   title?: Prisma.SortOrder;
   description?: Prisma.SortOrderInput | Prisma.SortOrder;
   status?: Prisma.SortOrder;
+  dueAt?: Prisma.SortOrderInput | Prisma.SortOrder;
   projectId?: Prisma.SortOrder;
   projectOwnerId?: Prisma.SortOrder;
   projectCompanyId?: Prisma.SortOrderInput | Prisma.SortOrder;
@@ -243,6 +253,7 @@ export type TaskOrderByWithRelationInput = {
   brainNotes?: Prisma.BrainNoteOrderByRelationAggregateInput;
   knowledgeArticles?: Prisma.KnowledgeArticleOrderByRelationAggregateInput;
   brainTemplates?: Prisma.BrainTemplateOrderByRelationAggregateInput;
+  reminders?: Prisma.ReminderOrderByRelationAggregateInput;
 };
 
 export type TaskWhereUniqueInput = Prisma.AtLeast<
@@ -254,6 +265,7 @@ export type TaskWhereUniqueInput = Prisma.AtLeast<
     title?: Prisma.StringFilter<'Task'> | string;
     description?: Prisma.StringNullableFilter<'Task'> | string | null;
     status?: Prisma.EnumTaskStatusFilter<'Task'> | $Enums.TaskStatus;
+    dueAt?: Prisma.DateTimeNullableFilter<'Task'> | Date | string | null;
     projectId?: Prisma.StringFilter<'Task'> | string;
     projectOwnerId?: Prisma.StringFilter<'Task'> | string;
     projectCompanyId?: Prisma.StringNullableFilter<'Task'> | string | null;
@@ -266,6 +278,7 @@ export type TaskWhereUniqueInput = Prisma.AtLeast<
     brainNotes?: Prisma.BrainNoteListRelationFilter;
     knowledgeArticles?: Prisma.KnowledgeArticleListRelationFilter;
     brainTemplates?: Prisma.BrainTemplateListRelationFilter;
+    reminders?: Prisma.ReminderListRelationFilter;
   },
   'id'
 >;
@@ -275,6 +288,7 @@ export type TaskOrderByWithAggregationInput = {
   title?: Prisma.SortOrder;
   description?: Prisma.SortOrderInput | Prisma.SortOrder;
   status?: Prisma.SortOrder;
+  dueAt?: Prisma.SortOrderInput | Prisma.SortOrder;
   projectId?: Prisma.SortOrder;
   projectOwnerId?: Prisma.SortOrder;
   projectCompanyId?: Prisma.SortOrderInput | Prisma.SortOrder;
@@ -294,6 +308,7 @@ export type TaskScalarWhereWithAggregatesInput = {
   title?: Prisma.StringWithAggregatesFilter<'Task'> | string;
   description?: Prisma.StringNullableWithAggregatesFilter<'Task'> | string | null;
   status?: Prisma.EnumTaskStatusWithAggregatesFilter<'Task'> | $Enums.TaskStatus;
+  dueAt?: Prisma.DateTimeNullableWithAggregatesFilter<'Task'> | Date | string | null;
   projectId?: Prisma.StringWithAggregatesFilter<'Task'> | string;
   projectOwnerId?: Prisma.StringWithAggregatesFilter<'Task'> | string;
   projectCompanyId?: Prisma.StringNullableWithAggregatesFilter<'Task'> | string | null;
@@ -307,6 +322,7 @@ export type TaskCreateInput = {
   title: string;
   description?: string | null;
   status?: $Enums.TaskStatus;
+  dueAt?: Date | string | null;
   projectOwnerId: string;
   projectCompanyId?: string | null;
   createdAt?: Date | string;
@@ -317,6 +333,7 @@ export type TaskCreateInput = {
   brainNotes?: Prisma.BrainNoteCreateNestedManyWithoutTaskInput;
   knowledgeArticles?: Prisma.KnowledgeArticleCreateNestedManyWithoutTaskInput;
   brainTemplates?: Prisma.BrainTemplateCreateNestedManyWithoutTaskInput;
+  reminders?: Prisma.ReminderCreateNestedManyWithoutTaskInput;
 };
 
 export type TaskUncheckedCreateInput = {
@@ -324,6 +341,7 @@ export type TaskUncheckedCreateInput = {
   title: string;
   description?: string | null;
   status?: $Enums.TaskStatus;
+  dueAt?: Date | string | null;
   projectId: string;
   projectOwnerId: string;
   projectCompanyId?: string | null;
@@ -334,6 +352,7 @@ export type TaskUncheckedCreateInput = {
   brainNotes?: Prisma.BrainNoteUncheckedCreateNestedManyWithoutTaskInput;
   knowledgeArticles?: Prisma.KnowledgeArticleUncheckedCreateNestedManyWithoutTaskInput;
   brainTemplates?: Prisma.BrainTemplateUncheckedCreateNestedManyWithoutTaskInput;
+  reminders?: Prisma.ReminderUncheckedCreateNestedManyWithoutTaskInput;
 };
 
 export type TaskUpdateInput = {
@@ -341,6 +360,7 @@ export type TaskUpdateInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string;
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   status?: Prisma.EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus;
+  dueAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
   projectOwnerId?: Prisma.StringFieldUpdateOperationsInput | string;
   projectCompanyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -351,6 +371,7 @@ export type TaskUpdateInput = {
   brainNotes?: Prisma.BrainNoteUpdateManyWithoutTaskNestedInput;
   knowledgeArticles?: Prisma.KnowledgeArticleUpdateManyWithoutTaskNestedInput;
   brainTemplates?: Prisma.BrainTemplateUpdateManyWithoutTaskNestedInput;
+  reminders?: Prisma.ReminderUpdateManyWithoutTaskNestedInput;
 };
 
 export type TaskUncheckedUpdateInput = {
@@ -358,6 +379,7 @@ export type TaskUncheckedUpdateInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string;
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   status?: Prisma.EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus;
+  dueAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
   projectId?: Prisma.StringFieldUpdateOperationsInput | string;
   projectOwnerId?: Prisma.StringFieldUpdateOperationsInput | string;
   projectCompanyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
@@ -368,6 +390,7 @@ export type TaskUncheckedUpdateInput = {
   brainNotes?: Prisma.BrainNoteUncheckedUpdateManyWithoutTaskNestedInput;
   knowledgeArticles?: Prisma.KnowledgeArticleUncheckedUpdateManyWithoutTaskNestedInput;
   brainTemplates?: Prisma.BrainTemplateUncheckedUpdateManyWithoutTaskNestedInput;
+  reminders?: Prisma.ReminderUncheckedUpdateManyWithoutTaskNestedInput;
 };
 
 export type TaskCreateManyInput = {
@@ -375,6 +398,7 @@ export type TaskCreateManyInput = {
   title: string;
   description?: string | null;
   status?: $Enums.TaskStatus;
+  dueAt?: Date | string | null;
   projectId: string;
   projectOwnerId: string;
   projectCompanyId?: string | null;
@@ -388,6 +412,7 @@ export type TaskUpdateManyMutationInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string;
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   status?: Prisma.EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus;
+  dueAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
   projectOwnerId?: Prisma.StringFieldUpdateOperationsInput | string;
   projectCompanyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -399,6 +424,7 @@ export type TaskUncheckedUpdateManyInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string;
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   status?: Prisma.EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus;
+  dueAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
   projectId?: Prisma.StringFieldUpdateOperationsInput | string;
   projectOwnerId?: Prisma.StringFieldUpdateOperationsInput | string;
   projectCompanyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
@@ -427,6 +453,7 @@ export type TaskCountOrderByAggregateInput = {
   title?: Prisma.SortOrder;
   description?: Prisma.SortOrder;
   status?: Prisma.SortOrder;
+  dueAt?: Prisma.SortOrder;
   projectId?: Prisma.SortOrder;
   projectOwnerId?: Prisma.SortOrder;
   projectCompanyId?: Prisma.SortOrder;
@@ -440,6 +467,7 @@ export type TaskMaxOrderByAggregateInput = {
   title?: Prisma.SortOrder;
   description?: Prisma.SortOrder;
   status?: Prisma.SortOrder;
+  dueAt?: Prisma.SortOrder;
   projectId?: Prisma.SortOrder;
   projectOwnerId?: Prisma.SortOrder;
   projectCompanyId?: Prisma.SortOrder;
@@ -453,6 +481,7 @@ export type TaskMinOrderByAggregateInput = {
   title?: Prisma.SortOrder;
   description?: Prisma.SortOrder;
   status?: Prisma.SortOrder;
+  dueAt?: Prisma.SortOrder;
   projectId?: Prisma.SortOrder;
   projectOwnerId?: Prisma.SortOrder;
   projectCompanyId?: Prisma.SortOrder;
@@ -545,6 +574,34 @@ export type TaskUncheckedUpdateManyWithoutProjectNestedInput = {
     | Prisma.TaskUpdateManyWithWhereWithoutProjectInput
     | Prisma.TaskUpdateManyWithWhereWithoutProjectInput[];
   deleteMany?: Prisma.TaskScalarWhereInput | Prisma.TaskScalarWhereInput[];
+};
+
+export type TaskCreateNestedOneWithoutRemindersInput = {
+  create?: Prisma.XOR<
+    Prisma.TaskCreateWithoutRemindersInput,
+    Prisma.TaskUncheckedCreateWithoutRemindersInput
+  >;
+  connectOrCreate?: Prisma.TaskCreateOrConnectWithoutRemindersInput;
+  connect?: Prisma.TaskWhereUniqueInput;
+};
+
+export type TaskUpdateOneWithoutRemindersNestedInput = {
+  create?: Prisma.XOR<
+    Prisma.TaskCreateWithoutRemindersInput,
+    Prisma.TaskUncheckedCreateWithoutRemindersInput
+  >;
+  connectOrCreate?: Prisma.TaskCreateOrConnectWithoutRemindersInput;
+  upsert?: Prisma.TaskUpsertWithoutRemindersInput;
+  disconnect?: Prisma.TaskWhereInput | boolean;
+  delete?: Prisma.TaskWhereInput | boolean;
+  connect?: Prisma.TaskWhereUniqueInput;
+  update?: Prisma.XOR<
+    Prisma.XOR<
+      Prisma.TaskUpdateToOneWithWhereWithoutRemindersInput,
+      Prisma.TaskUpdateWithoutRemindersInput
+    >,
+    Prisma.TaskUncheckedUpdateWithoutRemindersInput
+  >;
 };
 
 export type TaskCreateNestedOneWithoutBrainNotesInput = {
@@ -754,6 +811,7 @@ export type TaskCreateWithoutProjectInput = {
   title: string;
   description?: string | null;
   status?: $Enums.TaskStatus;
+  dueAt?: Date | string | null;
   projectOwnerId: string;
   projectCompanyId?: string | null;
   createdAt?: Date | string;
@@ -763,6 +821,7 @@ export type TaskCreateWithoutProjectInput = {
   brainNotes?: Prisma.BrainNoteCreateNestedManyWithoutTaskInput;
   knowledgeArticles?: Prisma.KnowledgeArticleCreateNestedManyWithoutTaskInput;
   brainTemplates?: Prisma.BrainTemplateCreateNestedManyWithoutTaskInput;
+  reminders?: Prisma.ReminderCreateNestedManyWithoutTaskInput;
 };
 
 export type TaskUncheckedCreateWithoutProjectInput = {
@@ -770,6 +829,7 @@ export type TaskUncheckedCreateWithoutProjectInput = {
   title: string;
   description?: string | null;
   status?: $Enums.TaskStatus;
+  dueAt?: Date | string | null;
   projectOwnerId: string;
   projectCompanyId?: string | null;
   assigneeId: string;
@@ -779,6 +839,7 @@ export type TaskUncheckedCreateWithoutProjectInput = {
   brainNotes?: Prisma.BrainNoteUncheckedCreateNestedManyWithoutTaskInput;
   knowledgeArticles?: Prisma.KnowledgeArticleUncheckedCreateNestedManyWithoutTaskInput;
   brainTemplates?: Prisma.BrainTemplateUncheckedCreateNestedManyWithoutTaskInput;
+  reminders?: Prisma.ReminderUncheckedCreateNestedManyWithoutTaskInput;
 };
 
 export type TaskCreateOrConnectWithoutProjectInput = {
@@ -830,6 +891,7 @@ export type TaskScalarWhereInput = {
   title?: Prisma.StringFilter<'Task'> | string;
   description?: Prisma.StringNullableFilter<'Task'> | string | null;
   status?: Prisma.EnumTaskStatusFilter<'Task'> | $Enums.TaskStatus;
+  dueAt?: Prisma.DateTimeNullableFilter<'Task'> | Date | string | null;
   projectId?: Prisma.StringFilter<'Task'> | string;
   projectOwnerId?: Prisma.StringFilter<'Task'> | string;
   projectCompanyId?: Prisma.StringNullableFilter<'Task'> | string | null;
@@ -838,11 +900,112 @@ export type TaskScalarWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<'Task'> | Date | string;
 };
 
+export type TaskCreateWithoutRemindersInput = {
+  id?: string;
+  title: string;
+  description?: string | null;
+  status?: $Enums.TaskStatus;
+  dueAt?: Date | string | null;
+  projectOwnerId: string;
+  projectCompanyId?: string | null;
+  createdAt?: Date | string;
+  updatedAt?: Date | string;
+  project: Prisma.ProjectCreateNestedOneWithoutTasksInput;
+  assignee: Prisma.UserCreateNestedOneWithoutTasksInput;
+  timeEntries?: Prisma.TimeEntryCreateNestedManyWithoutTaskInput;
+  brainNotes?: Prisma.BrainNoteCreateNestedManyWithoutTaskInput;
+  knowledgeArticles?: Prisma.KnowledgeArticleCreateNestedManyWithoutTaskInput;
+  brainTemplates?: Prisma.BrainTemplateCreateNestedManyWithoutTaskInput;
+};
+
+export type TaskUncheckedCreateWithoutRemindersInput = {
+  id?: string;
+  title: string;
+  description?: string | null;
+  status?: $Enums.TaskStatus;
+  dueAt?: Date | string | null;
+  projectId: string;
+  projectOwnerId: string;
+  projectCompanyId?: string | null;
+  assigneeId: string;
+  createdAt?: Date | string;
+  updatedAt?: Date | string;
+  timeEntries?: Prisma.TimeEntryUncheckedCreateNestedManyWithoutTaskInput;
+  brainNotes?: Prisma.BrainNoteUncheckedCreateNestedManyWithoutTaskInput;
+  knowledgeArticles?: Prisma.KnowledgeArticleUncheckedCreateNestedManyWithoutTaskInput;
+  brainTemplates?: Prisma.BrainTemplateUncheckedCreateNestedManyWithoutTaskInput;
+};
+
+export type TaskCreateOrConnectWithoutRemindersInput = {
+  where: Prisma.TaskWhereUniqueInput;
+  create: Prisma.XOR<
+    Prisma.TaskCreateWithoutRemindersInput,
+    Prisma.TaskUncheckedCreateWithoutRemindersInput
+  >;
+};
+
+export type TaskUpsertWithoutRemindersInput = {
+  update: Prisma.XOR<
+    Prisma.TaskUpdateWithoutRemindersInput,
+    Prisma.TaskUncheckedUpdateWithoutRemindersInput
+  >;
+  create: Prisma.XOR<
+    Prisma.TaskCreateWithoutRemindersInput,
+    Prisma.TaskUncheckedCreateWithoutRemindersInput
+  >;
+  where?: Prisma.TaskWhereInput;
+};
+
+export type TaskUpdateToOneWithWhereWithoutRemindersInput = {
+  where?: Prisma.TaskWhereInput;
+  data: Prisma.XOR<
+    Prisma.TaskUpdateWithoutRemindersInput,
+    Prisma.TaskUncheckedUpdateWithoutRemindersInput
+  >;
+};
+
+export type TaskUpdateWithoutRemindersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string;
+  title?: Prisma.StringFieldUpdateOperationsInput | string;
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  status?: Prisma.EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus;
+  dueAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+  projectOwnerId?: Prisma.StringFieldUpdateOperationsInput | string;
+  projectCompanyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+  project?: Prisma.ProjectUpdateOneRequiredWithoutTasksNestedInput;
+  assignee?: Prisma.UserUpdateOneRequiredWithoutTasksNestedInput;
+  timeEntries?: Prisma.TimeEntryUpdateManyWithoutTaskNestedInput;
+  brainNotes?: Prisma.BrainNoteUpdateManyWithoutTaskNestedInput;
+  knowledgeArticles?: Prisma.KnowledgeArticleUpdateManyWithoutTaskNestedInput;
+  brainTemplates?: Prisma.BrainTemplateUpdateManyWithoutTaskNestedInput;
+};
+
+export type TaskUncheckedUpdateWithoutRemindersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string;
+  title?: Prisma.StringFieldUpdateOperationsInput | string;
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  status?: Prisma.EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus;
+  dueAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+  projectId?: Prisma.StringFieldUpdateOperationsInput | string;
+  projectOwnerId?: Prisma.StringFieldUpdateOperationsInput | string;
+  projectCompanyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  assigneeId?: Prisma.StringFieldUpdateOperationsInput | string;
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+  timeEntries?: Prisma.TimeEntryUncheckedUpdateManyWithoutTaskNestedInput;
+  brainNotes?: Prisma.BrainNoteUncheckedUpdateManyWithoutTaskNestedInput;
+  knowledgeArticles?: Prisma.KnowledgeArticleUncheckedUpdateManyWithoutTaskNestedInput;
+  brainTemplates?: Prisma.BrainTemplateUncheckedUpdateManyWithoutTaskNestedInput;
+};
+
 export type TaskCreateWithoutBrainNotesInput = {
   id?: string;
   title: string;
   description?: string | null;
   status?: $Enums.TaskStatus;
+  dueAt?: Date | string | null;
   projectOwnerId: string;
   projectCompanyId?: string | null;
   createdAt?: Date | string;
@@ -852,6 +1015,7 @@ export type TaskCreateWithoutBrainNotesInput = {
   timeEntries?: Prisma.TimeEntryCreateNestedManyWithoutTaskInput;
   knowledgeArticles?: Prisma.KnowledgeArticleCreateNestedManyWithoutTaskInput;
   brainTemplates?: Prisma.BrainTemplateCreateNestedManyWithoutTaskInput;
+  reminders?: Prisma.ReminderCreateNestedManyWithoutTaskInput;
 };
 
 export type TaskUncheckedCreateWithoutBrainNotesInput = {
@@ -859,6 +1023,7 @@ export type TaskUncheckedCreateWithoutBrainNotesInput = {
   title: string;
   description?: string | null;
   status?: $Enums.TaskStatus;
+  dueAt?: Date | string | null;
   projectId: string;
   projectOwnerId: string;
   projectCompanyId?: string | null;
@@ -868,6 +1033,7 @@ export type TaskUncheckedCreateWithoutBrainNotesInput = {
   timeEntries?: Prisma.TimeEntryUncheckedCreateNestedManyWithoutTaskInput;
   knowledgeArticles?: Prisma.KnowledgeArticleUncheckedCreateNestedManyWithoutTaskInput;
   brainTemplates?: Prisma.BrainTemplateUncheckedCreateNestedManyWithoutTaskInput;
+  reminders?: Prisma.ReminderUncheckedCreateNestedManyWithoutTaskInput;
 };
 
 export type TaskCreateOrConnectWithoutBrainNotesInput = {
@@ -903,6 +1069,7 @@ export type TaskUpdateWithoutBrainNotesInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string;
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   status?: Prisma.EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus;
+  dueAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
   projectOwnerId?: Prisma.StringFieldUpdateOperationsInput | string;
   projectCompanyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -912,6 +1079,7 @@ export type TaskUpdateWithoutBrainNotesInput = {
   timeEntries?: Prisma.TimeEntryUpdateManyWithoutTaskNestedInput;
   knowledgeArticles?: Prisma.KnowledgeArticleUpdateManyWithoutTaskNestedInput;
   brainTemplates?: Prisma.BrainTemplateUpdateManyWithoutTaskNestedInput;
+  reminders?: Prisma.ReminderUpdateManyWithoutTaskNestedInput;
 };
 
 export type TaskUncheckedUpdateWithoutBrainNotesInput = {
@@ -919,6 +1087,7 @@ export type TaskUncheckedUpdateWithoutBrainNotesInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string;
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   status?: Prisma.EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus;
+  dueAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
   projectId?: Prisma.StringFieldUpdateOperationsInput | string;
   projectOwnerId?: Prisma.StringFieldUpdateOperationsInput | string;
   projectCompanyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
@@ -928,6 +1097,7 @@ export type TaskUncheckedUpdateWithoutBrainNotesInput = {
   timeEntries?: Prisma.TimeEntryUncheckedUpdateManyWithoutTaskNestedInput;
   knowledgeArticles?: Prisma.KnowledgeArticleUncheckedUpdateManyWithoutTaskNestedInput;
   brainTemplates?: Prisma.BrainTemplateUncheckedUpdateManyWithoutTaskNestedInput;
+  reminders?: Prisma.ReminderUncheckedUpdateManyWithoutTaskNestedInput;
 };
 
 export type TaskCreateWithoutKnowledgeArticlesInput = {
@@ -935,6 +1105,7 @@ export type TaskCreateWithoutKnowledgeArticlesInput = {
   title: string;
   description?: string | null;
   status?: $Enums.TaskStatus;
+  dueAt?: Date | string | null;
   projectOwnerId: string;
   projectCompanyId?: string | null;
   createdAt?: Date | string;
@@ -944,6 +1115,7 @@ export type TaskCreateWithoutKnowledgeArticlesInput = {
   timeEntries?: Prisma.TimeEntryCreateNestedManyWithoutTaskInput;
   brainNotes?: Prisma.BrainNoteCreateNestedManyWithoutTaskInput;
   brainTemplates?: Prisma.BrainTemplateCreateNestedManyWithoutTaskInput;
+  reminders?: Prisma.ReminderCreateNestedManyWithoutTaskInput;
 };
 
 export type TaskUncheckedCreateWithoutKnowledgeArticlesInput = {
@@ -951,6 +1123,7 @@ export type TaskUncheckedCreateWithoutKnowledgeArticlesInput = {
   title: string;
   description?: string | null;
   status?: $Enums.TaskStatus;
+  dueAt?: Date | string | null;
   projectId: string;
   projectOwnerId: string;
   projectCompanyId?: string | null;
@@ -960,6 +1133,7 @@ export type TaskUncheckedCreateWithoutKnowledgeArticlesInput = {
   timeEntries?: Prisma.TimeEntryUncheckedCreateNestedManyWithoutTaskInput;
   brainNotes?: Prisma.BrainNoteUncheckedCreateNestedManyWithoutTaskInput;
   brainTemplates?: Prisma.BrainTemplateUncheckedCreateNestedManyWithoutTaskInput;
+  reminders?: Prisma.ReminderUncheckedCreateNestedManyWithoutTaskInput;
 };
 
 export type TaskCreateOrConnectWithoutKnowledgeArticlesInput = {
@@ -995,6 +1169,7 @@ export type TaskUpdateWithoutKnowledgeArticlesInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string;
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   status?: Prisma.EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus;
+  dueAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
   projectOwnerId?: Prisma.StringFieldUpdateOperationsInput | string;
   projectCompanyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -1004,6 +1179,7 @@ export type TaskUpdateWithoutKnowledgeArticlesInput = {
   timeEntries?: Prisma.TimeEntryUpdateManyWithoutTaskNestedInput;
   brainNotes?: Prisma.BrainNoteUpdateManyWithoutTaskNestedInput;
   brainTemplates?: Prisma.BrainTemplateUpdateManyWithoutTaskNestedInput;
+  reminders?: Prisma.ReminderUpdateManyWithoutTaskNestedInput;
 };
 
 export type TaskUncheckedUpdateWithoutKnowledgeArticlesInput = {
@@ -1011,6 +1187,7 @@ export type TaskUncheckedUpdateWithoutKnowledgeArticlesInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string;
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   status?: Prisma.EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus;
+  dueAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
   projectId?: Prisma.StringFieldUpdateOperationsInput | string;
   projectOwnerId?: Prisma.StringFieldUpdateOperationsInput | string;
   projectCompanyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
@@ -1020,6 +1197,7 @@ export type TaskUncheckedUpdateWithoutKnowledgeArticlesInput = {
   timeEntries?: Prisma.TimeEntryUncheckedUpdateManyWithoutTaskNestedInput;
   brainNotes?: Prisma.BrainNoteUncheckedUpdateManyWithoutTaskNestedInput;
   brainTemplates?: Prisma.BrainTemplateUncheckedUpdateManyWithoutTaskNestedInput;
+  reminders?: Prisma.ReminderUncheckedUpdateManyWithoutTaskNestedInput;
 };
 
 export type TaskCreateWithoutBrainTemplatesInput = {
@@ -1027,6 +1205,7 @@ export type TaskCreateWithoutBrainTemplatesInput = {
   title: string;
   description?: string | null;
   status?: $Enums.TaskStatus;
+  dueAt?: Date | string | null;
   projectOwnerId: string;
   projectCompanyId?: string | null;
   createdAt?: Date | string;
@@ -1036,6 +1215,7 @@ export type TaskCreateWithoutBrainTemplatesInput = {
   timeEntries?: Prisma.TimeEntryCreateNestedManyWithoutTaskInput;
   brainNotes?: Prisma.BrainNoteCreateNestedManyWithoutTaskInput;
   knowledgeArticles?: Prisma.KnowledgeArticleCreateNestedManyWithoutTaskInput;
+  reminders?: Prisma.ReminderCreateNestedManyWithoutTaskInput;
 };
 
 export type TaskUncheckedCreateWithoutBrainTemplatesInput = {
@@ -1043,6 +1223,7 @@ export type TaskUncheckedCreateWithoutBrainTemplatesInput = {
   title: string;
   description?: string | null;
   status?: $Enums.TaskStatus;
+  dueAt?: Date | string | null;
   projectId: string;
   projectOwnerId: string;
   projectCompanyId?: string | null;
@@ -1052,6 +1233,7 @@ export type TaskUncheckedCreateWithoutBrainTemplatesInput = {
   timeEntries?: Prisma.TimeEntryUncheckedCreateNestedManyWithoutTaskInput;
   brainNotes?: Prisma.BrainNoteUncheckedCreateNestedManyWithoutTaskInput;
   knowledgeArticles?: Prisma.KnowledgeArticleUncheckedCreateNestedManyWithoutTaskInput;
+  reminders?: Prisma.ReminderUncheckedCreateNestedManyWithoutTaskInput;
 };
 
 export type TaskCreateOrConnectWithoutBrainTemplatesInput = {
@@ -1087,6 +1269,7 @@ export type TaskUpdateWithoutBrainTemplatesInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string;
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   status?: Prisma.EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus;
+  dueAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
   projectOwnerId?: Prisma.StringFieldUpdateOperationsInput | string;
   projectCompanyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -1096,6 +1279,7 @@ export type TaskUpdateWithoutBrainTemplatesInput = {
   timeEntries?: Prisma.TimeEntryUpdateManyWithoutTaskNestedInput;
   brainNotes?: Prisma.BrainNoteUpdateManyWithoutTaskNestedInput;
   knowledgeArticles?: Prisma.KnowledgeArticleUpdateManyWithoutTaskNestedInput;
+  reminders?: Prisma.ReminderUpdateManyWithoutTaskNestedInput;
 };
 
 export type TaskUncheckedUpdateWithoutBrainTemplatesInput = {
@@ -1103,6 +1287,7 @@ export type TaskUncheckedUpdateWithoutBrainTemplatesInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string;
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   status?: Prisma.EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus;
+  dueAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
   projectId?: Prisma.StringFieldUpdateOperationsInput | string;
   projectOwnerId?: Prisma.StringFieldUpdateOperationsInput | string;
   projectCompanyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
@@ -1112,6 +1297,7 @@ export type TaskUncheckedUpdateWithoutBrainTemplatesInput = {
   timeEntries?: Prisma.TimeEntryUncheckedUpdateManyWithoutTaskNestedInput;
   brainNotes?: Prisma.BrainNoteUncheckedUpdateManyWithoutTaskNestedInput;
   knowledgeArticles?: Prisma.KnowledgeArticleUncheckedUpdateManyWithoutTaskNestedInput;
+  reminders?: Prisma.ReminderUncheckedUpdateManyWithoutTaskNestedInput;
 };
 
 export type TaskCreateWithoutTimeEntriesInput = {
@@ -1119,6 +1305,7 @@ export type TaskCreateWithoutTimeEntriesInput = {
   title: string;
   description?: string | null;
   status?: $Enums.TaskStatus;
+  dueAt?: Date | string | null;
   projectOwnerId: string;
   projectCompanyId?: string | null;
   createdAt?: Date | string;
@@ -1128,6 +1315,7 @@ export type TaskCreateWithoutTimeEntriesInput = {
   brainNotes?: Prisma.BrainNoteCreateNestedManyWithoutTaskInput;
   knowledgeArticles?: Prisma.KnowledgeArticleCreateNestedManyWithoutTaskInput;
   brainTemplates?: Prisma.BrainTemplateCreateNestedManyWithoutTaskInput;
+  reminders?: Prisma.ReminderCreateNestedManyWithoutTaskInput;
 };
 
 export type TaskUncheckedCreateWithoutTimeEntriesInput = {
@@ -1135,6 +1323,7 @@ export type TaskUncheckedCreateWithoutTimeEntriesInput = {
   title: string;
   description?: string | null;
   status?: $Enums.TaskStatus;
+  dueAt?: Date | string | null;
   projectId: string;
   projectOwnerId: string;
   projectCompanyId?: string | null;
@@ -1144,6 +1333,7 @@ export type TaskUncheckedCreateWithoutTimeEntriesInput = {
   brainNotes?: Prisma.BrainNoteUncheckedCreateNestedManyWithoutTaskInput;
   knowledgeArticles?: Prisma.KnowledgeArticleUncheckedCreateNestedManyWithoutTaskInput;
   brainTemplates?: Prisma.BrainTemplateUncheckedCreateNestedManyWithoutTaskInput;
+  reminders?: Prisma.ReminderUncheckedCreateNestedManyWithoutTaskInput;
 };
 
 export type TaskCreateOrConnectWithoutTimeEntriesInput = {
@@ -1179,6 +1369,7 @@ export type TaskUpdateWithoutTimeEntriesInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string;
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   status?: Prisma.EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus;
+  dueAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
   projectOwnerId?: Prisma.StringFieldUpdateOperationsInput | string;
   projectCompanyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -1188,6 +1379,7 @@ export type TaskUpdateWithoutTimeEntriesInput = {
   brainNotes?: Prisma.BrainNoteUpdateManyWithoutTaskNestedInput;
   knowledgeArticles?: Prisma.KnowledgeArticleUpdateManyWithoutTaskNestedInput;
   brainTemplates?: Prisma.BrainTemplateUpdateManyWithoutTaskNestedInput;
+  reminders?: Prisma.ReminderUpdateManyWithoutTaskNestedInput;
 };
 
 export type TaskUncheckedUpdateWithoutTimeEntriesInput = {
@@ -1195,6 +1387,7 @@ export type TaskUncheckedUpdateWithoutTimeEntriesInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string;
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   status?: Prisma.EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus;
+  dueAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
   projectId?: Prisma.StringFieldUpdateOperationsInput | string;
   projectOwnerId?: Prisma.StringFieldUpdateOperationsInput | string;
   projectCompanyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
@@ -1204,6 +1397,7 @@ export type TaskUncheckedUpdateWithoutTimeEntriesInput = {
   brainNotes?: Prisma.BrainNoteUncheckedUpdateManyWithoutTaskNestedInput;
   knowledgeArticles?: Prisma.KnowledgeArticleUncheckedUpdateManyWithoutTaskNestedInput;
   brainTemplates?: Prisma.BrainTemplateUncheckedUpdateManyWithoutTaskNestedInput;
+  reminders?: Prisma.ReminderUncheckedUpdateManyWithoutTaskNestedInput;
 };
 
 export type TaskCreateWithoutAssigneeInput = {
@@ -1211,6 +1405,7 @@ export type TaskCreateWithoutAssigneeInput = {
   title: string;
   description?: string | null;
   status?: $Enums.TaskStatus;
+  dueAt?: Date | string | null;
   projectOwnerId: string;
   projectCompanyId?: string | null;
   createdAt?: Date | string;
@@ -1220,6 +1415,7 @@ export type TaskCreateWithoutAssigneeInput = {
   brainNotes?: Prisma.BrainNoteCreateNestedManyWithoutTaskInput;
   knowledgeArticles?: Prisma.KnowledgeArticleCreateNestedManyWithoutTaskInput;
   brainTemplates?: Prisma.BrainTemplateCreateNestedManyWithoutTaskInput;
+  reminders?: Prisma.ReminderCreateNestedManyWithoutTaskInput;
 };
 
 export type TaskUncheckedCreateWithoutAssigneeInput = {
@@ -1227,6 +1423,7 @@ export type TaskUncheckedCreateWithoutAssigneeInput = {
   title: string;
   description?: string | null;
   status?: $Enums.TaskStatus;
+  dueAt?: Date | string | null;
   projectId: string;
   projectOwnerId: string;
   projectCompanyId?: string | null;
@@ -1236,6 +1433,7 @@ export type TaskUncheckedCreateWithoutAssigneeInput = {
   brainNotes?: Prisma.BrainNoteUncheckedCreateNestedManyWithoutTaskInput;
   knowledgeArticles?: Prisma.KnowledgeArticleUncheckedCreateNestedManyWithoutTaskInput;
   brainTemplates?: Prisma.BrainTemplateUncheckedCreateNestedManyWithoutTaskInput;
+  reminders?: Prisma.ReminderUncheckedCreateNestedManyWithoutTaskInput;
 };
 
 export type TaskCreateOrConnectWithoutAssigneeInput = {
@@ -1284,6 +1482,7 @@ export type TaskCreateManyProjectInput = {
   title: string;
   description?: string | null;
   status?: $Enums.TaskStatus;
+  dueAt?: Date | string | null;
   projectOwnerId: string;
   projectCompanyId?: string | null;
   assigneeId: string;
@@ -1296,6 +1495,7 @@ export type TaskUpdateWithoutProjectInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string;
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   status?: Prisma.EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus;
+  dueAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
   projectOwnerId?: Prisma.StringFieldUpdateOperationsInput | string;
   projectCompanyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -1305,6 +1505,7 @@ export type TaskUpdateWithoutProjectInput = {
   brainNotes?: Prisma.BrainNoteUpdateManyWithoutTaskNestedInput;
   knowledgeArticles?: Prisma.KnowledgeArticleUpdateManyWithoutTaskNestedInput;
   brainTemplates?: Prisma.BrainTemplateUpdateManyWithoutTaskNestedInput;
+  reminders?: Prisma.ReminderUpdateManyWithoutTaskNestedInput;
 };
 
 export type TaskUncheckedUpdateWithoutProjectInput = {
@@ -1312,6 +1513,7 @@ export type TaskUncheckedUpdateWithoutProjectInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string;
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   status?: Prisma.EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus;
+  dueAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
   projectOwnerId?: Prisma.StringFieldUpdateOperationsInput | string;
   projectCompanyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   assigneeId?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -1321,6 +1523,7 @@ export type TaskUncheckedUpdateWithoutProjectInput = {
   brainNotes?: Prisma.BrainNoteUncheckedUpdateManyWithoutTaskNestedInput;
   knowledgeArticles?: Prisma.KnowledgeArticleUncheckedUpdateManyWithoutTaskNestedInput;
   brainTemplates?: Prisma.BrainTemplateUncheckedUpdateManyWithoutTaskNestedInput;
+  reminders?: Prisma.ReminderUncheckedUpdateManyWithoutTaskNestedInput;
 };
 
 export type TaskUncheckedUpdateManyWithoutProjectInput = {
@@ -1328,6 +1531,7 @@ export type TaskUncheckedUpdateManyWithoutProjectInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string;
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   status?: Prisma.EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus;
+  dueAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
   projectOwnerId?: Prisma.StringFieldUpdateOperationsInput | string;
   projectCompanyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   assigneeId?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -1340,6 +1544,7 @@ export type TaskCreateManyAssigneeInput = {
   title: string;
   description?: string | null;
   status?: $Enums.TaskStatus;
+  dueAt?: Date | string | null;
   projectId: string;
   projectOwnerId: string;
   projectCompanyId?: string | null;
@@ -1352,6 +1557,7 @@ export type TaskUpdateWithoutAssigneeInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string;
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   status?: Prisma.EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus;
+  dueAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
   projectOwnerId?: Prisma.StringFieldUpdateOperationsInput | string;
   projectCompanyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -1361,6 +1567,7 @@ export type TaskUpdateWithoutAssigneeInput = {
   brainNotes?: Prisma.BrainNoteUpdateManyWithoutTaskNestedInput;
   knowledgeArticles?: Prisma.KnowledgeArticleUpdateManyWithoutTaskNestedInput;
   brainTemplates?: Prisma.BrainTemplateUpdateManyWithoutTaskNestedInput;
+  reminders?: Prisma.ReminderUpdateManyWithoutTaskNestedInput;
 };
 
 export type TaskUncheckedUpdateWithoutAssigneeInput = {
@@ -1368,6 +1575,7 @@ export type TaskUncheckedUpdateWithoutAssigneeInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string;
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   status?: Prisma.EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus;
+  dueAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
   projectId?: Prisma.StringFieldUpdateOperationsInput | string;
   projectOwnerId?: Prisma.StringFieldUpdateOperationsInput | string;
   projectCompanyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
@@ -1377,6 +1585,7 @@ export type TaskUncheckedUpdateWithoutAssigneeInput = {
   brainNotes?: Prisma.BrainNoteUncheckedUpdateManyWithoutTaskNestedInput;
   knowledgeArticles?: Prisma.KnowledgeArticleUncheckedUpdateManyWithoutTaskNestedInput;
   brainTemplates?: Prisma.BrainTemplateUncheckedUpdateManyWithoutTaskNestedInput;
+  reminders?: Prisma.ReminderUncheckedUpdateManyWithoutTaskNestedInput;
 };
 
 export type TaskUncheckedUpdateManyWithoutAssigneeInput = {
@@ -1384,6 +1593,7 @@ export type TaskUncheckedUpdateManyWithoutAssigneeInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string;
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   status?: Prisma.EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus;
+  dueAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
   projectId?: Prisma.StringFieldUpdateOperationsInput | string;
   projectOwnerId?: Prisma.StringFieldUpdateOperationsInput | string;
   projectCompanyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
@@ -1400,6 +1610,7 @@ export type TaskCountOutputType = {
   brainNotes: number;
   knowledgeArticles: number;
   brainTemplates: number;
+  reminders: number;
 };
 
 export type TaskCountOutputTypeSelect<
@@ -1409,6 +1620,7 @@ export type TaskCountOutputTypeSelect<
   brainNotes?: boolean | TaskCountOutputTypeCountBrainNotesArgs;
   knowledgeArticles?: boolean | TaskCountOutputTypeCountKnowledgeArticlesArgs;
   brainTemplates?: boolean | TaskCountOutputTypeCountBrainTemplatesArgs;
+  reminders?: boolean | TaskCountOutputTypeCountRemindersArgs;
 };
 
 /**
@@ -1459,6 +1671,15 @@ export type TaskCountOutputTypeCountBrainTemplatesArgs<
   where?: Prisma.BrainTemplateWhereInput;
 };
 
+/**
+ * TaskCountOutputType without action
+ */
+export type TaskCountOutputTypeCountRemindersArgs<
+  ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
+> = {
+  where?: Prisma.ReminderWhereInput;
+};
+
 export type TaskSelect<
   ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
 > = runtime.Types.Extensions.GetSelect<
@@ -1467,6 +1688,7 @@ export type TaskSelect<
     title?: boolean;
     description?: boolean;
     status?: boolean;
+    dueAt?: boolean;
     projectId?: boolean;
     projectOwnerId?: boolean;
     projectCompanyId?: boolean;
@@ -1479,6 +1701,7 @@ export type TaskSelect<
     brainNotes?: boolean | Prisma.Task$brainNotesArgs<ExtArgs>;
     knowledgeArticles?: boolean | Prisma.Task$knowledgeArticlesArgs<ExtArgs>;
     brainTemplates?: boolean | Prisma.Task$brainTemplatesArgs<ExtArgs>;
+    reminders?: boolean | Prisma.Task$remindersArgs<ExtArgs>;
     _count?: boolean | Prisma.TaskCountOutputTypeDefaultArgs<ExtArgs>;
   },
   ExtArgs['result']['task']
@@ -1492,6 +1715,7 @@ export type TaskSelectCreateManyAndReturn<
     title?: boolean;
     description?: boolean;
     status?: boolean;
+    dueAt?: boolean;
     projectId?: boolean;
     projectOwnerId?: boolean;
     projectCompanyId?: boolean;
@@ -1512,6 +1736,7 @@ export type TaskSelectUpdateManyAndReturn<
     title?: boolean;
     description?: boolean;
     status?: boolean;
+    dueAt?: boolean;
     projectId?: boolean;
     projectOwnerId?: boolean;
     projectCompanyId?: boolean;
@@ -1529,6 +1754,7 @@ export type TaskSelectScalar = {
   title?: boolean;
   description?: boolean;
   status?: boolean;
+  dueAt?: boolean;
   projectId?: boolean;
   projectOwnerId?: boolean;
   projectCompanyId?: boolean;
@@ -1544,6 +1770,7 @@ export type TaskOmit<
   | 'title'
   | 'description'
   | 'status'
+  | 'dueAt'
   | 'projectId'
   | 'projectOwnerId'
   | 'projectCompanyId'
@@ -1561,6 +1788,7 @@ export type TaskInclude<
   brainNotes?: boolean | Prisma.Task$brainNotesArgs<ExtArgs>;
   knowledgeArticles?: boolean | Prisma.Task$knowledgeArticlesArgs<ExtArgs>;
   brainTemplates?: boolean | Prisma.Task$brainTemplatesArgs<ExtArgs>;
+  reminders?: boolean | Prisma.Task$remindersArgs<ExtArgs>;
   _count?: boolean | Prisma.TaskCountOutputTypeDefaultArgs<ExtArgs>;
 };
 export type TaskIncludeCreateManyAndReturn<
@@ -1587,6 +1815,7 @@ export type $TaskPayload<
     brainNotes: Prisma.$BrainNotePayload<ExtArgs>[];
     knowledgeArticles: Prisma.$KnowledgeArticlePayload<ExtArgs>[];
     brainTemplates: Prisma.$BrainTemplatePayload<ExtArgs>[];
+    reminders: Prisma.$ReminderPayload<ExtArgs>[];
   };
   scalars: runtime.Types.Extensions.GetPayloadResult<
     {
@@ -1594,6 +1823,7 @@ export type $TaskPayload<
       title: string;
       description: string | null;
       status: $Enums.TaskStatus;
+      dueAt: Date | null;
       projectId: string;
       projectOwnerId: string;
       projectCompanyId: string | null;
@@ -2182,6 +2412,17 @@ export interface Prisma__TaskClient<
       >
     | Null
   >;
+  reminders<T extends Prisma.Task$remindersArgs<ExtArgs> = {}>(
+    args?: Prisma.Subset<T, Prisma.Task$remindersArgs<ExtArgs>>,
+  ): Prisma.PrismaPromise<
+    | runtime.Types.Result.GetResult<
+        Prisma.$ReminderPayload<ExtArgs>,
+        T,
+        'findMany',
+        GlobalOmitOptions
+      >
+    | Null
+  >;
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2217,6 +2458,7 @@ export interface TaskFieldRefs {
   readonly title: Prisma.FieldRef<'Task', 'String'>;
   readonly description: Prisma.FieldRef<'Task', 'String'>;
   readonly status: Prisma.FieldRef<'Task', 'TaskStatus'>;
+  readonly dueAt: Prisma.FieldRef<'Task', 'DateTime'>;
   readonly projectId: Prisma.FieldRef<'Task', 'String'>;
   readonly projectOwnerId: Prisma.FieldRef<'Task', 'String'>;
   readonly projectCompanyId: Prisma.FieldRef<'Task', 'String'>;
@@ -2751,6 +2993,32 @@ export type Task$brainTemplatesArgs<
   take?: number;
   skip?: number;
   distinct?: Prisma.BrainTemplateScalarFieldEnum | Prisma.BrainTemplateScalarFieldEnum[];
+};
+
+/**
+ * Task.reminders
+ */
+export type Task$remindersArgs<
+  ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
+> = {
+  /**
+   * Select specific fields to fetch from the Reminder
+   */
+  select?: Prisma.ReminderSelect<ExtArgs> | null;
+  /**
+   * Omit specific fields from the Reminder
+   */
+  omit?: Prisma.ReminderOmit<ExtArgs> | null;
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ReminderInclude<ExtArgs> | null;
+  where?: Prisma.ReminderWhereInput;
+  orderBy?: Prisma.ReminderOrderByWithRelationInput | Prisma.ReminderOrderByWithRelationInput[];
+  cursor?: Prisma.ReminderWhereUniqueInput;
+  take?: number;
+  skip?: number;
+  distinct?: Prisma.ReminderScalarFieldEnum | Prisma.ReminderScalarFieldEnum[];
 };
 
 /**

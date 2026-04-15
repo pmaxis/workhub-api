@@ -29,6 +29,7 @@ export class TasksService {
       title: dto.title,
       description: dto.description ?? null,
       status: dto.status ?? TaskStatus.PENDING,
+      ...(dto.dueAt !== undefined ? { dueAt: new Date(dto.dueAt) } : {}),
       projectId: dto.projectId,
       projectOwnerId: project.ownerId,
       projectCompanyId: project.companyId,
@@ -43,6 +44,8 @@ export class TasksService {
     userId: string,
     ability: AppAbility,
     projectId?: string,
+    dueFrom?: string,
+    dueTo?: string,
   ): Promise<TaskResponseDto[]> {
     if (projectId) {
       const project = await this.projectsRepository.findOne(projectId, ability);
@@ -52,7 +55,7 @@ export class TasksService {
       }
     }
 
-    const tasks = await this.tasksRepository.findAll({ ability, projectId });
+    const tasks = await this.tasksRepository.findAll({ ability, projectId, dueFrom, dueTo });
     const tracked = await this.tasksRepository.sumTrackedDurationSecondsForUser(
       userId,
       tasks.map((t) => t.id),
@@ -95,7 +98,20 @@ export class TasksService {
     }
 
     const prevStatus = task.status;
-    const updated = await this.tasksRepository.update(id, dto);
+    const updatePayload: {
+      title?: string;
+      description?: string | null;
+      status?: TaskStatus;
+      dueAt?: Date | null;
+    } = {};
+    if (dto.title !== undefined) updatePayload.title = dto.title;
+    if (dto.description !== undefined) updatePayload.description = dto.description;
+    if (dto.status !== undefined) updatePayload.status = dto.status;
+    if (dto.dueAt !== undefined) {
+      updatePayload.dueAt = dto.dueAt === null ? null : new Date(dto.dueAt);
+    }
+
+    const updated = await this.tasksRepository.update(id, updatePayload);
 
     if (dto.status && dto.status !== prevStatus) {
       await this.notifyTaskStatusChanged(updated, prevStatus, updated.status);
@@ -127,6 +143,7 @@ export class TasksService {
       title: task.title,
       description: task.description,
       status: task.status,
+      dueAt: task.dueAt,
       projectId: task.projectId,
       assigneeId: task.assigneeId,
       createdAt: task.createdAt,

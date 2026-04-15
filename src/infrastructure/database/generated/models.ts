@@ -16,6 +16,7 @@ export type * from './models/Invitation.js';
 export type * from './models/Notification.js';
 export type * from './models/Permission.js';
 export type * from './models/Project.js';
+export type * from './models/Reminder.js';
 export type * from './models/Role.js';
 export type * from './models/RolePermission.js';
 export type * from './models/BrainNote.js';

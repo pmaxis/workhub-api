@@ -55,6 +55,7 @@ describe('TasksController', () => {
         title: dto.title,
         description: null,
         status: TaskStatus.PENDING,
+        dueAt: null,
         projectId: dto.projectId,
         assigneeId: ownerId,
         createdAt: new Date(),
@@ -78,6 +79,7 @@ describe('TasksController', () => {
           title: 'T',
           description: null,
           status: TaskStatus.PENDING,
+          dueAt: null,
           projectId: 'p1',
           assigneeId: ownerId,
           createdAt: new Date(),
@@ -86,19 +88,46 @@ describe('TasksController', () => {
       ];
       mockTasksService.findAll.mockResolvedValue(tasks);
 
-      const result = await controller.findAll(undefined, ownerId, ability);
+      const result = await controller.findAll(undefined, undefined, undefined, ownerId, ability);
 
       expect(result).toEqual(tasks);
-      expect(mockTasksService.findAll).toHaveBeenCalledWith(ownerId, ability, undefined);
+      expect(mockTasksService.findAll).toHaveBeenCalledWith(
+        ownerId,
+        ability,
+        undefined,
+        undefined,
+        undefined,
+      );
     });
 
     it('should pass projectId query when provided', async () => {
       const ownerId = 'u1';
       mockTasksService.findAll.mockResolvedValue([]);
 
-      await controller.findAll('p1', ownerId, ability);
+      await controller.findAll('p1', undefined, undefined, ownerId, ability);
 
-      expect(mockTasksService.findAll).toHaveBeenCalledWith(ownerId, ability, 'p1');
+      expect(mockTasksService.findAll).toHaveBeenCalledWith(
+        ownerId,
+        ability,
+        'p1',
+        undefined,
+        undefined,
+      );
+    });
+
+    it('should pass dueFrom and dueTo query when provided', async () => {
+      const ownerId = 'u1';
+      mockTasksService.findAll.mockResolvedValue([]);
+
+      await controller.findAll(undefined, '2026-04-01', '2026-04-30', ownerId, ability);
+
+      expect(mockTasksService.findAll).toHaveBeenCalledWith(
+        ownerId,
+        ability,
+        undefined,
+        '2026-04-01',
+        '2026-04-30',
+      );
     });
   });
 
@@ -109,6 +138,7 @@ describe('TasksController', () => {
         title: 'T',
         description: null,
         status: TaskStatus.COMPLETED,
+        dueAt: null,
         projectId: 'p1',
         assigneeId: 'u1',
         createdAt: new Date(),
@@ -131,6 +161,7 @@ describe('TasksController', () => {
         title: 'New',
         description: null,
         status: TaskStatus.PENDING,
+        dueAt: null,
         projectId: 'p1',
         assigneeId: 'u1',
         createdAt: new Date(),

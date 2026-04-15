@@ -1,5 +1,5 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { IsEnum, IsOptional, IsString, MinLength } from 'class-validator';
+import { IsDateString, IsEnum, IsOptional, IsString, MinLength } from 'class-validator';
 import { TaskStatus } from '@/infrastructure/database/generated/enums';
 
 export class UpdateTaskDto {
@@ -18,4 +18,14 @@ export class UpdateTaskDto {
   @IsEnum(TaskStatus)
   @IsOptional()
   status?: TaskStatus;
+
+  @ApiPropertyOptional({
+    nullable: true,
+    type: String,
+    format: 'date-time',
+    description: 'ISO 8601 date-time, or null to clear the due date',
+  })
+  @IsOptional()
+  @IsDateString()
+  dueAt?: string | null;
 }
