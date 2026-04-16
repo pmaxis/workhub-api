@@ -1,5 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { hashPassword } from '@/common/utils/hash.util';
+import { AdminAuditLogLevel } from '@/infrastructure/database/generated/enums';
+import { AdminAuditLogWriterService } from '@/modules/admin-audit-logs/service/admin-audit-log-writer.service';
 import { UsersRepository } from '@/modules/users/repository/users.repository';
 import { CreateUserDto } from '@/modules/users/dto/create-user.dto';
 import { UpdateUserDto } from '@/modules/users/dto/update-user.dto';
@@ -7,14 +9,25 @@ import { UserResponseDto } from '@/modules/users/dto/user-response.dto';
 
 @Injectable()
 export class UsersService {
-  constructor(private readonly usersRepository: UsersRepository) {}
+  constructor(
+    private readonly usersRepository: UsersRepository,
+    private readonly adminAuditLogWriter: AdminAuditLogWriterService,
+  ) {}
 
-  async create(createUserDto: CreateUserDto): Promise<UserResponseDto> {
+  async create(createUserDto: CreateUserDto, performedByUserId?: string): Promise<UserResponseDto> {
     const hashedPassword = await hashPassword(createUserDto.password);
 
     const user = await this.usersRepository.create({
       ...createUserDto,
       password: hashedPassword,
+    });
+
+    this.adminAuditLogWriter.enqueue({
+      level: AdminAuditLogLevel.INFO,
+      source: 'users',
+      message: performedByUserId ? 'User created by administrator' : 'User registered',
+      actorUserId: performedByUserId,
+      context: { newUserId: user.id, email: user.email },
     });
 
     return new UserResponseDto(user);
@@ -39,7 +52,11 @@ export class UsersService {
     return this.usersRepository.findOneByEmail(email);
   }
 
-  async update(id: string, updateUserDto: UpdateUserDto): Promise<UserResponseDto> {
+  async update(
+    id: string,
+    updateUserDto: UpdateUserDto,
+    actorUserId: string,
+  ): Promise<UserResponseDto> {
     await this.findOne(id);
 
     const { password, ...rest } = updateUserDto;
@@ -51,12 +68,28 @@ export class UsersService {
       password: hashedPassword,
     });
 
+    this.adminAuditLogWriter.enqueue({
+      level: AdminAuditLogLevel.INFO,
+      source: 'users',
+      message: 'User updated',
+      actorUserId,
+      context: { targetUserId: id, passwordChanged: Boolean(password) },
+    });
+
     return new UserResponseDto(user);
   }
 
-  async delete(id: string): Promise<void> {
+  async delete(id: string, actorUserId: string): Promise<void> {
     await this.findOne(id);
 
     await this.usersRepository.delete(id);
+
+    this.adminAuditLogWriter.enqueue({
+      level: AdminAuditLogLevel.INFO,
+      source: 'users',
+      message: 'User deleted',
+      actorUserId,
+      context: { deletedUserId: id },
+    });
   }
 }

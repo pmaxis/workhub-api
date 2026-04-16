@@ -1,4 +1,6 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { AdminAuditLogLevel } from '@/infrastructure/database/generated/enums';
+import { AdminAuditLogWriterService } from '@/modules/admin-audit-logs/service/admin-audit-log-writer.service';
 import { RolesRepository } from '@/modules/roles/repository/roles.repository';
 import { CreateRoleDto } from '@/modules/roles/dto/create-role.dto';
 import { UpdateRoleDto } from '@/modules/roles/dto/update-role.dto';
@@ -7,14 +9,25 @@ import { ADMIN_ROLE_SLUG } from '@/common/constants/reserved';
 
 @Injectable()
 export class RolesService {
-  constructor(private readonly rolesRepository: RolesRepository) {}
+  constructor(
+    private readonly rolesRepository: RolesRepository,
+    private readonly adminAuditLogWriter: AdminAuditLogWriterService,
+  ) {}
 
-  async create(createRoleDto: CreateRoleDto): Promise<RoleResponseDto> {
+  async create(createRoleDto: CreateRoleDto, actorUserId: string): Promise<RoleResponseDto> {
     if (createRoleDto.slug === ADMIN_ROLE_SLUG) {
       throw new BadRequestException('Cannot create reserved role');
     }
 
     const role = await this.rolesRepository.create(createRoleDto);
+
+    this.adminAuditLogWriter.enqueue({
+      level: AdminAuditLogLevel.INFO,
+      source: 'roles',
+      message: 'Role created',
+      actorUserId,
+      context: { roleId: role.id, slug: role.slug },
+    });
 
     return new RoleResponseDto(role);
   }
@@ -39,7 +52,11 @@ export class RolesService {
     return role?.id ?? null;
   }
 
-  async update(id: string, updateRoleDto: UpdateRoleDto): Promise<RoleResponseDto> {
+  async update(
+    id: string,
+    updateRoleDto: UpdateRoleDto,
+    actorUserId: string,
+  ): Promise<RoleResponseDto> {
     await this.findOne(id);
 
     if (updateRoleDto.slug === ADMIN_ROLE_SLUG) {
@@ -48,12 +65,28 @@ export class RolesService {
 
     const role = await this.rolesRepository.update(id, updateRoleDto);
 
+    this.adminAuditLogWriter.enqueue({
+      level: AdminAuditLogLevel.INFO,
+      source: 'roles',
+      message: 'Role updated',
+      actorUserId,
+      context: { roleId: id },
+    });
+
     return new RoleResponseDto(role);
   }
 
-  async delete(id: string): Promise<void> {
+  async delete(id: string, actorUserId: string): Promise<void> {
     await this.findOne(id);
 
     await this.rolesRepository.delete(id);
+
+    this.adminAuditLogWriter.enqueue({
+      level: AdminAuditLogLevel.INFO,
+      source: 'roles',
+      message: 'Role deleted',
+      actorUserId,
+      context: { roleId: id },
+    });
   }
 }

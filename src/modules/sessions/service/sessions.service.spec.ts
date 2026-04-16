@@ -1,4 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { AdminAuditLogWriterService } from '@/modules/admin-audit-logs/service/admin-audit-log-writer.service';
 import { SessionsService } from '@/modules/sessions/service/sessions.service';
 import { SessionsRepository } from '@/modules/sessions/repository/sessions.repository';
 import { CreateSessionDto } from '@/modules/sessions/dto/create-session.dto';
@@ -12,6 +13,10 @@ const mockSessionsRepository = {
   deleteForUser: jest.fn(),
 };
 
+const mockAdminAuditLogWriter = {
+  enqueue: jest.fn(),
+};
+
 describe('SessionsService', () => {
   let service: SessionsService;
 
@@ -21,6 +26,7 @@ describe('SessionsService', () => {
       providers: [
         SessionsService,
         { provide: SessionsRepository, useValue: mockSessionsRepository },
+        { provide: AdminAuditLogWriterService, useValue: mockAdminAuditLogWriter },
       ],
     }).compile();
 

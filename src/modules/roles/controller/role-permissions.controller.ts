@@ -9,6 +9,7 @@ import {
 } from '@nestjs/swagger';
 import { Action } from '@/common/ability/ability.types';
 import { CheckPolicies } from '@/common/decorators/policy.decorator';
+import { CurrentUserId } from '@/common/decorators/current-user.decorator';
 import { RolePermissionsService } from '@/modules/roles/service/role-permissions.service';
 import { AddPermissionDto } from '@/modules/roles/dto/add-permission.dto';
 
@@ -23,8 +24,12 @@ export class RolePermissionsController {
   @ApiParam({ name: 'roleId', description: 'Role ID' })
   @ApiCreatedResponse({ description: 'Permission linked (empty body)' })
   @CheckPolicies((ability) => ability.can(Action.Manage, 'RolePermission'))
-  addPermission(@Param('roleId') roleId: string, @Body() dto: AddPermissionDto): Promise<void> {
-    return this.rolePermissionsService.addPermission(roleId, dto.permissionId);
+  addPermission(
+    @Param('roleId') roleId: string,
+    @Body() dto: AddPermissionDto,
+    @CurrentUserId() actorUserId: string,
+  ): Promise<void> {
+    return this.rolePermissionsService.addPermission(roleId, dto.permissionId, actorUserId);
   }
 
   @Delete(':permissionId')
@@ -37,7 +42,8 @@ export class RolePermissionsController {
   deletePermission(
     @Param('roleId') roleId: string,
     @Param('permissionId') permissionId: string,
+    @CurrentUserId() actorUserId: string,
   ): Promise<void> {
-    return this.rolePermissionsService.deletePermission(roleId, permissionId);
+    return this.rolePermissionsService.deletePermission(roleId, permissionId, actorUserId);
   }
 }

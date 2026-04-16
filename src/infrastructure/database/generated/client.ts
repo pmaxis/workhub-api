@@ -28,8 +28,8 @@ export * from './enums.js';
  * const prisma = new PrismaClient({
  *   adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL })
  * })
- * // Fetch zero or more Companies
- * const companies = await prisma.company.findMany()
+ * // Fetch zero or more AdminAuditLogs
+ * const adminAuditLogs = await prisma.adminAuditLog.findMany()
  * ```
  *
  * Read more in our [docs](https://pris.ly/d/client).
@@ -42,6 +42,11 @@ export type PrismaClient<
 > = $Class.PrismaClient<LogOpts, OmitOpts, ExtArgs>;
 export { Prisma };
 
+/**
+ * Model AdminAuditLog
+ *
+ */
+export type AdminAuditLog = Prisma.AdminAuditLogModel;
 /**
  * Model Company
  *

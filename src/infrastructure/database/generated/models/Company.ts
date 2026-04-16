@@ -346,14 +346,6 @@ export type CompanyNullableScalarRelationFilter = {
   isNot?: Prisma.CompanyWhereInput | null;
 };
 
-export type StringFieldUpdateOperationsInput = {
-  set?: string;
-};
-
-export type DateTimeFieldUpdateOperationsInput = {
-  set?: Date | string;
-};
-
 export type CompanyCreateNestedOneWithoutCompanyMembersInput = {
   create?: Prisma.XOR<
     Prisma.CompanyCreateWithoutCompanyMembersInput,

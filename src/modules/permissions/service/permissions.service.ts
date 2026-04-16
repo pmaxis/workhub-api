@@ -1,4 +1,6 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { AdminAuditLogLevel } from '@/infrastructure/database/generated/enums';
+import { AdminAuditLogWriterService } from '@/modules/admin-audit-logs/service/admin-audit-log-writer.service';
 import { PermissionsRepository } from '@/modules/permissions/repository/permissions.repository';
 import { CreatePermissionDto } from '@/modules/permissions/dto/create-permission.dto';
 import { UpdatePermissionDto } from '@/modules/permissions/dto/update-permission.dto';
@@ -7,14 +9,28 @@ import { MANAGE_ALL_PERMISSION_KEY } from '@/common/constants/reserved';
 
 @Injectable()
 export class PermissionsService {
-  constructor(private readonly permissionsRepository: PermissionsRepository) {}
+  constructor(
+    private readonly permissionsRepository: PermissionsRepository,
+    private readonly adminAuditLogWriter: AdminAuditLogWriterService,
+  ) {}
 
-  async create(createPermissionDto: CreatePermissionDto): Promise<PermissionResponseDto> {
+  async create(
+    createPermissionDto: CreatePermissionDto,
+    actorUserId: string,
+  ): Promise<PermissionResponseDto> {
     if (createPermissionDto.key === MANAGE_ALL_PERMISSION_KEY) {
       throw new BadRequestException('Cannot create reserved permission');
     }
 
     const permission = await this.permissionsRepository.create(createPermissionDto);
+
+    this.adminAuditLogWriter.enqueue({
+      level: AdminAuditLogLevel.INFO,
+      source: 'permissions',
+      message: 'Permission created',
+      actorUserId,
+      context: { permissionId: permission.id, key: permission.key },
+    });
 
     return new PermissionResponseDto(permission);
   }
@@ -37,6 +53,7 @@ export class PermissionsService {
   async update(
     id: string,
     updatePermissionDto: UpdatePermissionDto,
+    actorUserId: string,
   ): Promise<PermissionResponseDto> {
     await this.findOne(id);
 
@@ -46,12 +63,28 @@ export class PermissionsService {
 
     const permission = await this.permissionsRepository.update(id, updatePermissionDto);
 
+    this.adminAuditLogWriter.enqueue({
+      level: AdminAuditLogLevel.INFO,
+      source: 'permissions',
+      message: 'Permission updated',
+      actorUserId,
+      context: { permissionId: id },
+    });
+
     return new PermissionResponseDto(permission);
   }
 
-  async delete(id: string): Promise<void> {
+  async delete(id: string, actorUserId: string): Promise<void> {
     await this.findOne(id);
 
     await this.permissionsRepository.delete(id);
+
+    this.adminAuditLogWriter.enqueue({
+      level: AdminAuditLogLevel.INFO,
+      source: 'permissions',
+      message: 'Permission deleted',
+      actorUserId,
+      context: { permissionId: id },
+    });
   }
 }

@@ -1,0 +1,22 @@
+enum AdminAuditLogLevel {
+  DEBUG
+  INFO
+  WARN
+  ERROR
+}
+
+model AdminAuditLog {
+  id          String             @id @default(cuid())
+  level       AdminAuditLogLevel
+  source      String
+  message     String
+  context     Json?
+  actorUserId String?            @map("actor_user_id")
+  actor       User?              @relation("AdminAuditLogActor", fields: [actorUserId], references: [id], onDelete: SetNull)
+  createdAt   DateTime           @default(now()) @map("created_at")
+
+  @@index([createdAt])
+  @@index([level])
+  @@index([source])
+  @@map("admin_audit_logs")
+}

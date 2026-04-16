@@ -225,6 +225,7 @@ export type UserWhereInput = {
   brainJournalEntries?: Prisma.BrainJournalEntryListRelationFilter;
   reminders?: Prisma.ReminderListRelationFilter;
   notifications?: Prisma.NotificationListRelationFilter;
+  adminAuditLogsAsActor?: Prisma.AdminAuditLogListRelationFilter;
   freelancerProfile?: Prisma.XOR<
     Prisma.FreelancerProfileNullableScalarRelationFilter,
     Prisma.FreelancerProfileWhereInput
@@ -260,6 +261,7 @@ export type UserOrderByWithRelationInput = {
   brainJournalEntries?: Prisma.BrainJournalEntryOrderByRelationAggregateInput;
   reminders?: Prisma.ReminderOrderByRelationAggregateInput;
   notifications?: Prisma.NotificationOrderByRelationAggregateInput;
+  adminAuditLogsAsActor?: Prisma.AdminAuditLogOrderByRelationAggregateInput;
   freelancerProfile?: Prisma.FreelancerProfileOrderByWithRelationInput;
   clientProfile?: Prisma.ClientProfileOrderByWithRelationInput;
 };
@@ -293,6 +295,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<
     brainJournalEntries?: Prisma.BrainJournalEntryListRelationFilter;
     reminders?: Prisma.ReminderListRelationFilter;
     notifications?: Prisma.NotificationListRelationFilter;
+    adminAuditLogsAsActor?: Prisma.AdminAuditLogListRelationFilter;
     freelancerProfile?: Prisma.XOR<
       Prisma.FreelancerProfileNullableScalarRelationFilter,
       Prisma.FreelancerProfileWhereInput
@@ -360,6 +363,7 @@ export type UserCreateInput = {
   brainJournalEntries?: Prisma.BrainJournalEntryCreateNestedManyWithoutUserInput;
   reminders?: Prisma.ReminderCreateNestedManyWithoutUserInput;
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput;
+  adminAuditLogsAsActor?: Prisma.AdminAuditLogCreateNestedManyWithoutActorInput;
   freelancerProfile?: Prisma.FreelancerProfileCreateNestedOneWithoutUserInput;
   clientProfile?: Prisma.ClientProfileCreateNestedOneWithoutUserInput;
 };
@@ -389,6 +393,7 @@ export type UserUncheckedCreateInput = {
   brainJournalEntries?: Prisma.BrainJournalEntryUncheckedCreateNestedManyWithoutUserInput;
   reminders?: Prisma.ReminderUncheckedCreateNestedManyWithoutUserInput;
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput;
+  adminAuditLogsAsActor?: Prisma.AdminAuditLogUncheckedCreateNestedManyWithoutActorInput;
   freelancerProfile?: Prisma.FreelancerProfileUncheckedCreateNestedOneWithoutUserInput;
   clientProfile?: Prisma.ClientProfileUncheckedCreateNestedOneWithoutUserInput;
 };
@@ -418,6 +423,7 @@ export type UserUpdateInput = {
   brainJournalEntries?: Prisma.BrainJournalEntryUpdateManyWithoutUserNestedInput;
   reminders?: Prisma.ReminderUpdateManyWithoutUserNestedInput;
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput;
+  adminAuditLogsAsActor?: Prisma.AdminAuditLogUpdateManyWithoutActorNestedInput;
   freelancerProfile?: Prisma.FreelancerProfileUpdateOneWithoutUserNestedInput;
   clientProfile?: Prisma.ClientProfileUpdateOneWithoutUserNestedInput;
 };
@@ -447,6 +453,7 @@ export type UserUncheckedUpdateInput = {
   brainJournalEntries?: Prisma.BrainJournalEntryUncheckedUpdateManyWithoutUserNestedInput;
   reminders?: Prisma.ReminderUncheckedUpdateManyWithoutUserNestedInput;
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput;
+  adminAuditLogsAsActor?: Prisma.AdminAuditLogUncheckedUpdateManyWithoutActorNestedInput;
   freelancerProfile?: Prisma.FreelancerProfileUncheckedUpdateOneWithoutUserNestedInput;
   clientProfile?: Prisma.ClientProfileUncheckedUpdateOneWithoutUserNestedInput;
 };
@@ -485,6 +492,11 @@ export type UserUncheckedUpdateManyInput = {
   isActivated?: Prisma.BoolFieldUpdateOperationsInput | boolean;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+};
+
+export type UserNullableScalarRelationFilter = {
+  is?: Prisma.UserWhereInput | null;
+  isNot?: Prisma.UserWhereInput | null;
 };
 
 export type UserScalarRelationFilter = {
@@ -526,6 +538,34 @@ export type UserMinOrderByAggregateInput = {
   isActivated?: Prisma.SortOrder;
   createdAt?: Prisma.SortOrder;
   updatedAt?: Prisma.SortOrder;
+};
+
+export type UserCreateNestedOneWithoutAdminAuditLogsAsActorInput = {
+  create?: Prisma.XOR<
+    Prisma.UserCreateWithoutAdminAuditLogsAsActorInput,
+    Prisma.UserUncheckedCreateWithoutAdminAuditLogsAsActorInput
+  >;
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAdminAuditLogsAsActorInput;
+  connect?: Prisma.UserWhereUniqueInput;
+};
+
+export type UserUpdateOneWithoutAdminAuditLogsAsActorNestedInput = {
+  create?: Prisma.XOR<
+    Prisma.UserCreateWithoutAdminAuditLogsAsActorInput,
+    Prisma.UserUncheckedCreateWithoutAdminAuditLogsAsActorInput
+  >;
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAdminAuditLogsAsActorInput;
+  upsert?: Prisma.UserUpsertWithoutAdminAuditLogsAsActorInput;
+  disconnect?: Prisma.UserWhereInput | boolean;
+  delete?: Prisma.UserWhereInput | boolean;
+  connect?: Prisma.UserWhereUniqueInput;
+  update?: Prisma.XOR<
+    Prisma.XOR<
+      Prisma.UserUpdateToOneWithWhereWithoutAdminAuditLogsAsActorInput,
+      Prisma.UserUpdateWithoutAdminAuditLogsAsActorInput
+    >,
+    Prisma.UserUncheckedUpdateWithoutAdminAuditLogsAsActorInput
+  >;
 };
 
 export type UserCreateNestedOneWithoutInvoicesInput = {
@@ -970,6 +1010,150 @@ export type UserUpdateOneRequiredWithoutClientProfileNestedInput = {
   >;
 };
 
+export type UserCreateWithoutAdminAuditLogsAsActorInput = {
+  id?: string;
+  email: string;
+  password: string;
+  lastName: string;
+  firstName: string;
+  thirdName?: string | null;
+  isActivated?: boolean;
+  createdAt?: Date | string;
+  updatedAt?: Date | string;
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput;
+  roles?: Prisma.UserRoleCreateNestedManyWithoutUserInput;
+  invitations?: Prisma.InvitationCreateNestedManyWithoutInvitedByInput;
+  projects?: Prisma.ProjectCreateNestedManyWithoutOwnerInput;
+  tasks?: Prisma.TaskCreateNestedManyWithoutAssigneeInput;
+  timeEntries?: Prisma.TimeEntryCreateNestedManyWithoutUserInput;
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutUserInput;
+  payments?: Prisma.PaymentCreateNestedManyWithoutUserInput;
+  expenses?: Prisma.ExpenseCreateNestedManyWithoutUserInput;
+  brainNotes?: Prisma.BrainNoteCreateNestedManyWithoutUserInput;
+  knowledgeArticles?: Prisma.KnowledgeArticleCreateNestedManyWithoutUserInput;
+  brainTemplates?: Prisma.BrainTemplateCreateNestedManyWithoutUserInput;
+  brainJournalEntries?: Prisma.BrainJournalEntryCreateNestedManyWithoutUserInput;
+  reminders?: Prisma.ReminderCreateNestedManyWithoutUserInput;
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput;
+  freelancerProfile?: Prisma.FreelancerProfileCreateNestedOneWithoutUserInput;
+  clientProfile?: Prisma.ClientProfileCreateNestedOneWithoutUserInput;
+};
+
+export type UserUncheckedCreateWithoutAdminAuditLogsAsActorInput = {
+  id?: string;
+  email: string;
+  password: string;
+  lastName: string;
+  firstName: string;
+  thirdName?: string | null;
+  isActivated?: boolean;
+  createdAt?: Date | string;
+  updatedAt?: Date | string;
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput;
+  roles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput;
+  invitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutInvitedByInput;
+  projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutOwnerInput;
+  tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutAssigneeInput;
+  timeEntries?: Prisma.TimeEntryUncheckedCreateNestedManyWithoutUserInput;
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUserInput;
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutUserInput;
+  expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutUserInput;
+  brainNotes?: Prisma.BrainNoteUncheckedCreateNestedManyWithoutUserInput;
+  knowledgeArticles?: Prisma.KnowledgeArticleUncheckedCreateNestedManyWithoutUserInput;
+  brainTemplates?: Prisma.BrainTemplateUncheckedCreateNestedManyWithoutUserInput;
+  brainJournalEntries?: Prisma.BrainJournalEntryUncheckedCreateNestedManyWithoutUserInput;
+  reminders?: Prisma.ReminderUncheckedCreateNestedManyWithoutUserInput;
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput;
+  freelancerProfile?: Prisma.FreelancerProfileUncheckedCreateNestedOneWithoutUserInput;
+  clientProfile?: Prisma.ClientProfileUncheckedCreateNestedOneWithoutUserInput;
+};
+
+export type UserCreateOrConnectWithoutAdminAuditLogsAsActorInput = {
+  where: Prisma.UserWhereUniqueInput;
+  create: Prisma.XOR<
+    Prisma.UserCreateWithoutAdminAuditLogsAsActorInput,
+    Prisma.UserUncheckedCreateWithoutAdminAuditLogsAsActorInput
+  >;
+};
+
+export type UserUpsertWithoutAdminAuditLogsAsActorInput = {
+  update: Prisma.XOR<
+    Prisma.UserUpdateWithoutAdminAuditLogsAsActorInput,
+    Prisma.UserUncheckedUpdateWithoutAdminAuditLogsAsActorInput
+  >;
+  create: Prisma.XOR<
+    Prisma.UserCreateWithoutAdminAuditLogsAsActorInput,
+    Prisma.UserUncheckedCreateWithoutAdminAuditLogsAsActorInput
+  >;
+  where?: Prisma.UserWhereInput;
+};
+
+export type UserUpdateToOneWithWhereWithoutAdminAuditLogsAsActorInput = {
+  where?: Prisma.UserWhereInput;
+  data: Prisma.XOR<
+    Prisma.UserUpdateWithoutAdminAuditLogsAsActorInput,
+    Prisma.UserUncheckedUpdateWithoutAdminAuditLogsAsActorInput
+  >;
+};
+
+export type UserUpdateWithoutAdminAuditLogsAsActorInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string;
+  email?: Prisma.StringFieldUpdateOperationsInput | string;
+  password?: Prisma.StringFieldUpdateOperationsInput | string;
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string;
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string;
+  thirdName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  isActivated?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput;
+  roles?: Prisma.UserRoleUpdateManyWithoutUserNestedInput;
+  invitations?: Prisma.InvitationUpdateManyWithoutInvitedByNestedInput;
+  projects?: Prisma.ProjectUpdateManyWithoutOwnerNestedInput;
+  tasks?: Prisma.TaskUpdateManyWithoutAssigneeNestedInput;
+  timeEntries?: Prisma.TimeEntryUpdateManyWithoutUserNestedInput;
+  invoices?: Prisma.InvoiceUpdateManyWithoutUserNestedInput;
+  payments?: Prisma.PaymentUpdateManyWithoutUserNestedInput;
+  expenses?: Prisma.ExpenseUpdateManyWithoutUserNestedInput;
+  brainNotes?: Prisma.BrainNoteUpdateManyWithoutUserNestedInput;
+  knowledgeArticles?: Prisma.KnowledgeArticleUpdateManyWithoutUserNestedInput;
+  brainTemplates?: Prisma.BrainTemplateUpdateManyWithoutUserNestedInput;
+  brainJournalEntries?: Prisma.BrainJournalEntryUpdateManyWithoutUserNestedInput;
+  reminders?: Prisma.ReminderUpdateManyWithoutUserNestedInput;
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput;
+  freelancerProfile?: Prisma.FreelancerProfileUpdateOneWithoutUserNestedInput;
+  clientProfile?: Prisma.ClientProfileUpdateOneWithoutUserNestedInput;
+};
+
+export type UserUncheckedUpdateWithoutAdminAuditLogsAsActorInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string;
+  email?: Prisma.StringFieldUpdateOperationsInput | string;
+  password?: Prisma.StringFieldUpdateOperationsInput | string;
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string;
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string;
+  thirdName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  isActivated?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput;
+  roles?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput;
+  invitations?: Prisma.InvitationUncheckedUpdateManyWithoutInvitedByNestedInput;
+  projects?: Prisma.ProjectUncheckedUpdateManyWithoutOwnerNestedInput;
+  tasks?: Prisma.TaskUncheckedUpdateManyWithoutAssigneeNestedInput;
+  timeEntries?: Prisma.TimeEntryUncheckedUpdateManyWithoutUserNestedInput;
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutUserNestedInput;
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutUserNestedInput;
+  expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutUserNestedInput;
+  brainNotes?: Prisma.BrainNoteUncheckedUpdateManyWithoutUserNestedInput;
+  knowledgeArticles?: Prisma.KnowledgeArticleUncheckedUpdateManyWithoutUserNestedInput;
+  brainTemplates?: Prisma.BrainTemplateUncheckedUpdateManyWithoutUserNestedInput;
+  brainJournalEntries?: Prisma.BrainJournalEntryUncheckedUpdateManyWithoutUserNestedInput;
+  reminders?: Prisma.ReminderUncheckedUpdateManyWithoutUserNestedInput;
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput;
+  freelancerProfile?: Prisma.FreelancerProfileUncheckedUpdateOneWithoutUserNestedInput;
+  clientProfile?: Prisma.ClientProfileUncheckedUpdateOneWithoutUserNestedInput;
+};
+
 export type UserCreateWithoutInvoicesInput = {
   id?: string;
   email: string;
@@ -994,6 +1178,7 @@ export type UserCreateWithoutInvoicesInput = {
   brainJournalEntries?: Prisma.BrainJournalEntryCreateNestedManyWithoutUserInput;
   reminders?: Prisma.ReminderCreateNestedManyWithoutUserInput;
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput;
+  adminAuditLogsAsActor?: Prisma.AdminAuditLogCreateNestedManyWithoutActorInput;
   freelancerProfile?: Prisma.FreelancerProfileCreateNestedOneWithoutUserInput;
   clientProfile?: Prisma.ClientProfileCreateNestedOneWithoutUserInput;
 };
@@ -1022,6 +1207,7 @@ export type UserUncheckedCreateWithoutInvoicesInput = {
   brainJournalEntries?: Prisma.BrainJournalEntryUncheckedCreateNestedManyWithoutUserInput;
   reminders?: Prisma.ReminderUncheckedCreateNestedManyWithoutUserInput;
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput;
+  adminAuditLogsAsActor?: Prisma.AdminAuditLogUncheckedCreateNestedManyWithoutActorInput;
   freelancerProfile?: Prisma.FreelancerProfileUncheckedCreateNestedOneWithoutUserInput;
   clientProfile?: Prisma.ClientProfileUncheckedCreateNestedOneWithoutUserInput;
 };
@@ -1078,6 +1264,7 @@ export type UserUpdateWithoutInvoicesInput = {
   brainJournalEntries?: Prisma.BrainJournalEntryUpdateManyWithoutUserNestedInput;
   reminders?: Prisma.ReminderUpdateManyWithoutUserNestedInput;
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput;
+  adminAuditLogsAsActor?: Prisma.AdminAuditLogUpdateManyWithoutActorNestedInput;
   freelancerProfile?: Prisma.FreelancerProfileUpdateOneWithoutUserNestedInput;
   clientProfile?: Prisma.ClientProfileUpdateOneWithoutUserNestedInput;
 };
@@ -1106,6 +1293,7 @@ export type UserUncheckedUpdateWithoutInvoicesInput = {
   brainJournalEntries?: Prisma.BrainJournalEntryUncheckedUpdateManyWithoutUserNestedInput;
   reminders?: Prisma.ReminderUncheckedUpdateManyWithoutUserNestedInput;
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput;
+  adminAuditLogsAsActor?: Prisma.AdminAuditLogUncheckedUpdateManyWithoutActorNestedInput;
   freelancerProfile?: Prisma.FreelancerProfileUncheckedUpdateOneWithoutUserNestedInput;
   clientProfile?: Prisma.ClientProfileUncheckedUpdateOneWithoutUserNestedInput;
 };
@@ -1134,6 +1322,7 @@ export type UserCreateWithoutPaymentsInput = {
   brainJournalEntries?: Prisma.BrainJournalEntryCreateNestedManyWithoutUserInput;
   reminders?: Prisma.ReminderCreateNestedManyWithoutUserInput;
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput;
+  adminAuditLogsAsActor?: Prisma.AdminAuditLogCreateNestedManyWithoutActorInput;
   freelancerProfile?: Prisma.FreelancerProfileCreateNestedOneWithoutUserInput;
   clientProfile?: Prisma.ClientProfileCreateNestedOneWithoutUserInput;
 };
@@ -1162,6 +1351,7 @@ export type UserUncheckedCreateWithoutPaymentsInput = {
   brainJournalEntries?: Prisma.BrainJournalEntryUncheckedCreateNestedManyWithoutUserInput;
   reminders?: Prisma.ReminderUncheckedCreateNestedManyWithoutUserInput;
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput;
+  adminAuditLogsAsActor?: Prisma.AdminAuditLogUncheckedCreateNestedManyWithoutActorInput;
   freelancerProfile?: Prisma.FreelancerProfileUncheckedCreateNestedOneWithoutUserInput;
   clientProfile?: Prisma.ClientProfileUncheckedCreateNestedOneWithoutUserInput;
 };
@@ -1218,6 +1408,7 @@ export type UserUpdateWithoutPaymentsInput = {
   brainJournalEntries?: Prisma.BrainJournalEntryUpdateManyWithoutUserNestedInput;
   reminders?: Prisma.ReminderUpdateManyWithoutUserNestedInput;
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput;
+  adminAuditLogsAsActor?: Prisma.AdminAuditLogUpdateManyWithoutActorNestedInput;
   freelancerProfile?: Prisma.FreelancerProfileUpdateOneWithoutUserNestedInput;
   clientProfile?: Prisma.ClientProfileUpdateOneWithoutUserNestedInput;
 };
@@ -1246,6 +1437,7 @@ export type UserUncheckedUpdateWithoutPaymentsInput = {
   brainJournalEntries?: Prisma.BrainJournalEntryUncheckedUpdateManyWithoutUserNestedInput;
   reminders?: Prisma.ReminderUncheckedUpdateManyWithoutUserNestedInput;
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput;
+  adminAuditLogsAsActor?: Prisma.AdminAuditLogUncheckedUpdateManyWithoutActorNestedInput;
   freelancerProfile?: Prisma.FreelancerProfileUncheckedUpdateOneWithoutUserNestedInput;
   clientProfile?: Prisma.ClientProfileUncheckedUpdateOneWithoutUserNestedInput;
 };
@@ -1274,6 +1466,7 @@ export type UserCreateWithoutExpensesInput = {
   brainJournalEntries?: Prisma.BrainJournalEntryCreateNestedManyWithoutUserInput;
   reminders?: Prisma.ReminderCreateNestedManyWithoutUserInput;
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput;
+  adminAuditLogsAsActor?: Prisma.AdminAuditLogCreateNestedManyWithoutActorInput;
   freelancerProfile?: Prisma.FreelancerProfileCreateNestedOneWithoutUserInput;
   clientProfile?: Prisma.ClientProfileCreateNestedOneWithoutUserInput;
 };
@@ -1302,6 +1495,7 @@ export type UserUncheckedCreateWithoutExpensesInput = {
   brainJournalEntries?: Prisma.BrainJournalEntryUncheckedCreateNestedManyWithoutUserInput;
   reminders?: Prisma.ReminderUncheckedCreateNestedManyWithoutUserInput;
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput;
+  adminAuditLogsAsActor?: Prisma.AdminAuditLogUncheckedCreateNestedManyWithoutActorInput;
   freelancerProfile?: Prisma.FreelancerProfileUncheckedCreateNestedOneWithoutUserInput;
   clientProfile?: Prisma.ClientProfileUncheckedCreateNestedOneWithoutUserInput;
 };
@@ -1358,6 +1552,7 @@ export type UserUpdateWithoutExpensesInput = {
   brainJournalEntries?: Prisma.BrainJournalEntryUpdateManyWithoutUserNestedInput;
   reminders?: Prisma.ReminderUpdateManyWithoutUserNestedInput;
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput;
+  adminAuditLogsAsActor?: Prisma.AdminAuditLogUpdateManyWithoutActorNestedInput;
   freelancerProfile?: Prisma.FreelancerProfileUpdateOneWithoutUserNestedInput;
   clientProfile?: Prisma.ClientProfileUpdateOneWithoutUserNestedInput;
 };
@@ -1386,6 +1581,7 @@ export type UserUncheckedUpdateWithoutExpensesInput = {
   brainJournalEntries?: Prisma.BrainJournalEntryUncheckedUpdateManyWithoutUserNestedInput;
   reminders?: Prisma.ReminderUncheckedUpdateManyWithoutUserNestedInput;
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput;
+  adminAuditLogsAsActor?: Prisma.AdminAuditLogUncheckedUpdateManyWithoutActorNestedInput;
   freelancerProfile?: Prisma.FreelancerProfileUncheckedUpdateOneWithoutUserNestedInput;
   clientProfile?: Prisma.ClientProfileUncheckedUpdateOneWithoutUserNestedInput;
 };
@@ -1414,6 +1610,7 @@ export type UserCreateWithoutInvitationsInput = {
   brainJournalEntries?: Prisma.BrainJournalEntryCreateNestedManyWithoutUserInput;
   reminders?: Prisma.ReminderCreateNestedManyWithoutUserInput;
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput;
+  adminAuditLogsAsActor?: Prisma.AdminAuditLogCreateNestedManyWithoutActorInput;
   freelancerProfile?: Prisma.FreelancerProfileCreateNestedOneWithoutUserInput;
   clientProfile?: Prisma.ClientProfileCreateNestedOneWithoutUserInput;
 };
@@ -1442,6 +1639,7 @@ export type UserUncheckedCreateWithoutInvitationsInput = {
   brainJournalEntries?: Prisma.BrainJournalEntryUncheckedCreateNestedManyWithoutUserInput;
   reminders?: Prisma.ReminderUncheckedCreateNestedManyWithoutUserInput;
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput;
+  adminAuditLogsAsActor?: Prisma.AdminAuditLogUncheckedCreateNestedManyWithoutActorInput;
   freelancerProfile?: Prisma.FreelancerProfileUncheckedCreateNestedOneWithoutUserInput;
   clientProfile?: Prisma.ClientProfileUncheckedCreateNestedOneWithoutUserInput;
 };
@@ -1498,6 +1696,7 @@ export type UserUpdateWithoutInvitationsInput = {
   brainJournalEntries?: Prisma.BrainJournalEntryUpdateManyWithoutUserNestedInput;
   reminders?: Prisma.ReminderUpdateManyWithoutUserNestedInput;
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput;
+  adminAuditLogsAsActor?: Prisma.AdminAuditLogUpdateManyWithoutActorNestedInput;
   freelancerProfile?: Prisma.FreelancerProfileUpdateOneWithoutUserNestedInput;
   clientProfile?: Prisma.ClientProfileUpdateOneWithoutUserNestedInput;
 };
@@ -1526,6 +1725,7 @@ export type UserUncheckedUpdateWithoutInvitationsInput = {
   brainJournalEntries?: Prisma.BrainJournalEntryUncheckedUpdateManyWithoutUserNestedInput;
   reminders?: Prisma.ReminderUncheckedUpdateManyWithoutUserNestedInput;
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput;
+  adminAuditLogsAsActor?: Prisma.AdminAuditLogUncheckedUpdateManyWithoutActorNestedInput;
   freelancerProfile?: Prisma.FreelancerProfileUncheckedUpdateOneWithoutUserNestedInput;
   clientProfile?: Prisma.ClientProfileUncheckedUpdateOneWithoutUserNestedInput;
 };
@@ -1554,6 +1754,7 @@ export type UserCreateWithoutNotificationsInput = {
   brainTemplates?: Prisma.BrainTemplateCreateNestedManyWithoutUserInput;
   brainJournalEntries?: Prisma.BrainJournalEntryCreateNestedManyWithoutUserInput;
   reminders?: Prisma.ReminderCreateNestedManyWithoutUserInput;
+  adminAuditLogsAsActor?: Prisma.AdminAuditLogCreateNestedManyWithoutActorInput;
   freelancerProfile?: Prisma.FreelancerProfileCreateNestedOneWithoutUserInput;
   clientProfile?: Prisma.ClientProfileCreateNestedOneWithoutUserInput;
 };
@@ -1582,6 +1783,7 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   brainTemplates?: Prisma.BrainTemplateUncheckedCreateNestedManyWithoutUserInput;
   brainJournalEntries?: Prisma.BrainJournalEntryUncheckedCreateNestedManyWithoutUserInput;
   reminders?: Prisma.ReminderUncheckedCreateNestedManyWithoutUserInput;
+  adminAuditLogsAsActor?: Prisma.AdminAuditLogUncheckedCreateNestedManyWithoutActorInput;
   freelancerProfile?: Prisma.FreelancerProfileUncheckedCreateNestedOneWithoutUserInput;
   clientProfile?: Prisma.ClientProfileUncheckedCreateNestedOneWithoutUserInput;
 };
@@ -1638,6 +1840,7 @@ export type UserUpdateWithoutNotificationsInput = {
   brainTemplates?: Prisma.BrainTemplateUpdateManyWithoutUserNestedInput;
   brainJournalEntries?: Prisma.BrainJournalEntryUpdateManyWithoutUserNestedInput;
   reminders?: Prisma.ReminderUpdateManyWithoutUserNestedInput;
+  adminAuditLogsAsActor?: Prisma.AdminAuditLogUpdateManyWithoutActorNestedInput;
   freelancerProfile?: Prisma.FreelancerProfileUpdateOneWithoutUserNestedInput;
   clientProfile?: Prisma.ClientProfileUpdateOneWithoutUserNestedInput;
 };
@@ -1666,6 +1869,7 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   brainTemplates?: Prisma.BrainTemplateUncheckedUpdateManyWithoutUserNestedInput;
   brainJournalEntries?: Prisma.BrainJournalEntryUncheckedUpdateManyWithoutUserNestedInput;
   reminders?: Prisma.ReminderUncheckedUpdateManyWithoutUserNestedInput;
+  adminAuditLogsAsActor?: Prisma.AdminAuditLogUncheckedUpdateManyWithoutActorNestedInput;
   freelancerProfile?: Prisma.FreelancerProfileUncheckedUpdateOneWithoutUserNestedInput;
   clientProfile?: Prisma.ClientProfileUncheckedUpdateOneWithoutUserNestedInput;
 };
@@ -1694,6 +1898,7 @@ export type UserCreateWithoutProjectsInput = {
   brainJournalEntries?: Prisma.BrainJournalEntryCreateNestedManyWithoutUserInput;
   reminders?: Prisma.ReminderCreateNestedManyWithoutUserInput;
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput;
+  adminAuditLogsAsActor?: Prisma.AdminAuditLogCreateNestedManyWithoutActorInput;
   freelancerProfile?: Prisma.FreelancerProfileCreateNestedOneWithoutUserInput;
   clientProfile?: Prisma.ClientProfileCreateNestedOneWithoutUserInput;
 };
@@ -1722,6 +1927,7 @@ export type UserUncheckedCreateWithoutProjectsInput = {
   brainJournalEntries?: Prisma.BrainJournalEntryUncheckedCreateNestedManyWithoutUserInput;
   reminders?: Prisma.ReminderUncheckedCreateNestedManyWithoutUserInput;
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput;
+  adminAuditLogsAsActor?: Prisma.AdminAuditLogUncheckedCreateNestedManyWithoutActorInput;
   freelancerProfile?: Prisma.FreelancerProfileUncheckedCreateNestedOneWithoutUserInput;
   clientProfile?: Prisma.ClientProfileUncheckedCreateNestedOneWithoutUserInput;
 };
@@ -1778,6 +1984,7 @@ export type UserUpdateWithoutProjectsInput = {
   brainJournalEntries?: Prisma.BrainJournalEntryUpdateManyWithoutUserNestedInput;
   reminders?: Prisma.ReminderUpdateManyWithoutUserNestedInput;
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput;
+  adminAuditLogsAsActor?: Prisma.AdminAuditLogUpdateManyWithoutActorNestedInput;
   freelancerProfile?: Prisma.FreelancerProfileUpdateOneWithoutUserNestedInput;
   clientProfile?: Prisma.ClientProfileUpdateOneWithoutUserNestedInput;
 };
@@ -1806,6 +2013,7 @@ export type UserUncheckedUpdateWithoutProjectsInput = {
   brainJournalEntries?: Prisma.BrainJournalEntryUncheckedUpdateManyWithoutUserNestedInput;
   reminders?: Prisma.ReminderUncheckedUpdateManyWithoutUserNestedInput;
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput;
+  adminAuditLogsAsActor?: Prisma.AdminAuditLogUncheckedUpdateManyWithoutActorNestedInput;
   freelancerProfile?: Prisma.FreelancerProfileUncheckedUpdateOneWithoutUserNestedInput;
   clientProfile?: Prisma.ClientProfileUncheckedUpdateOneWithoutUserNestedInput;
 };
@@ -1834,6 +2042,7 @@ export type UserCreateWithoutRemindersInput = {
   brainTemplates?: Prisma.BrainTemplateCreateNestedManyWithoutUserInput;
   brainJournalEntries?: Prisma.BrainJournalEntryCreateNestedManyWithoutUserInput;
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput;
+  adminAuditLogsAsActor?: Prisma.AdminAuditLogCreateNestedManyWithoutActorInput;
   freelancerProfile?: Prisma.FreelancerProfileCreateNestedOneWithoutUserInput;
   clientProfile?: Prisma.ClientProfileCreateNestedOneWithoutUserInput;
 };
@@ -1862,6 +2071,7 @@ export type UserUncheckedCreateWithoutRemindersInput = {
   brainTemplates?: Prisma.BrainTemplateUncheckedCreateNestedManyWithoutUserInput;
   brainJournalEntries?: Prisma.BrainJournalEntryUncheckedCreateNestedManyWithoutUserInput;
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput;
+  adminAuditLogsAsActor?: Prisma.AdminAuditLogUncheckedCreateNestedManyWithoutActorInput;
   freelancerProfile?: Prisma.FreelancerProfileUncheckedCreateNestedOneWithoutUserInput;
   clientProfile?: Prisma.ClientProfileUncheckedCreateNestedOneWithoutUserInput;
 };
@@ -1918,6 +2128,7 @@ export type UserUpdateWithoutRemindersInput = {
   brainTemplates?: Prisma.BrainTemplateUpdateManyWithoutUserNestedInput;
   brainJournalEntries?: Prisma.BrainJournalEntryUpdateManyWithoutUserNestedInput;
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput;
+  adminAuditLogsAsActor?: Prisma.AdminAuditLogUpdateManyWithoutActorNestedInput;
   freelancerProfile?: Prisma.FreelancerProfileUpdateOneWithoutUserNestedInput;
   clientProfile?: Prisma.ClientProfileUpdateOneWithoutUserNestedInput;
 };
@@ -1946,6 +2157,7 @@ export type UserUncheckedUpdateWithoutRemindersInput = {
   brainTemplates?: Prisma.BrainTemplateUncheckedUpdateManyWithoutUserNestedInput;
   brainJournalEntries?: Prisma.BrainJournalEntryUncheckedUpdateManyWithoutUserNestedInput;
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput;
+  adminAuditLogsAsActor?: Prisma.AdminAuditLogUncheckedUpdateManyWithoutActorNestedInput;
   freelancerProfile?: Prisma.FreelancerProfileUncheckedUpdateOneWithoutUserNestedInput;
   clientProfile?: Prisma.ClientProfileUncheckedUpdateOneWithoutUserNestedInput;
 };
@@ -1974,6 +2186,7 @@ export type UserCreateWithoutBrainNotesInput = {
   brainJournalEntries?: Prisma.BrainJournalEntryCreateNestedManyWithoutUserInput;
   reminders?: Prisma.ReminderCreateNestedManyWithoutUserInput;
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput;
+  adminAuditLogsAsActor?: Prisma.AdminAuditLogCreateNestedManyWithoutActorInput;
   freelancerProfile?: Prisma.FreelancerProfileCreateNestedOneWithoutUserInput;
   clientProfile?: Prisma.ClientProfileCreateNestedOneWithoutUserInput;
 };
@@ -2002,6 +2215,7 @@ export type UserUncheckedCreateWithoutBrainNotesInput = {
   brainJournalEntries?: Prisma.BrainJournalEntryUncheckedCreateNestedManyWithoutUserInput;
   reminders?: Prisma.ReminderUncheckedCreateNestedManyWithoutUserInput;
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput;
+  adminAuditLogsAsActor?: Prisma.AdminAuditLogUncheckedCreateNestedManyWithoutActorInput;
   freelancerProfile?: Prisma.FreelancerProfileUncheckedCreateNestedOneWithoutUserInput;
   clientProfile?: Prisma.ClientProfileUncheckedCreateNestedOneWithoutUserInput;
 };
@@ -2058,6 +2272,7 @@ export type UserUpdateWithoutBrainNotesInput = {
   brainJournalEntries?: Prisma.BrainJournalEntryUpdateManyWithoutUserNestedInput;
   reminders?: Prisma.ReminderUpdateManyWithoutUserNestedInput;
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput;
+  adminAuditLogsAsActor?: Prisma.AdminAuditLogUpdateManyWithoutActorNestedInput;
   freelancerProfile?: Prisma.FreelancerProfileUpdateOneWithoutUserNestedInput;
   clientProfile?: Prisma.ClientProfileUpdateOneWithoutUserNestedInput;
 };
@@ -2086,6 +2301,7 @@ export type UserUncheckedUpdateWithoutBrainNotesInput = {
   brainJournalEntries?: Prisma.BrainJournalEntryUncheckedUpdateManyWithoutUserNestedInput;
   reminders?: Prisma.ReminderUncheckedUpdateManyWithoutUserNestedInput;
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput;
+  adminAuditLogsAsActor?: Prisma.AdminAuditLogUncheckedUpdateManyWithoutActorNestedInput;
   freelancerProfile?: Prisma.FreelancerProfileUncheckedUpdateOneWithoutUserNestedInput;
   clientProfile?: Prisma.ClientProfileUncheckedUpdateOneWithoutUserNestedInput;
 };
@@ -2114,6 +2330,7 @@ export type UserCreateWithoutKnowledgeArticlesInput = {
   brainJournalEntries?: Prisma.BrainJournalEntryCreateNestedManyWithoutUserInput;
   reminders?: Prisma.ReminderCreateNestedManyWithoutUserInput;
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput;
+  adminAuditLogsAsActor?: Prisma.AdminAuditLogCreateNestedManyWithoutActorInput;
   freelancerProfile?: Prisma.FreelancerProfileCreateNestedOneWithoutUserInput;
   clientProfile?: Prisma.ClientProfileCreateNestedOneWithoutUserInput;
 };
@@ -2142,6 +2359,7 @@ export type UserUncheckedCreateWithoutKnowledgeArticlesInput = {
   brainJournalEntries?: Prisma.BrainJournalEntryUncheckedCreateNestedManyWithoutUserInput;
   reminders?: Prisma.ReminderUncheckedCreateNestedManyWithoutUserInput;
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput;
+  adminAuditLogsAsActor?: Prisma.AdminAuditLogUncheckedCreateNestedManyWithoutActorInput;
   freelancerProfile?: Prisma.FreelancerProfileUncheckedCreateNestedOneWithoutUserInput;
   clientProfile?: Prisma.ClientProfileUncheckedCreateNestedOneWithoutUserInput;
 };
@@ -2198,6 +2416,7 @@ export type UserUpdateWithoutKnowledgeArticlesInput = {
   brainJournalEntries?: Prisma.BrainJournalEntryUpdateManyWithoutUserNestedInput;
   reminders?: Prisma.ReminderUpdateManyWithoutUserNestedInput;
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput;
+  adminAuditLogsAsActor?: Prisma.AdminAuditLogUpdateManyWithoutActorNestedInput;
   freelancerProfile?: Prisma.FreelancerProfileUpdateOneWithoutUserNestedInput;
   clientProfile?: Prisma.ClientProfileUpdateOneWithoutUserNestedInput;
 };
@@ -2226,6 +2445,7 @@ export type UserUncheckedUpdateWithoutKnowledgeArticlesInput = {
   brainJournalEntries?: Prisma.BrainJournalEntryUncheckedUpdateManyWithoutUserNestedInput;
   reminders?: Prisma.ReminderUncheckedUpdateManyWithoutUserNestedInput;
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput;
+  adminAuditLogsAsActor?: Prisma.AdminAuditLogUncheckedUpdateManyWithoutActorNestedInput;
   freelancerProfile?: Prisma.FreelancerProfileUncheckedUpdateOneWithoutUserNestedInput;
   clientProfile?: Prisma.ClientProfileUncheckedUpdateOneWithoutUserNestedInput;
 };
@@ -2254,6 +2474,7 @@ export type UserCreateWithoutBrainTemplatesInput = {
   brainJournalEntries?: Prisma.BrainJournalEntryCreateNestedManyWithoutUserInput;
   reminders?: Prisma.ReminderCreateNestedManyWithoutUserInput;
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput;
+  adminAuditLogsAsActor?: Prisma.AdminAuditLogCreateNestedManyWithoutActorInput;
   freelancerProfile?: Prisma.FreelancerProfileCreateNestedOneWithoutUserInput;
   clientProfile?: Prisma.ClientProfileCreateNestedOneWithoutUserInput;
 };
@@ -2282,6 +2503,7 @@ export type UserUncheckedCreateWithoutBrainTemplatesInput = {
   brainJournalEntries?: Prisma.BrainJournalEntryUncheckedCreateNestedManyWithoutUserInput;
   reminders?: Prisma.ReminderUncheckedCreateNestedManyWithoutUserInput;
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput;
+  adminAuditLogsAsActor?: Prisma.AdminAuditLogUncheckedCreateNestedManyWithoutActorInput;
   freelancerProfile?: Prisma.FreelancerProfileUncheckedCreateNestedOneWithoutUserInput;
   clientProfile?: Prisma.ClientProfileUncheckedCreateNestedOneWithoutUserInput;
 };
@@ -2338,6 +2560,7 @@ export type UserUpdateWithoutBrainTemplatesInput = {
   brainJournalEntries?: Prisma.BrainJournalEntryUpdateManyWithoutUserNestedInput;
   reminders?: Prisma.ReminderUpdateManyWithoutUserNestedInput;
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput;
+  adminAuditLogsAsActor?: Prisma.AdminAuditLogUpdateManyWithoutActorNestedInput;
   freelancerProfile?: Prisma.FreelancerProfileUpdateOneWithoutUserNestedInput;
   clientProfile?: Prisma.ClientProfileUpdateOneWithoutUserNestedInput;
 };
@@ -2366,6 +2589,7 @@ export type UserUncheckedUpdateWithoutBrainTemplatesInput = {
   brainJournalEntries?: Prisma.BrainJournalEntryUncheckedUpdateManyWithoutUserNestedInput;
   reminders?: Prisma.ReminderUncheckedUpdateManyWithoutUserNestedInput;
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput;
+  adminAuditLogsAsActor?: Prisma.AdminAuditLogUncheckedUpdateManyWithoutActorNestedInput;
   freelancerProfile?: Prisma.FreelancerProfileUncheckedUpdateOneWithoutUserNestedInput;
   clientProfile?: Prisma.ClientProfileUncheckedUpdateOneWithoutUserNestedInput;
 };
@@ -2394,6 +2618,7 @@ export type UserCreateWithoutBrainJournalEntriesInput = {
   brainTemplates?: Prisma.BrainTemplateCreateNestedManyWithoutUserInput;
   reminders?: Prisma.ReminderCreateNestedManyWithoutUserInput;
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput;
+  adminAuditLogsAsActor?: Prisma.AdminAuditLogCreateNestedManyWithoutActorInput;
   freelancerProfile?: Prisma.FreelancerProfileCreateNestedOneWithoutUserInput;
   clientProfile?: Prisma.ClientProfileCreateNestedOneWithoutUserInput;
 };
@@ -2422,6 +2647,7 @@ export type UserUncheckedCreateWithoutBrainJournalEntriesInput = {
   brainTemplates?: Prisma.BrainTemplateUncheckedCreateNestedManyWithoutUserInput;
   reminders?: Prisma.ReminderUncheckedCreateNestedManyWithoutUserInput;
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput;
+  adminAuditLogsAsActor?: Prisma.AdminAuditLogUncheckedCreateNestedManyWithoutActorInput;
   freelancerProfile?: Prisma.FreelancerProfileUncheckedCreateNestedOneWithoutUserInput;
   clientProfile?: Prisma.ClientProfileUncheckedCreateNestedOneWithoutUserInput;
 };
@@ -2478,6 +2704,7 @@ export type UserUpdateWithoutBrainJournalEntriesInput = {
   brainTemplates?: Prisma.BrainTemplateUpdateManyWithoutUserNestedInput;
   reminders?: Prisma.ReminderUpdateManyWithoutUserNestedInput;
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput;
+  adminAuditLogsAsActor?: Prisma.AdminAuditLogUpdateManyWithoutActorNestedInput;
   freelancerProfile?: Prisma.FreelancerProfileUpdateOneWithoutUserNestedInput;
   clientProfile?: Prisma.ClientProfileUpdateOneWithoutUserNestedInput;
 };
@@ -2506,6 +2733,7 @@ export type UserUncheckedUpdateWithoutBrainJournalEntriesInput = {
   brainTemplates?: Prisma.BrainTemplateUncheckedUpdateManyWithoutUserNestedInput;
   reminders?: Prisma.ReminderUncheckedUpdateManyWithoutUserNestedInput;
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput;
+  adminAuditLogsAsActor?: Prisma.AdminAuditLogUncheckedUpdateManyWithoutActorNestedInput;
   freelancerProfile?: Prisma.FreelancerProfileUncheckedUpdateOneWithoutUserNestedInput;
   clientProfile?: Prisma.ClientProfileUncheckedUpdateOneWithoutUserNestedInput;
 };
@@ -2534,6 +2762,7 @@ export type UserCreateWithoutSessionsInput = {
   brainJournalEntries?: Prisma.BrainJournalEntryCreateNestedManyWithoutUserInput;
   reminders?: Prisma.ReminderCreateNestedManyWithoutUserInput;
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput;
+  adminAuditLogsAsActor?: Prisma.AdminAuditLogCreateNestedManyWithoutActorInput;
   freelancerProfile?: Prisma.FreelancerProfileCreateNestedOneWithoutUserInput;
   clientProfile?: Prisma.ClientProfileCreateNestedOneWithoutUserInput;
 };
@@ -2562,6 +2791,7 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   brainJournalEntries?: Prisma.BrainJournalEntryUncheckedCreateNestedManyWithoutUserInput;
   reminders?: Prisma.ReminderUncheckedCreateNestedManyWithoutUserInput;
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput;
+  adminAuditLogsAsActor?: Prisma.AdminAuditLogUncheckedCreateNestedManyWithoutActorInput;
   freelancerProfile?: Prisma.FreelancerProfileUncheckedCreateNestedOneWithoutUserInput;
   clientProfile?: Prisma.ClientProfileUncheckedCreateNestedOneWithoutUserInput;
 };
@@ -2618,6 +2848,7 @@ export type UserUpdateWithoutSessionsInput = {
   brainJournalEntries?: Prisma.BrainJournalEntryUpdateManyWithoutUserNestedInput;
   reminders?: Prisma.ReminderUpdateManyWithoutUserNestedInput;
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput;
+  adminAuditLogsAsActor?: Prisma.AdminAuditLogUpdateManyWithoutActorNestedInput;
   freelancerProfile?: Prisma.FreelancerProfileUpdateOneWithoutUserNestedInput;
   clientProfile?: Prisma.ClientProfileUpdateOneWithoutUserNestedInput;
 };
@@ -2646,6 +2877,7 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   brainJournalEntries?: Prisma.BrainJournalEntryUncheckedUpdateManyWithoutUserNestedInput;
   reminders?: Prisma.ReminderUncheckedUpdateManyWithoutUserNestedInput;
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput;
+  adminAuditLogsAsActor?: Prisma.AdminAuditLogUncheckedUpdateManyWithoutActorNestedInput;
   freelancerProfile?: Prisma.FreelancerProfileUncheckedUpdateOneWithoutUserNestedInput;
   clientProfile?: Prisma.ClientProfileUncheckedUpdateOneWithoutUserNestedInput;
 };
@@ -2674,6 +2906,7 @@ export type UserCreateWithoutTasksInput = {
   brainJournalEntries?: Prisma.BrainJournalEntryCreateNestedManyWithoutUserInput;
   reminders?: Prisma.ReminderCreateNestedManyWithoutUserInput;
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput;
+  adminAuditLogsAsActor?: Prisma.AdminAuditLogCreateNestedManyWithoutActorInput;
   freelancerProfile?: Prisma.FreelancerProfileCreateNestedOneWithoutUserInput;
   clientProfile?: Prisma.ClientProfileCreateNestedOneWithoutUserInput;
 };
@@ -2702,6 +2935,7 @@ export type UserUncheckedCreateWithoutTasksInput = {
   brainJournalEntries?: Prisma.BrainJournalEntryUncheckedCreateNestedManyWithoutUserInput;
   reminders?: Prisma.ReminderUncheckedCreateNestedManyWithoutUserInput;
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput;
+  adminAuditLogsAsActor?: Prisma.AdminAuditLogUncheckedCreateNestedManyWithoutActorInput;
   freelancerProfile?: Prisma.FreelancerProfileUncheckedCreateNestedOneWithoutUserInput;
   clientProfile?: Prisma.ClientProfileUncheckedCreateNestedOneWithoutUserInput;
 };
@@ -2755,6 +2989,7 @@ export type UserUpdateWithoutTasksInput = {
   brainJournalEntries?: Prisma.BrainJournalEntryUpdateManyWithoutUserNestedInput;
   reminders?: Prisma.ReminderUpdateManyWithoutUserNestedInput;
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput;
+  adminAuditLogsAsActor?: Prisma.AdminAuditLogUpdateManyWithoutActorNestedInput;
   freelancerProfile?: Prisma.FreelancerProfileUpdateOneWithoutUserNestedInput;
   clientProfile?: Prisma.ClientProfileUpdateOneWithoutUserNestedInput;
 };
@@ -2783,6 +3018,7 @@ export type UserUncheckedUpdateWithoutTasksInput = {
   brainJournalEntries?: Prisma.BrainJournalEntryUncheckedUpdateManyWithoutUserNestedInput;
   reminders?: Prisma.ReminderUncheckedUpdateManyWithoutUserNestedInput;
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput;
+  adminAuditLogsAsActor?: Prisma.AdminAuditLogUncheckedUpdateManyWithoutActorNestedInput;
   freelancerProfile?: Prisma.FreelancerProfileUncheckedUpdateOneWithoutUserNestedInput;
   clientProfile?: Prisma.ClientProfileUncheckedUpdateOneWithoutUserNestedInput;
 };
@@ -2811,6 +3047,7 @@ export type UserCreateWithoutTimeEntriesInput = {
   brainJournalEntries?: Prisma.BrainJournalEntryCreateNestedManyWithoutUserInput;
   reminders?: Prisma.ReminderCreateNestedManyWithoutUserInput;
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput;
+  adminAuditLogsAsActor?: Prisma.AdminAuditLogCreateNestedManyWithoutActorInput;
   freelancerProfile?: Prisma.FreelancerProfileCreateNestedOneWithoutUserInput;
   clientProfile?: Prisma.ClientProfileCreateNestedOneWithoutUserInput;
 };
@@ -2839,6 +3076,7 @@ export type UserUncheckedCreateWithoutTimeEntriesInput = {
   brainJournalEntries?: Prisma.BrainJournalEntryUncheckedCreateNestedManyWithoutUserInput;
   reminders?: Prisma.ReminderUncheckedCreateNestedManyWithoutUserInput;
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput;
+  adminAuditLogsAsActor?: Prisma.AdminAuditLogUncheckedCreateNestedManyWithoutActorInput;
   freelancerProfile?: Prisma.FreelancerProfileUncheckedCreateNestedOneWithoutUserInput;
   clientProfile?: Prisma.ClientProfileUncheckedCreateNestedOneWithoutUserInput;
 };
@@ -2895,6 +3133,7 @@ export type UserUpdateWithoutTimeEntriesInput = {
   brainJournalEntries?: Prisma.BrainJournalEntryUpdateManyWithoutUserNestedInput;
   reminders?: Prisma.ReminderUpdateManyWithoutUserNestedInput;
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput;
+  adminAuditLogsAsActor?: Prisma.AdminAuditLogUpdateManyWithoutActorNestedInput;
   freelancerProfile?: Prisma.FreelancerProfileUpdateOneWithoutUserNestedInput;
   clientProfile?: Prisma.ClientProfileUpdateOneWithoutUserNestedInput;
 };
@@ -2923,6 +3162,7 @@ export type UserUncheckedUpdateWithoutTimeEntriesInput = {
   brainJournalEntries?: Prisma.BrainJournalEntryUncheckedUpdateManyWithoutUserNestedInput;
   reminders?: Prisma.ReminderUncheckedUpdateManyWithoutUserNestedInput;
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput;
+  adminAuditLogsAsActor?: Prisma.AdminAuditLogUncheckedUpdateManyWithoutActorNestedInput;
   freelancerProfile?: Prisma.FreelancerProfileUncheckedUpdateOneWithoutUserNestedInput;
   clientProfile?: Prisma.ClientProfileUncheckedUpdateOneWithoutUserNestedInput;
 };
@@ -2951,6 +3191,7 @@ export type UserCreateWithoutRolesInput = {
   brainJournalEntries?: Prisma.BrainJournalEntryCreateNestedManyWithoutUserInput;
   reminders?: Prisma.ReminderCreateNestedManyWithoutUserInput;
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput;
+  adminAuditLogsAsActor?: Prisma.AdminAuditLogCreateNestedManyWithoutActorInput;
   freelancerProfile?: Prisma.FreelancerProfileCreateNestedOneWithoutUserInput;
   clientProfile?: Prisma.ClientProfileCreateNestedOneWithoutUserInput;
 };
@@ -2979,6 +3220,7 @@ export type UserUncheckedCreateWithoutRolesInput = {
   brainJournalEntries?: Prisma.BrainJournalEntryUncheckedCreateNestedManyWithoutUserInput;
   reminders?: Prisma.ReminderUncheckedCreateNestedManyWithoutUserInput;
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput;
+  adminAuditLogsAsActor?: Prisma.AdminAuditLogUncheckedCreateNestedManyWithoutActorInput;
   freelancerProfile?: Prisma.FreelancerProfileUncheckedCreateNestedOneWithoutUserInput;
   clientProfile?: Prisma.ClientProfileUncheckedCreateNestedOneWithoutUserInput;
 };
@@ -3032,6 +3274,7 @@ export type UserUpdateWithoutRolesInput = {
   brainJournalEntries?: Prisma.BrainJournalEntryUpdateManyWithoutUserNestedInput;
   reminders?: Prisma.ReminderUpdateManyWithoutUserNestedInput;
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput;
+  adminAuditLogsAsActor?: Prisma.AdminAuditLogUpdateManyWithoutActorNestedInput;
   freelancerProfile?: Prisma.FreelancerProfileUpdateOneWithoutUserNestedInput;
   clientProfile?: Prisma.ClientProfileUpdateOneWithoutUserNestedInput;
 };
@@ -3060,6 +3303,7 @@ export type UserUncheckedUpdateWithoutRolesInput = {
   brainJournalEntries?: Prisma.BrainJournalEntryUncheckedUpdateManyWithoutUserNestedInput;
   reminders?: Prisma.ReminderUncheckedUpdateManyWithoutUserNestedInput;
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput;
+  adminAuditLogsAsActor?: Prisma.AdminAuditLogUncheckedUpdateManyWithoutActorNestedInput;
   freelancerProfile?: Prisma.FreelancerProfileUncheckedUpdateOneWithoutUserNestedInput;
   clientProfile?: Prisma.ClientProfileUncheckedUpdateOneWithoutUserNestedInput;
 };
@@ -3089,6 +3333,7 @@ export type UserCreateWithoutFreelancerProfileInput = {
   brainJournalEntries?: Prisma.BrainJournalEntryCreateNestedManyWithoutUserInput;
   reminders?: Prisma.ReminderCreateNestedManyWithoutUserInput;
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput;
+  adminAuditLogsAsActor?: Prisma.AdminAuditLogCreateNestedManyWithoutActorInput;
   clientProfile?: Prisma.ClientProfileCreateNestedOneWithoutUserInput;
 };
 
@@ -3117,6 +3362,7 @@ export type UserUncheckedCreateWithoutFreelancerProfileInput = {
   brainJournalEntries?: Prisma.BrainJournalEntryUncheckedCreateNestedManyWithoutUserInput;
   reminders?: Prisma.ReminderUncheckedCreateNestedManyWithoutUserInput;
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput;
+  adminAuditLogsAsActor?: Prisma.AdminAuditLogUncheckedCreateNestedManyWithoutActorInput;
   clientProfile?: Prisma.ClientProfileUncheckedCreateNestedOneWithoutUserInput;
 };
 
@@ -3173,6 +3419,7 @@ export type UserUpdateWithoutFreelancerProfileInput = {
   brainJournalEntries?: Prisma.BrainJournalEntryUpdateManyWithoutUserNestedInput;
   reminders?: Prisma.ReminderUpdateManyWithoutUserNestedInput;
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput;
+  adminAuditLogsAsActor?: Prisma.AdminAuditLogUpdateManyWithoutActorNestedInput;
   clientProfile?: Prisma.ClientProfileUpdateOneWithoutUserNestedInput;
 };
 
@@ -3201,6 +3448,7 @@ export type UserUncheckedUpdateWithoutFreelancerProfileInput = {
   brainJournalEntries?: Prisma.BrainJournalEntryUncheckedUpdateManyWithoutUserNestedInput;
   reminders?: Prisma.ReminderUncheckedUpdateManyWithoutUserNestedInput;
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput;
+  adminAuditLogsAsActor?: Prisma.AdminAuditLogUncheckedUpdateManyWithoutActorNestedInput;
   clientProfile?: Prisma.ClientProfileUncheckedUpdateOneWithoutUserNestedInput;
 };
 
@@ -3229,6 +3477,7 @@ export type UserCreateWithoutClientProfileInput = {
   brainJournalEntries?: Prisma.BrainJournalEntryCreateNestedManyWithoutUserInput;
   reminders?: Prisma.ReminderCreateNestedManyWithoutUserInput;
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput;
+  adminAuditLogsAsActor?: Prisma.AdminAuditLogCreateNestedManyWithoutActorInput;
   freelancerProfile?: Prisma.FreelancerProfileCreateNestedOneWithoutUserInput;
 };
 
@@ -3257,6 +3506,7 @@ export type UserUncheckedCreateWithoutClientProfileInput = {
   brainJournalEntries?: Prisma.BrainJournalEntryUncheckedCreateNestedManyWithoutUserInput;
   reminders?: Prisma.ReminderUncheckedCreateNestedManyWithoutUserInput;
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput;
+  adminAuditLogsAsActor?: Prisma.AdminAuditLogUncheckedCreateNestedManyWithoutActorInput;
   freelancerProfile?: Prisma.FreelancerProfileUncheckedCreateNestedOneWithoutUserInput;
 };
 
@@ -3313,6 +3563,7 @@ export type UserUpdateWithoutClientProfileInput = {
   brainJournalEntries?: Prisma.BrainJournalEntryUpdateManyWithoutUserNestedInput;
   reminders?: Prisma.ReminderUpdateManyWithoutUserNestedInput;
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput;
+  adminAuditLogsAsActor?: Prisma.AdminAuditLogUpdateManyWithoutActorNestedInput;
   freelancerProfile?: Prisma.FreelancerProfileUpdateOneWithoutUserNestedInput;
 };
 
@@ -3341,6 +3592,7 @@ export type UserUncheckedUpdateWithoutClientProfileInput = {
   brainJournalEntries?: Prisma.BrainJournalEntryUncheckedUpdateManyWithoutUserNestedInput;
   reminders?: Prisma.ReminderUncheckedUpdateManyWithoutUserNestedInput;
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput;
+  adminAuditLogsAsActor?: Prisma.AdminAuditLogUncheckedUpdateManyWithoutActorNestedInput;
   freelancerProfile?: Prisma.FreelancerProfileUncheckedUpdateOneWithoutUserNestedInput;
 };
 
@@ -3364,6 +3616,7 @@ export type UserCountOutputType = {
   brainJournalEntries: number;
   reminders: number;
   notifications: number;
+  adminAuditLogsAsActor: number;
 };
 
 export type UserCountOutputTypeSelect<
@@ -3384,6 +3637,7 @@ export type UserCountOutputTypeSelect<
   brainJournalEntries?: boolean | UserCountOutputTypeCountBrainJournalEntriesArgs;
   reminders?: boolean | UserCountOutputTypeCountRemindersArgs;
   notifications?: boolean | UserCountOutputTypeCountNotificationsArgs;
+  adminAuditLogsAsActor?: boolean | UserCountOutputTypeCountAdminAuditLogsAsActorArgs;
 };
 
 /**
@@ -3533,6 +3787,15 @@ export type UserCountOutputTypeCountNotificationsArgs<
   where?: Prisma.NotificationWhereInput;
 };
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountAdminAuditLogsAsActorArgs<
+  ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
+> = {
+  where?: Prisma.AdminAuditLogWhereInput;
+};
+
 export type UserSelect<
   ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
 > = runtime.Types.Extensions.GetSelect<
@@ -3561,6 +3824,7 @@ export type UserSelect<
     brainJournalEntries?: boolean | Prisma.User$brainJournalEntriesArgs<ExtArgs>;
     reminders?: boolean | Prisma.User$remindersArgs<ExtArgs>;
     notifications?: boolean | Prisma.User$notificationsArgs<ExtArgs>;
+    adminAuditLogsAsActor?: boolean | Prisma.User$adminAuditLogsAsActorArgs<ExtArgs>;
     freelancerProfile?: boolean | Prisma.User$freelancerProfileArgs<ExtArgs>;
     clientProfile?: boolean | Prisma.User$clientProfileArgs<ExtArgs>;
     _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>;
@@ -3646,6 +3910,7 @@ export type UserInclude<
   brainJournalEntries?: boolean | Prisma.User$brainJournalEntriesArgs<ExtArgs>;
   reminders?: boolean | Prisma.User$remindersArgs<ExtArgs>;
   notifications?: boolean | Prisma.User$notificationsArgs<ExtArgs>;
+  adminAuditLogsAsActor?: boolean | Prisma.User$adminAuditLogsAsActorArgs<ExtArgs>;
   freelancerProfile?: boolean | Prisma.User$freelancerProfileArgs<ExtArgs>;
   clientProfile?: boolean | Prisma.User$clientProfileArgs<ExtArgs>;
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>;
@@ -3677,6 +3942,7 @@ export type $UserPayload<
     brainJournalEntries: Prisma.$BrainJournalEntryPayload<ExtArgs>[];
     reminders: Prisma.$ReminderPayload<ExtArgs>[];
     notifications: Prisma.$NotificationPayload<ExtArgs>[];
+    adminAuditLogsAsActor: Prisma.$AdminAuditLogPayload<ExtArgs>[];
     freelancerProfile: Prisma.$FreelancerProfilePayload<ExtArgs> | null;
     clientProfile: Prisma.$ClientProfilePayload<ExtArgs> | null;
   };
@@ -4355,6 +4621,17 @@ export interface Prisma__UserClient<
   ): Prisma.PrismaPromise<
     | runtime.Types.Result.GetResult<
         Prisma.$NotificationPayload<ExtArgs>,
+        T,
+        'findMany',
+        GlobalOmitOptions
+      >
+    | Null
+  >;
+  adminAuditLogsAsActor<T extends Prisma.User$adminAuditLogsAsActorArgs<ExtArgs> = {}>(
+    args?: Prisma.Subset<T, Prisma.User$adminAuditLogsAsActorArgs<ExtArgs>>,
+  ): Prisma.PrismaPromise<
+    | runtime.Types.Result.GetResult<
+        Prisma.$AdminAuditLogPayload<ExtArgs>,
         T,
         'findMany',
         GlobalOmitOptions
@@ -5237,6 +5514,34 @@ export type User$notificationsArgs<
   take?: number;
   skip?: number;
   distinct?: Prisma.NotificationScalarFieldEnum | Prisma.NotificationScalarFieldEnum[];
+};
+
+/**
+ * User.adminAuditLogsAsActor
+ */
+export type User$adminAuditLogsAsActorArgs<
+  ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
+> = {
+  /**
+   * Select specific fields to fetch from the AdminAuditLog
+   */
+  select?: Prisma.AdminAuditLogSelect<ExtArgs> | null;
+  /**
+   * Omit specific fields from the AdminAuditLog
+   */
+  omit?: Prisma.AdminAuditLogOmit<ExtArgs> | null;
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AdminAuditLogInclude<ExtArgs> | null;
+  where?: Prisma.AdminAuditLogWhereInput;
+  orderBy?:
+    | Prisma.AdminAuditLogOrderByWithRelationInput
+    | Prisma.AdminAuditLogOrderByWithRelationInput[];
+  cursor?: Prisma.AdminAuditLogWhereUniqueInput;
+  take?: number;
+  skip?: number;
+  distinct?: Prisma.AdminAuditLogScalarFieldEnum | Prisma.AdminAuditLogScalarFieldEnum[];
 };
 
 /**

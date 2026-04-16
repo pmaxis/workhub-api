@@ -8,6 +8,15 @@
  * 🟢 You can import this file directly.
  */
 
+export const AdminAuditLogLevel = {
+  DEBUG: 'DEBUG',
+  INFO: 'INFO',
+  WARN: 'WARN',
+  ERROR: 'ERROR',
+} as const;
+
+export type AdminAuditLogLevel = (typeof AdminAuditLogLevel)[keyof typeof AdminAuditLogLevel];
+
 export const InvoiceStatus = {
   DRAFT: 'DRAFT',
   SENT: 'SENT',

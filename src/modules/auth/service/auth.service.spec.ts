@@ -7,6 +7,7 @@ import { UserOnboardingService } from '@/modules/users/service/user-onboarding.s
 import { SessionsService } from '@/modules/sessions/service/sessions.service';
 import { InvitationsService } from '@/modules/invitations/service/invitations.service';
 import { TokensService } from '@/infrastructure/tokens/tokens.service';
+import { AdminAuditLogWriterService } from '@/modules/admin-audit-logs/service/admin-audit-log-writer.service';
 import { LoginDto } from '@/modules/auth/dto/login.dto';
 import { RegisterDto } from '@/modules/auth/dto/register.dto';
 import { comparePassword } from '@/common/utils/hash.util';
@@ -49,6 +50,10 @@ const mockInvitationsService = {
   getInvitationForRegistration: jest.fn(),
 };
 
+const mockAdminAuditLogWriter = {
+  enqueue: jest.fn(),
+};
+
 describe('AuthService', () => {
   let service: AuthService;
 
@@ -63,6 +68,7 @@ describe('AuthService', () => {
         { provide: SessionsService, useValue: mockSessionsService },
         { provide: TokensService, useValue: mockTokensService },
         { provide: InvitationsService, useValue: mockInvitationsService },
+        { provide: AdminAuditLogWriterService, useValue: mockAdminAuditLogWriter },
       ],
     }).compile();
 

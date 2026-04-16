@@ -12,6 +12,8 @@ const mockUsersService = {
   delete: jest.fn(),
 };
 
+const actorUserId = 'current-user-id';
+
 describe('UsersController', () => {
   let controller: UsersController;
 
@@ -40,10 +42,10 @@ describe('UsersController', () => {
       const created = { id: '1', ...dto };
       mockUsersService.create.mockResolvedValue(created);
 
-      const result = await controller.create(dto);
+      const result = await controller.create(dto, actorUserId);
 
       expect(result).toEqual(created);
-      expect(mockUsersService.create).toHaveBeenCalledWith(dto);
+      expect(mockUsersService.create).toHaveBeenCalledWith(dto, actorUserId);
     });
   });
 
@@ -77,10 +79,10 @@ describe('UsersController', () => {
       const updated = { id: '1', firstName: 'Jane' };
       mockUsersService.update.mockResolvedValue(updated);
 
-      const result = await controller.update('1', dto);
+      const result = await controller.update('1', dto, actorUserId);
 
       expect(result).toEqual(updated);
-      expect(mockUsersService.update).toHaveBeenCalledWith('1', dto);
+      expect(mockUsersService.update).toHaveBeenCalledWith('1', dto, actorUserId);
     });
   });
 
@@ -88,10 +90,10 @@ describe('UsersController', () => {
     it('should delete user by id', async () => {
       mockUsersService.delete.mockResolvedValue(undefined);
 
-      const result = await controller.delete('1');
+      const result = await controller.delete('1', actorUserId);
 
       expect(result).toBeUndefined();
-      expect(mockUsersService.delete).toHaveBeenCalledWith('1');
+      expect(mockUsersService.delete).toHaveBeenCalledWith('1', actorUserId);
     });
   });
 });

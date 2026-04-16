@@ -10,6 +10,7 @@ import {
 } from '@nestjs/swagger';
 import { Action } from '@/common/ability/ability.types';
 import { CheckPolicies } from '@/common/decorators/policy.decorator';
+import { CurrentUserId } from '@/common/decorators/current-user.decorator';
 import { RolesService } from '@/modules/roles/service/roles.service';
 import { CreateRoleDto } from '@/modules/roles/dto/create-role.dto';
 import { UpdateRoleDto } from '@/modules/roles/dto/update-role.dto';
@@ -25,8 +26,11 @@ export class RolesController {
   @ApiOperation({ summary: 'Create role' })
   @ApiCreatedResponse({ type: RoleResponseDto })
   @CheckPolicies((ability) => ability.can(Action.Create, 'Role'))
-  create(@Body() createRoleDto: CreateRoleDto): Promise<RoleResponseDto> {
-    return this.rolesService.create(createRoleDto);
+  create(
+    @Body() createRoleDto: CreateRoleDto,
+    @CurrentUserId() actorUserId: string,
+  ): Promise<RoleResponseDto> {
+    return this.rolesService.create(createRoleDto, actorUserId);
   }
 
   @Get()
@@ -51,8 +55,12 @@ export class RolesController {
   @ApiParam({ name: 'id', description: 'Role ID' })
   @ApiOkResponse({ type: RoleResponseDto })
   @CheckPolicies((ability) => ability.can(Action.Update, 'Role'))
-  update(@Param('id') id: string, @Body() updateRoleDto: UpdateRoleDto): Promise<RoleResponseDto> {
-    return this.rolesService.update(id, updateRoleDto);
+  update(
+    @Param('id') id: string,
+    @Body() updateRoleDto: UpdateRoleDto,
+    @CurrentUserId() actorUserId: string,
+  ): Promise<RoleResponseDto> {
+    return this.rolesService.update(id, updateRoleDto, actorUserId);
   }
 
   @Delete(':id')
@@ -61,7 +69,7 @@ export class RolesController {
   @ApiParam({ name: 'id', description: 'Role ID' })
   @ApiNoContentResponse({ description: 'Role deleted' })
   @CheckPolicies((ability) => ability.can(Action.Delete, 'Role'))
-  delete(@Param('id') id: string): Promise<void> {
-    return this.rolesService.delete(id);
+  delete(@Param('id') id: string, @CurrentUserId() actorUserId: string): Promise<void> {
+    return this.rolesService.delete(id, actorUserId);
   }
 }

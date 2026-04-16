@@ -10,6 +10,7 @@ import {
   InvitationsRepository,
   type InvitationScopeContext,
 } from '@/modules/invitations/repository/invitations.repository';
+import { AdminAuditLogWriterService } from '@/modules/admin-audit-logs/service/admin-audit-log-writer.service';
 import { InvitationsService } from '@/modules/invitations/service/invitations.service';
 import { UsersRepository } from '@/modules/users/repository/users.repository';
 import { CreateInvitationDto } from '@/modules/invitations/dto/create-invitation.dto';
@@ -55,6 +56,10 @@ const mockUsersRepository = {
   findColleaguesInCompanies: jest.fn(),
 };
 
+const mockAdminAuditLogWriter = {
+  enqueue: jest.fn(),
+};
+
 type InvitationCreatePayload = {
   email: string;
   token: string;
@@ -91,6 +96,7 @@ describe('InvitationsService', () => {
         InvitationsService,
         { provide: InvitationsRepository, useValue: mockInvitationsRepository },
         { provide: UsersRepository, useValue: mockUsersRepository },
+        { provide: AdminAuditLogWriterService, useValue: mockAdminAuditLogWriter },
       ],
     }).compile();
 

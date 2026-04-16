@@ -8,6 +8,7 @@ import { UsersModule } from '@/modules/users/users.module';
 import { SessionsModule } from '@/modules/sessions/sessions.module';
 import { InvitationsModule } from '@/modules/invitations/invitations.module';
 import { JwtStrategy } from '@/modules/auth/strategies/jwt.strategy';
+import { AdminAuditLogsModule } from '@/modules/admin-audit-logs/admin-audit-logs.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { JwtStrategy } from '@/modules/auth/strategies/jwt.strategy';
     UsersModule,
     SessionsModule,
     InvitationsModule,
+    AdminAuditLogsModule,
   ],
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy],

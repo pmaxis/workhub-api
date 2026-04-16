@@ -16,6 +16,8 @@ describe('RolesController', () => {
     delete: jest.fn(),
   };
 
+  const actorUserId = 'current-user-id';
+
   beforeEach(async () => {
     jest.clearAllMocks();
 
@@ -49,9 +51,9 @@ describe('RolesController', () => {
       });
       mockRolesService.create.mockResolvedValue(created);
 
-      const result = await controller.create(dto);
+      const result = await controller.create(dto, actorUserId);
 
-      expect(mockRolesService.create).toHaveBeenCalledWith(dto);
+      expect(mockRolesService.create).toHaveBeenCalledWith(dto, actorUserId);
       expect(result).toEqual(created);
     });
   });
@@ -109,9 +111,9 @@ describe('RolesController', () => {
       });
       mockRolesService.update.mockResolvedValue(updated);
 
-      const result = await controller.update('role-id', dto);
+      const result = await controller.update('role-id', dto, actorUserId);
 
-      expect(mockRolesService.update).toHaveBeenCalledWith('role-id', dto);
+      expect(mockRolesService.update).toHaveBeenCalledWith('role-id', dto, actorUserId);
       expect(result).toEqual(updated);
     });
   });
@@ -120,9 +122,9 @@ describe('RolesController', () => {
     it('should delete a role', async () => {
       mockRolesService.delete.mockResolvedValue(undefined);
 
-      const result = await controller.delete('role-id');
+      const result = await controller.delete('role-id', actorUserId);
 
-      expect(mockRolesService.delete).toHaveBeenCalledWith('role-id');
+      expect(mockRolesService.delete).toHaveBeenCalledWith('role-id', actorUserId);
       expect(result).toBeUndefined();
     });
   });

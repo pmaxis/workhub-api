@@ -1,10 +1,15 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { AdminAuditLogLevel } from '@/infrastructure/database/generated/enums';
+import { AdminAuditLogWriterService } from '@/modules/admin-audit-logs/service/admin-audit-log-writer.service';
 import { SessionsRepository } from '@/modules/sessions/repository/sessions.repository';
 import { CreateSessionDto } from '@/modules/sessions/dto/create-session.dto';
 
 @Injectable()
 export class SessionsService {
-  constructor(private readonly sessionsRepository: SessionsRepository) {}
+  constructor(
+    private readonly sessionsRepository: SessionsRepository,
+    private readonly adminAuditLogWriter: AdminAuditLogWriterService,
+  ) {}
 
   create(createSessionDto: CreateSessionDto) {
     return this.sessionsRepository.create(createSessionDto);
@@ -31,5 +36,13 @@ export class SessionsService {
     if (count === 0) {
       throw new NotFoundException('Session not found');
     }
+
+    this.adminAuditLogWriter.enqueue({
+      level: AdminAuditLogLevel.INFO,
+      source: 'sessions',
+      message: 'Session revoked',
+      actorUserId: userId,
+      context: { sessionId: id },
+    });
   }
 }

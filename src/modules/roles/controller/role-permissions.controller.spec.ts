@@ -6,6 +6,8 @@ import { AddPermissionDto } from '@/modules/roles/dto/add-permission.dto';
 describe('RolePermissionsController', () => {
   let controller: RolePermissionsController;
 
+  const actorUserId = 'current-user-id';
+
   const mockRolePermissionsService = {
     addPermission: jest.fn(),
     deletePermission: jest.fn(),
@@ -36,11 +38,12 @@ describe('RolePermissionsController', () => {
       mockRolePermissionsService.addPermission.mockResolvedValue(undefined);
       const dto: AddPermissionDto = { permissionId: 'permission-id' };
 
-      await controller.addPermission('role-id', dto);
+      await controller.addPermission('role-id', dto, actorUserId);
 
       expect(mockRolePermissionsService.addPermission).toHaveBeenCalledWith(
         'role-id',
         'permission-id',
+        actorUserId,
       );
     });
   });
@@ -49,11 +52,12 @@ describe('RolePermissionsController', () => {
     it('should delete permission from role', async () => {
       mockRolePermissionsService.deletePermission.mockResolvedValue(undefined);
 
-      await controller.deletePermission('role-id', 'permission-id');
+      await controller.deletePermission('role-id', 'permission-id', actorUserId);
 
       expect(mockRolePermissionsService.deletePermission).toHaveBeenCalledWith(
         'role-id',
         'permission-id',
+        actorUserId,
       );
     });
   });

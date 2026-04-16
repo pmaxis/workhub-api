@@ -10,6 +10,8 @@ import {
   InvitationsRepository,
   MappedInvitation,
 } from '@/modules/invitations/repository/invitations.repository';
+import { AdminAuditLogLevel } from '@/infrastructure/database/generated/enums';
+import { AdminAuditLogWriterService } from '@/modules/admin-audit-logs/service/admin-audit-log-writer.service';
 import { UsersRepository } from '@/modules/users/repository/users.repository';
 import { CreateInvitationDto } from '@/modules/invitations/dto/create-invitation.dto';
 import { UpdateInvitationDto } from '@/modules/invitations/dto/update-invitation.dto';
@@ -25,6 +27,7 @@ export class InvitationsService {
   constructor(
     private readonly invitationsRepository: InvitationsRepository,
     private readonly usersRepository: UsersRepository,
+    private readonly adminAuditLogWriter: AdminAuditLogWriterService,
   ) {}
 
   async create(
@@ -54,6 +57,18 @@ export class InvitationsService {
       invitedById: ctx.userId,
       companyId: createInvitationDto.companyId,
       expiresAt,
+    });
+
+    this.adminAuditLogWriter.enqueue({
+      level: AdminAuditLogLevel.INFO,
+      source: 'invitations',
+      message: 'Invitation created',
+      actorUserId: ctx.userId,
+      context: {
+        invitationId: invitation.id,
+        email: invitation.email,
+        companyId: invitation.companyId ?? null,
+      },
     });
 
     return new InvitationResponseDto(invitation);
@@ -194,6 +209,14 @@ export class InvitationsService {
       status: updateInvitationDto.status,
     });
 
+    this.adminAuditLogWriter.enqueue({
+      level: AdminAuditLogLevel.INFO,
+      source: 'invitations',
+      message: 'Invitation updated',
+      actorUserId: ctx.userId,
+      context: { invitationId: id, status: invitation.status },
+    });
+
     return new InvitationResponseDto(invitation);
   }
 
@@ -217,6 +240,14 @@ export class InvitationsService {
       throw new BadRequestException('Invitation is not pending');
     }
     await this.invitationsRepository.update(invitationId, { status: InvitationStatus.ACCEPTED });
+
+    this.adminAuditLogWriter.enqueue({
+      level: AdminAuditLogLevel.INFO,
+      source: 'invitations',
+      message: 'Invitation accepted during registration',
+      actorUserId: registeredUserId,
+      context: { invitationId },
+    });
   }
 
   async resend(id: string, ctx: RequestUser): Promise<InvitationResponseDto> {
@@ -238,12 +269,28 @@ export class InvitationsService {
       expiresAt,
     });
 
+    this.adminAuditLogWriter.enqueue({
+      level: AdminAuditLogLevel.INFO,
+      source: 'invitations',
+      message: 'Invitation resent',
+      actorUserId: ctx.userId,
+      context: { invitationId: id },
+    });
+
     return new InvitationResponseDto(updated);
   }
 
   async delete(id: string, ctx: RequestUser): Promise<void> {
     await this.findOne(id, ctx);
     await this.invitationsRepository.delete(id);
+
+    this.adminAuditLogWriter.enqueue({
+      level: AdminAuditLogLevel.INFO,
+      source: 'invitations',
+      message: 'Invitation deleted',
+      actorUserId: ctx.userId,
+      context: { invitationId: id },
+    });
   }
 
   private toScope(ctx: RequestUser) {

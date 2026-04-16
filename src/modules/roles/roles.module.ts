@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { DatabaseModule } from '@/infrastructure/database/database.module';
 import { AbilityModule } from '@/common/ability/ability.module';
+import { AdminAuditLogsModule } from '@/modules/admin-audit-logs/admin-audit-logs.module';
 import { PermissionsModule } from '@/modules/permissions/permissions.module';
 import { RolesService } from '@/modules/roles/service/roles.service';
 import { RolePermissionsService } from '@/modules/roles/service/role-permissions.service';
@@ -14,6 +15,7 @@ import { rolePermissionsAbilityDefinitions } from '@/modules/roles/ability/role-
 @Module({
   imports: [
     DatabaseModule,
+    AdminAuditLogsModule,
     PermissionsModule,
     AbilityModule.forModule([...rolesAbilityDefinitions, ...rolePermissionsAbilityDefinitions]),
   ],

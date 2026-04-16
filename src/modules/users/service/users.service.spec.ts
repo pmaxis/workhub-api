@@ -1,5 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { NotFoundException } from '@nestjs/common';
+import { AdminAuditLogWriterService } from '@/modules/admin-audit-logs/service/admin-audit-log-writer.service';
 import { UsersService } from '@/modules/users/service/users.service';
 import { UsersRepository } from '@/modules/users/repository/users.repository';
 import { CreateUserDto } from '@/modules/users/dto/create-user.dto';
@@ -19,6 +20,12 @@ const mockUsersRepository = {
   delete: jest.fn(),
 };
 
+const mockAdminAuditLogWriter = {
+  enqueue: jest.fn(),
+};
+
+const actorUserId = 'admin-actor-id';
+
 const baseUser = {
   id: '1',
   email: 'a@b.com',
@@ -36,7 +43,11 @@ describe('UsersService', () => {
   beforeEach(async () => {
     jest.clearAllMocks();
     const module: TestingModule = await Test.createTestingModule({
-      providers: [UsersService, { provide: UsersRepository, useValue: mockUsersRepository }],
+      providers: [
+        UsersService,
+        { provide: UsersRepository, useValue: mockUsersRepository },
+        { provide: AdminAuditLogWriterService, useValue: mockAdminAuditLogWriter },
+      ],
     }).compile();
 
     service = module.get<UsersService>(UsersService);
@@ -135,7 +146,7 @@ describe('UsersService', () => {
       const updated = { ...baseUser, id: '1', firstName: 'Jane' };
       mockUsersRepository.update.mockResolvedValue(updated);
 
-      const result = await service.update('1', dto);
+      const result = await service.update('1', dto, actorUserId);
 
       expect(result).toBeInstanceOf(UserResponseDto);
       expect(result).toMatchObject({ id: '1', firstName: 'Jane' });
@@ -150,7 +161,7 @@ describe('UsersService', () => {
       const dto: UpdateUserDto = { password: 'newpass' };
       mockUsersRepository.update.mockResolvedValue({ ...baseUser, id: '1' });
 
-      await service.update('1', dto);
+      await service.update('1', dto, actorUserId);
 
       expect(mockUsersRepository.update).toHaveBeenCalledWith('1', {
         password: 'hashed-password',
@@ -160,7 +171,7 @@ describe('UsersService', () => {
     it('should throw when user not found', async () => {
       mockUsersRepository.findOne.mockResolvedValue(null);
 
-      await expect(service.update('1', {})).rejects.toThrow(NotFoundException);
+      await expect(service.update('1', {}, actorUserId)).rejects.toThrow(NotFoundException);
     });
   });
 
@@ -169,7 +180,7 @@ describe('UsersService', () => {
       mockUsersRepository.findOne.mockResolvedValue({ ...baseUser, id: '1' });
       mockUsersRepository.delete.mockResolvedValue(undefined);
 
-      await service.delete('1');
+      await service.delete('1', actorUserId);
 
       expect(mockUsersRepository.findOne).toHaveBeenCalledWith('1');
       expect(mockUsersRepository.delete).toHaveBeenCalledWith('1');
@@ -178,7 +189,7 @@ describe('UsersService', () => {
     it('should throw when user not found', async () => {
       mockUsersRepository.findOne.mockResolvedValue(null);
 
-      await expect(service.delete('1')).rejects.toThrow(NotFoundException);
+      await expect(service.delete('1', actorUserId)).rejects.toThrow(NotFoundException);
     });
   });
 });

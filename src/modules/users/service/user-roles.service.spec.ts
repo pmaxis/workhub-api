@@ -1,5 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
+import { AdminAuditLogWriterService } from '@/modules/admin-audit-logs/service/admin-audit-log-writer.service';
 import { UserRolesService } from '@/modules/users/service/user-roles.service';
 import { UserRolesRepository } from '@/modules/users/repository/user-roles.repository';
 import { UsersService } from '@/modules/users/service/users.service';
@@ -24,6 +25,10 @@ describe('UserRolesService', () => {
     findOne: jest.fn(),
   };
 
+  const mockAdminAuditLogWriter = {
+    enqueue: jest.fn(),
+  };
+
   beforeEach(async () => {
     jest.clearAllMocks();
     mockUsersService.findOne.mockResolvedValue({ id: 'user-id' } as UserResponseDto);
@@ -38,6 +43,7 @@ describe('UserRolesService', () => {
         { provide: UserRolesRepository, useValue: mockUserRolesRepository },
         { provide: UsersService, useValue: mockUsersService },
         { provide: RolesService, useValue: mockRolesService },
+        { provide: AdminAuditLogWriterService, useValue: mockAdminAuditLogWriter },
       ],
     }).compile();
 

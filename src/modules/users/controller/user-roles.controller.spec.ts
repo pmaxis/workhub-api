@@ -5,6 +5,8 @@ import { UserRolesService } from '@/modules/users/service/user-roles.service';
 describe('UserRolesController', () => {
   let controller: UserRolesController;
 
+  const actorUserId = 'current-user-id';
+
   const mockUserRolesService = {
     addRole: jest.fn(),
     deleteRole: jest.fn(),
@@ -34,9 +36,9 @@ describe('UserRolesController', () => {
     it('should add role to user', async () => {
       mockUserRolesService.addRole.mockResolvedValue(undefined);
 
-      await controller.addRole('user-id', { roleId: 'role-id' });
+      await controller.addRole('user-id', { roleId: 'role-id' }, actorUserId);
 
-      expect(mockUserRolesService.addRole).toHaveBeenCalledWith('user-id', 'role-id');
+      expect(mockUserRolesService.addRole).toHaveBeenCalledWith('user-id', 'role-id', actorUserId);
     });
   });
 
@@ -44,9 +46,13 @@ describe('UserRolesController', () => {
     it('should delete role from user', async () => {
       mockUserRolesService.deleteRole.mockResolvedValue(undefined);
 
-      await controller.deleteRole('user-id', 'role-id');
+      await controller.deleteRole('user-id', 'role-id', actorUserId);
 
-      expect(mockUserRolesService.deleteRole).toHaveBeenCalledWith('user-id', 'role-id');
+      expect(mockUserRolesService.deleteRole).toHaveBeenCalledWith(
+        'user-id',
+        'role-id',
+        actorUserId,
+      );
     });
   });
 });

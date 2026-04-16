@@ -31,6 +31,7 @@ import { BrainTemplatesModule } from '@/modules/brain-templates/brain-templates.
 import { JournalEntriesModule } from '@/modules/journal-entries/journal-entries.module';
 import { RemindersModule } from '@/modules/reminders/reminders.module';
 import { PlanningModule } from '@/modules/planning/planning.module';
+import { AdminAuditLogsModule } from '@/modules/admin-audit-logs/admin-audit-logs.module';
 
 @Module({
   imports: [
@@ -65,6 +66,7 @@ import { PlanningModule } from '@/modules/planning/planning.module';
     JournalEntriesModule,
     RemindersModule,
     PlanningModule,
+    AdminAuditLogsModule,
   ],
   controllers: [],
   providers: [

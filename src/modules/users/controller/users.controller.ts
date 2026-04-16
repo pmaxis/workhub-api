@@ -10,6 +10,7 @@ import {
 } from '@nestjs/swagger';
 import { Action } from '@/common/ability/ability.types';
 import { CheckPolicies } from '@/common/decorators/policy.decorator';
+import { CurrentUserId } from '@/common/decorators/current-user.decorator';
 import { UsersService } from '@/modules/users/service/users.service';
 import { CreateUserDto } from '@/modules/users/dto/create-user.dto';
 import { UpdateUserDto } from '@/modules/users/dto/update-user.dto';
@@ -25,8 +26,11 @@ export class UsersController {
   @ApiOperation({ summary: 'Create user' })
   @ApiCreatedResponse({ type: UserResponseDto, description: 'User created' })
   @CheckPolicies((ability) => ability.can(Action.Create, 'User'))
-  create(@Body() createUserDto: CreateUserDto): Promise<UserResponseDto> {
-    return this.usersService.create(createUserDto);
+  create(
+    @Body() createUserDto: CreateUserDto,
+    @CurrentUserId() actorUserId: string,
+  ): Promise<UserResponseDto> {
+    return this.usersService.create(createUserDto, actorUserId);
   }
 
   @Get()
@@ -51,8 +55,12 @@ export class UsersController {
   @ApiParam({ name: 'id', description: 'User ID' })
   @ApiOkResponse({ type: UserResponseDto })
   @CheckPolicies((ability) => ability.can(Action.Update, 'User'))
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto): Promise<UserResponseDto> {
-    return this.usersService.update(id, updateUserDto);
+  update(
+    @Param('id') id: string,
+    @Body() updateUserDto: UpdateUserDto,
+    @CurrentUserId() actorUserId: string,
+  ): Promise<UserResponseDto> {
+    return this.usersService.update(id, updateUserDto, actorUserId);
   }
 
   @Delete(':id')
@@ -61,7 +69,7 @@ export class UsersController {
   @ApiParam({ name: 'id', description: 'User ID' })
   @ApiNoContentResponse({ description: 'User deleted' })
   @CheckPolicies((ability) => ability.can(Action.Delete, 'User'))
-  delete(@Param('id') id: string): Promise<void> {
-    return this.usersService.delete(id);
+  delete(@Param('id') id: string, @CurrentUserId() actorUserId: string): Promise<void> {
+    return this.usersService.delete(id, actorUserId);
   }
 }

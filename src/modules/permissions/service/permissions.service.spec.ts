@@ -1,5 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
+import { AdminAuditLogWriterService } from '@/modules/admin-audit-logs/service/admin-audit-log-writer.service';
 import { PermissionsService } from '@/modules/permissions/service/permissions.service';
 import { PermissionsRepository } from '@/modules/permissions/repository/permissions.repository';
 import { CreatePermissionDto } from '@/modules/permissions/dto/create-permission.dto';
@@ -26,6 +27,12 @@ describe('PermissionsService', () => {
     delete: jest.fn(),
   };
 
+  const mockAdminAuditLogWriter = {
+    enqueue: jest.fn(),
+  };
+
+  const actorUserId = 'admin-actor-id';
+
   beforeEach(async () => {
     jest.clearAllMocks();
 
@@ -36,6 +43,7 @@ describe('PermissionsService', () => {
           provide: PermissionsRepository,
           useValue: mockPermissionsRepository,
         },
+        { provide: AdminAuditLogWriterService, useValue: mockAdminAuditLogWriter },
       ],
     }).compile();
 
@@ -51,7 +59,7 @@ describe('PermissionsService', () => {
       const dto: CreatePermissionDto = { key: 'read:users', description: 'Read users' };
       mockPermissionsRepository.create.mockResolvedValue(mockPermissionFromRepo);
 
-      const result = await service.create(dto);
+      const result = await service.create(dto, actorUserId);
 
       expect(mockPermissionsRepository.create).toHaveBeenCalledWith(dto);
       expect(result).toBeInstanceOf(PermissionResponseDto);
@@ -68,7 +76,7 @@ describe('PermissionsService', () => {
         description: 'Reserved',
       };
 
-      await expect(service.create(dto)).rejects.toThrow(BadRequestException);
+      await expect(service.create(dto, actorUserId)).rejects.toThrow(BadRequestException);
       expect(mockPermissionsRepository.create).not.toHaveBeenCalled();
     });
   });
@@ -112,7 +120,7 @@ describe('PermissionsService', () => {
       mockPermissionsRepository.findOne.mockResolvedValue(mockPermissionFromRepo);
       mockPermissionsRepository.update.mockResolvedValue(updated);
 
-      const result = await service.update('permission-id', dto);
+      const result = await service.update('permission-id', dto, actorUserId);
 
       expect(mockPermissionsRepository.findOne).toHaveBeenCalledWith('permission-id');
       expect(mockPermissionsRepository.update).toHaveBeenCalledWith('permission-id', dto);
@@ -123,9 +131,9 @@ describe('PermissionsService', () => {
     it('should throw when permission not found', async () => {
       mockPermissionsRepository.findOne.mockResolvedValue(null);
 
-      await expect(service.update('missing', { key: 'x', description: 'y' })).rejects.toThrow(
-        NotFoundException,
-      );
+      await expect(
+        service.update('missing', { key: 'x', description: 'y' }, actorUserId),
+      ).rejects.toThrow(NotFoundException);
       expect(mockPermissionsRepository.update).not.toHaveBeenCalled();
     });
 
@@ -133,10 +141,14 @@ describe('PermissionsService', () => {
       mockPermissionsRepository.findOne.mockResolvedValue(mockPermissionFromRepo);
 
       await expect(
-        service.update('permission-id', {
-          key: MANAGE_ALL_PERMISSION_KEY,
-          description: 'x',
-        }),
+        service.update(
+          'permission-id',
+          {
+            key: MANAGE_ALL_PERMISSION_KEY,
+            description: 'x',
+          },
+          actorUserId,
+        ),
       ).rejects.toThrow(BadRequestException);
 
       expect(mockPermissionsRepository.update).not.toHaveBeenCalled();
@@ -148,7 +160,7 @@ describe('PermissionsService', () => {
       mockPermissionsRepository.findOne.mockResolvedValue(mockPermissionFromRepo);
       mockPermissionsRepository.delete.mockResolvedValue(undefined);
 
-      await service.delete('permission-id');
+      await service.delete('permission-id', actorUserId);
 
       expect(mockPermissionsRepository.findOne).toHaveBeenCalledWith('permission-id');
       expect(mockPermissionsRepository.delete).toHaveBeenCalledWith('permission-id');
@@ -157,7 +169,7 @@ describe('PermissionsService', () => {
     it('should throw when permission not found', async () => {
       mockPermissionsRepository.findOne.mockResolvedValue(null);
 
-      await expect(service.delete('missing')).rejects.toThrow(NotFoundException);
+      await expect(service.delete('missing', actorUserId)).rejects.toThrow(NotFoundException);
       expect(mockPermissionsRepository.delete).not.toHaveBeenCalled();
     });
   });

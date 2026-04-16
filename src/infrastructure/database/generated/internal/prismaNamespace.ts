@@ -375,6 +375,7 @@ export type FieldRef<Model, FieldType> = runtime.FieldRef<Model, FieldType>;
 type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRef<Model, FieldType>;
 
 export const ModelName = {
+  AdminAuditLog: 'AdminAuditLog',
   Company: 'Company',
   CompanyMember: 'CompanyMember',
   Invoice: 'Invoice',
@@ -419,6 +420,7 @@ export type TypeMap<
   };
   meta: {
     modelProps:
+      | 'adminAuditLog'
       | 'company'
       | 'companyMember'
       | 'invoice'
@@ -446,6 +448,82 @@ export type TypeMap<
     txIsolationLevel: TransactionIsolationLevel;
   };
   model: {
+    AdminAuditLog: {
+      payload: Prisma.$AdminAuditLogPayload<ExtArgs>;
+      fields: Prisma.AdminAuditLogFieldRefs;
+      operations: {
+        findUnique: {
+          args: Prisma.AdminAuditLogFindUniqueArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdminAuditLogPayload> | null;
+        };
+        findUniqueOrThrow: {
+          args: Prisma.AdminAuditLogFindUniqueOrThrowArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdminAuditLogPayload>;
+        };
+        findFirst: {
+          args: Prisma.AdminAuditLogFindFirstArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdminAuditLogPayload> | null;
+        };
+        findFirstOrThrow: {
+          args: Prisma.AdminAuditLogFindFirstOrThrowArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdminAuditLogPayload>;
+        };
+        findMany: {
+          args: Prisma.AdminAuditLogFindManyArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdminAuditLogPayload>[];
+        };
+        create: {
+          args: Prisma.AdminAuditLogCreateArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdminAuditLogPayload>;
+        };
+        createMany: {
+          args: Prisma.AdminAuditLogCreateManyArgs<ExtArgs>;
+          result: BatchPayload;
+        };
+        createManyAndReturn: {
+          args: Prisma.AdminAuditLogCreateManyAndReturnArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdminAuditLogPayload>[];
+        };
+        delete: {
+          args: Prisma.AdminAuditLogDeleteArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdminAuditLogPayload>;
+        };
+        update: {
+          args: Prisma.AdminAuditLogUpdateArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdminAuditLogPayload>;
+        };
+        deleteMany: {
+          args: Prisma.AdminAuditLogDeleteManyArgs<ExtArgs>;
+          result: BatchPayload;
+        };
+        updateMany: {
+          args: Prisma.AdminAuditLogUpdateManyArgs<ExtArgs>;
+          result: BatchPayload;
+        };
+        updateManyAndReturn: {
+          args: Prisma.AdminAuditLogUpdateManyAndReturnArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdminAuditLogPayload>[];
+        };
+        upsert: {
+          args: Prisma.AdminAuditLogUpsertArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdminAuditLogPayload>;
+        };
+        aggregate: {
+          args: Prisma.AdminAuditLogAggregateArgs<ExtArgs>;
+          result: runtime.Types.Utils.Optional<Prisma.AggregateAdminAuditLog>;
+        };
+        groupBy: {
+          args: Prisma.AdminAuditLogGroupByArgs<ExtArgs>;
+          result: runtime.Types.Utils.Optional<Prisma.AdminAuditLogGroupByOutputType>[];
+        };
+        count: {
+          args: Prisma.AdminAuditLogCountArgs<ExtArgs>;
+          result:
+            | runtime.Types.Utils.Optional<Prisma.AdminAuditLogCountAggregateOutputType>
+            | number;
+        };
+      };
+    };
     Company: {
       payload: Prisma.$CompanyPayload<ExtArgs>;
       fields: Prisma.CompanyFieldRefs;
@@ -2279,6 +2357,19 @@ export const TransactionIsolationLevel = runtime.makeStrictEnum({
 export type TransactionIsolationLevel =
   (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel];
 
+export const AdminAuditLogScalarFieldEnum = {
+  id: 'id',
+  level: 'level',
+  source: 'source',
+  message: 'message',
+  context: 'context',
+  actorUserId: 'actorUserId',
+  createdAt: 'createdAt',
+} as const;
+
+export type AdminAuditLogScalarFieldEnum =
+  (typeof AdminAuditLogScalarFieldEnum)[keyof typeof AdminAuditLogScalarFieldEnum];
+
 export const CompanyScalarFieldEnum = {
   id: 'id',
   slug: 'slug',
@@ -2615,13 +2706,6 @@ export const QueryMode = {
 
 export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode];
 
-export const NullsOrder = {
-  first: 'first',
-  last: 'last',
-} as const;
-
-export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder];
-
 export const JsonNullValueFilter = {
   DbNull: DbNull,
   JsonNull: JsonNull,
@@ -2629,6 +2713,13 @@ export const JsonNullValueFilter = {
 } as const;
 
 export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter];
+
+export const NullsOrder = {
+  first: 'first',
+  last: 'last',
+} as const;
+
+export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder];
 
 /**
  * Field references
@@ -2643,6 +2734,32 @@ export type StringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 
  * Reference to a field of type 'String[]'
  */
 export type ListStringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'String[]'>;
+
+/**
+ * Reference to a field of type 'AdminAuditLogLevel'
+ */
+export type EnumAdminAuditLogLevelFieldRefInput<$PrismaModel> = FieldRefInputType<
+  $PrismaModel,
+  'AdminAuditLogLevel'
+>;
+
+/**
+ * Reference to a field of type 'AdminAuditLogLevel[]'
+ */
+export type ListEnumAdminAuditLogLevelFieldRefInput<$PrismaModel> = FieldRefInputType<
+  $PrismaModel,
+  'AdminAuditLogLevel[]'
+>;
+
+/**
+ * Reference to a field of type 'Json'
+ */
+export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>;
+
+/**
+ * Reference to a field of type 'QueryMode'
+ */
+export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>;
 
 /**
  * Reference to a field of type 'DateTime'
@@ -2711,16 +2828,6 @@ export type ListEnumNotificationTypeFieldRefInput<$PrismaModel> = FieldRefInputT
   $PrismaModel,
   'NotificationType[]'
 >;
-
-/**
- * Reference to a field of type 'Json'
- */
-export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>;
-
-/**
- * Reference to a field of type 'QueryMode'
- */
-export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>;
 
 /**
  * Reference to a field of type 'Boolean'
@@ -2872,6 +2979,7 @@ export type PrismaClientOptions = (
   comments?: runtime.SqlCommenterPlugin[];
 };
 export type GlobalOmitConfig = {
+  adminAuditLog?: Prisma.AdminAuditLogOmit;
   company?: Prisma.CompanyOmit;
   companyMember?: Prisma.CompanyMemberOmit;
   invoice?: Prisma.InvoiceOmit;

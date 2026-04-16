@@ -16,6 +16,8 @@ describe('PermissionsController', () => {
     delete: jest.fn(),
   };
 
+  const actorUserId = 'current-user-id';
+
   beforeEach(async () => {
     jest.clearAllMocks();
 
@@ -48,9 +50,9 @@ describe('PermissionsController', () => {
       });
       mockPermissionsService.create.mockResolvedValue(created);
 
-      const result = await controller.create(dto);
+      const result = await controller.create(dto, actorUserId);
 
-      expect(mockPermissionsService.create).toHaveBeenCalledWith(dto);
+      expect(mockPermissionsService.create).toHaveBeenCalledWith(dto, actorUserId);
       expect(result).toEqual(created);
     });
   });
@@ -105,9 +107,9 @@ describe('PermissionsController', () => {
       });
       mockPermissionsService.update.mockResolvedValue(updated);
 
-      const result = await controller.update('permission-id', dto);
+      const result = await controller.update('permission-id', dto, actorUserId);
 
-      expect(mockPermissionsService.update).toHaveBeenCalledWith('permission-id', dto);
+      expect(mockPermissionsService.update).toHaveBeenCalledWith('permission-id', dto, actorUserId);
       expect(result).toEqual(updated);
     });
   });
@@ -116,9 +118,9 @@ describe('PermissionsController', () => {
     it('should delete a permission', async () => {
       mockPermissionsService.delete.mockResolvedValue(undefined);
 
-      const result = await controller.delete('permission-id');
+      const result = await controller.delete('permission-id', actorUserId);
 
-      expect(mockPermissionsService.delete).toHaveBeenCalledWith('permission-id');
+      expect(mockPermissionsService.delete).toHaveBeenCalledWith('permission-id', actorUserId);
       expect(result).toBeUndefined();
     });
   });

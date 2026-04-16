@@ -25,6 +25,7 @@ model User {
   brainJournalEntries BrainJournalEntry[]
   reminders           Reminder[]
   notifications       Notification[]
+  adminAuditLogsAsActor AdminAuditLog[] @relation("AdminAuditLogActor")
 
   freelancerProfile FreelancerProfile?
   clientProfile     ClientProfile?

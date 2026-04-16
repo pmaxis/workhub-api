@@ -10,6 +10,7 @@ import {
 } from '@nestjs/swagger';
 import { Action } from '@/common/ability/ability.types';
 import { CheckPolicies } from '@/common/decorators/policy.decorator';
+import { CurrentUserId } from '@/common/decorators/current-user.decorator';
 import { PermissionsService } from '@/modules/permissions/service/permissions.service';
 import { CreatePermissionDto } from '@/modules/permissions/dto/create-permission.dto';
 import { UpdatePermissionDto } from '@/modules/permissions/dto/update-permission.dto';
@@ -25,8 +26,11 @@ export class PermissionsController {
   @ApiOperation({ summary: 'Create permission' })
   @ApiCreatedResponse({ type: PermissionResponseDto })
   @CheckPolicies((ability) => ability.can(Action.Create, 'Permission'))
-  create(@Body() createPermissionDto: CreatePermissionDto): Promise<PermissionResponseDto> {
-    return this.permissionsService.create(createPermissionDto);
+  create(
+    @Body() createPermissionDto: CreatePermissionDto,
+    @CurrentUserId() actorUserId: string,
+  ): Promise<PermissionResponseDto> {
+    return this.permissionsService.create(createPermissionDto, actorUserId);
   }
 
   @Get()
@@ -54,8 +58,9 @@ export class PermissionsController {
   update(
     @Param('id') id: string,
     @Body() updatePermissionDto: UpdatePermissionDto,
+    @CurrentUserId() actorUserId: string,
   ): Promise<PermissionResponseDto> {
-    return this.permissionsService.update(id, updatePermissionDto);
+    return this.permissionsService.update(id, updatePermissionDto, actorUserId);
   }
 
   @Delete(':id')
@@ -64,7 +69,7 @@ export class PermissionsController {
   @ApiParam({ name: 'id', description: 'Permission ID' })
   @ApiNoContentResponse({ description: 'Permission deleted' })
   @CheckPolicies((ability) => ability.can(Action.Delete, 'Permission'))
-  delete(@Param('id') id: string): Promise<void> {
-    return this.permissionsService.delete(id);
+  delete(@Param('id') id: string, @CurrentUserId() actorUserId: string): Promise<void> {
+    return this.permissionsService.delete(id, actorUserId);
   }
 }

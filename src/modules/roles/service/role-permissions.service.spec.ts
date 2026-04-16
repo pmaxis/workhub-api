@@ -1,5 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
+import { AdminAuditLogWriterService } from '@/modules/admin-audit-logs/service/admin-audit-log-writer.service';
 import { RolePermissionsService } from '@/modules/roles/service/role-permissions.service';
 import { RolePermissionsRepository } from '@/modules/roles/repository/role-permissions.repository';
 import { RolesService } from '@/modules/roles/service/roles.service';
@@ -24,6 +25,12 @@ describe('RolePermissionsService', () => {
     findOne: jest.fn(),
   };
 
+  const mockAdminAuditLogWriter = {
+    enqueue: jest.fn(),
+  };
+
+  const actorUserId = 'admin-actor-id';
+
   beforeEach(async () => {
     jest.clearAllMocks();
     mockRolesService.findOne.mockResolvedValue({ id: 'role-id' } as RoleResponseDto);
@@ -42,6 +49,7 @@ describe('RolePermissionsService', () => {
         { provide: RolePermissionsRepository, useValue: mockRolePermissionsRepository },
         { provide: RolesService, useValue: mockRolesService },
         { provide: PermissionsService, useValue: mockPermissionsService },
+        { provide: AdminAuditLogWriterService, useValue: mockAdminAuditLogWriter },
       ],
     }).compile();
 
@@ -56,7 +64,7 @@ describe('RolePermissionsService', () => {
     it('should add permission to role', async () => {
       mockRolePermissionsRepository.addPermission.mockResolvedValue(undefined);
 
-      await service.addPermission('role-id', 'permission-id');
+      await service.addPermission('role-id', 'permission-id', actorUserId);
 
       expect(mockRolesService.findOne).toHaveBeenCalledWith('role-id');
       expect(mockPermissionsService.findOne).toHaveBeenCalledWith('permission-id');
@@ -69,7 +77,7 @@ describe('RolePermissionsService', () => {
     it('should not add permission when role does not exist', async () => {
       mockRolesService.findOne.mockRejectedValue(new NotFoundException());
 
-      await expect(service.addPermission('missing', 'permission-id')).rejects.toThrow(
+      await expect(service.addPermission('missing', 'permission-id', actorUserId)).rejects.toThrow(
         NotFoundException,
       );
       expect(mockPermissionsService.findOne).not.toHaveBeenCalled();
@@ -86,7 +94,7 @@ describe('RolePermissionsService', () => {
         }),
       );
 
-      await expect(service.addPermission('role-id', 'permission-id')).rejects.toThrow(
+      await expect(service.addPermission('role-id', 'permission-id', actorUserId)).rejects.toThrow(
         BadRequestException,
       );
       expect(mockRolePermissionsRepository.addPermission).not.toHaveBeenCalled();
@@ -97,9 +105,9 @@ describe('RolePermissionsService', () => {
         new NotFoundException('Permission not found'),
       );
 
-      await expect(service.addPermission('role-id', 'missing-permission')).rejects.toThrow(
-        NotFoundException,
-      );
+      await expect(
+        service.addPermission('role-id', 'missing-permission', actorUserId),
+      ).rejects.toThrow(NotFoundException);
       expect(mockRolesService.findOne).toHaveBeenCalledWith('role-id');
       expect(mockPermissionsService.findOne).toHaveBeenCalledWith('missing-permission');
       expect(mockRolePermissionsRepository.addPermission).not.toHaveBeenCalled();
@@ -110,7 +118,7 @@ describe('RolePermissionsService', () => {
     it('should delete permission from role', async () => {
       mockRolePermissionsRepository.deletePermission.mockResolvedValue(undefined);
 
-      await service.deletePermission('role-id', 'permission-id');
+      await service.deletePermission('role-id', 'permission-id', actorUserId);
 
       expect(mockRolesService.findOne).toHaveBeenCalledWith('role-id');
       expect(mockPermissionsService.findOne).toHaveBeenCalledWith('permission-id');
@@ -123,9 +131,9 @@ describe('RolePermissionsService', () => {
     it('should not delete when role does not exist', async () => {
       mockRolesService.findOne.mockRejectedValue(new NotFoundException());
 
-      await expect(service.deletePermission('missing', 'permission-id')).rejects.toThrow(
-        NotFoundException,
-      );
+      await expect(
+        service.deletePermission('missing', 'permission-id', actorUserId),
+      ).rejects.toThrow(NotFoundException);
       expect(mockPermissionsService.findOne).not.toHaveBeenCalled();
       expect(mockRolePermissionsRepository.deletePermission).not.toHaveBeenCalled();
     });
@@ -140,9 +148,9 @@ describe('RolePermissionsService', () => {
         }),
       );
 
-      await expect(service.deletePermission('role-id', 'permission-id')).rejects.toThrow(
-        BadRequestException,
-      );
+      await expect(
+        service.deletePermission('role-id', 'permission-id', actorUserId),
+      ).rejects.toThrow(BadRequestException);
       expect(mockRolePermissionsRepository.deletePermission).not.toHaveBeenCalled();
     });
 
@@ -151,9 +159,9 @@ describe('RolePermissionsService', () => {
         new NotFoundException('Permission not found'),
       );
 
-      await expect(service.deletePermission('role-id', 'missing-permission')).rejects.toThrow(
-        NotFoundException,
-      );
+      await expect(
+        service.deletePermission('role-id', 'missing-permission', actorUserId),
+      ).rejects.toThrow(NotFoundException);
       expect(mockRolesService.findOne).toHaveBeenCalledWith('role-id');
       expect(mockPermissionsService.findOne).toHaveBeenCalledWith('missing-permission');
       expect(mockRolePermissionsRepository.deletePermission).not.toHaveBeenCalled();

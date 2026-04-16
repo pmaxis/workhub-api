@@ -10,6 +10,8 @@ import { SessionsService } from '@/modules/sessions/service/sessions.service';
 import { InvitationsService } from '@/modules/invitations/service/invitations.service';
 import { LoginDto } from '@/modules/auth/dto/login.dto';
 import { RegisterDto } from '@/modules/auth/dto/register.dto';
+import { AdminAuditLogWriterService } from '@/modules/admin-audit-logs/service/admin-audit-log-writer.service';
+import { AdminAuditLogLevel } from '@/infrastructure/database/generated/enums';
 
 @Injectable()
 export class AuthService {
@@ -22,6 +24,7 @@ export class AuthService {
     private readonly sessionsService: SessionsService,
     private readonly tokensService: TokensService,
     private readonly invitationsService: InvitationsService,
+    private readonly adminAuditLogWriter: AdminAuditLogWriterService,
   ) {
     this.refreshTokenMaxAge = ms(
       this.configService.getOrThrow<ms.StringValue>('tokens.refreshToken.expiresIn'),
@@ -139,6 +142,18 @@ export class AuthService {
 
     const sessionId = session.id;
     const accessToken = this.tokensService.generateAccessToken(userId, sessionId);
+
+    this.adminAuditLogWriter.enqueue({
+      level: AdminAuditLogLevel.INFO,
+      source: 'auth',
+      message: 'User session created',
+      actorUserId: userId,
+      context: {
+        ipAddress,
+        userAgent: userAgent.length > 500 ? `${userAgent.slice(0, 500)}…` : userAgent,
+        sessionId,
+      },
+    });
 
     return { accessToken, refreshToken };
   }
